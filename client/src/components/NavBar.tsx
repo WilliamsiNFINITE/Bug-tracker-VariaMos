@@ -42,7 +42,7 @@ const NavBar = () => {
   };
 
   const mainButton = () => {
-    if (['/', '/login', '/signup'].includes(pathname)) {
+    if (['/', '/login', '/signup'].includes(pathname) || !pathname.includes('/bugs')) {
       return (
         <div className={classes.logoWrapper}>
           <Button
@@ -78,7 +78,7 @@ const NavBar = () => {
           onClick={handleGoBack}
           className={classes.backBtn}
         >
-          {pathname.includes('/bugs') ? 'Project' : 'Home'}
+          {pathname.includes('/bugs') ? 'Back to bugs list' : 'Home'}
         </Button>
       );
     }

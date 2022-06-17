@@ -91,7 +91,7 @@ npm start
 
 Open ormconfig.js & update the local PostgreSQL credentials to match with yours.
 
-To run the migarations, go to server dir & run this command:
+To run the migrations, go to server dir & run this command:
 `npm run typeorm migration:run`
 
 Run backend development server:

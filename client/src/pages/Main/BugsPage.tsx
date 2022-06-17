@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  fetchBugsByProjectId,
+  fetchBugs,
+  selectBugsById,
   selectBugsByProjectId,
   selectBugsState,
 } from '../../redux/slices/bugsSlice';
@@ -13,19 +14,19 @@ import sortBugs from '../../utils/sortBugs';
 import filterBugs from '../../utils/filterBugs';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import InfoText from '../../components/InfoText';
-
-import { Paper, Typography } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
+import { Paper, Typography, useMediaQuery } from '@material-ui/core';
 import { useMainPageStyles } from '../../styles/muiStyles';
 import BugReportOutlinedIcon from '@material-ui/icons/BugReportOutlined';
 
-const BugsCard: React.FC<{ projectId: string; isMobile: boolean }> = ({
-  projectId,
+
+const BugsPage: React.FC<{ isMobile: boolean }> = ({
   isMobile,
-}) => {
-  const classes = useMainPageStyles();
-  const dispatch = useDispatch();
-  const bugs = useSelector((state: RootState) =>
-    selectBugsByProjectId(state, projectId)
+  }) => {
+    const classes = useMainPageStyles();
+    const dispatch = useDispatch();
+    const bugs = useSelector((state: RootState) =>
+    selectBugsByProjectId(state)
   );
   const { fetchLoading, fetchError, sortBy, filterBy } = useSelector(
     selectBugsState
@@ -34,24 +35,26 @@ const BugsCard: React.FC<{ projectId: string; isMobile: boolean }> = ({
 
   useEffect(() => {
     if (!bugs) {
-      dispatch(fetchBugsByProjectId(projectId));
+      dispatch(fetchBugs());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const filteredSortedBugs =
-    bugs &&
-    sortBugs(
-      bugs.filter(
-        (b) =>
-          b.title.toLowerCase().includes(filterValue.toLowerCase()) &&
-          filterBugs(filterBy, b)
-      ),
-      sortBy
-    );
+  bugs &&
+  sortBugs(
+    bugs.filter(
+      (b) =>
+        b.title.toLowerCase().includes(filterValue.toLowerCase()) &&
+        filterBugs(filterBy, b)
+    ),
+    sortBy
+  );
+
 
   const bugsDataToDisplay = () => {
     if (fetchLoading) {
+      
       return (
         <LoadingSpinner
           marginTop={isMobile ? '3em' : '4em'}
@@ -59,6 +62,7 @@ const BugsCard: React.FC<{ projectId: string; isMobile: boolean }> = ({
         />
       );
     } else if (fetchError) {
+      
       return (
         <InfoText
           text={`Error: ${fetchError}`}
@@ -101,7 +105,6 @@ const BugsCard: React.FC<{ projectId: string; isMobile: boolean }> = ({
       </Typography>
       <div className={classes.bugsActionCard}>
         <BugsActionCard
-          projectId={projectId}
           filterValue={filterValue}
           setFilterValue={setFilterValue}
           isMobile={isMobile}
@@ -112,4 +115,4 @@ const BugsCard: React.FC<{ projectId: string; isMobile: boolean }> = ({
   );
 };
 
-export default BugsCard;
+export default BugsPage;

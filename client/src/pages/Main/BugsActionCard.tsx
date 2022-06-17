@@ -35,11 +35,11 @@ const menuItems = [
 ];
 
 const BugsActionCard: React.FC<{
-  projectId: string;
+
   filterValue: string;
   setFilterValue: (filterValue: string) => void;
   isMobile: boolean;
-}> = ({ projectId, filterValue, setFilterValue, isMobile }) => {
+}> = ({ filterValue, setFilterValue, isMobile }) => {
   const classes = useActionCardStyles();
   const dispatch = useDispatch();
   const { sortBy, filterBy } = useSelector(selectBugsState);
@@ -94,7 +94,7 @@ const BugsActionCard: React.FC<{
           }
           title="Add a new bug"
         >
-          <BugForm isEditMode={false} projectId={projectId} />
+          <BugForm isEditMode={false} />
         </FormDialog>
         <FormControl component="fieldset">
           <FormLabel component="legend" style={{ fontSize: '0.8em' }}>

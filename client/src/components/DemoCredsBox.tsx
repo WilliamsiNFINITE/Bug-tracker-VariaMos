@@ -5,8 +5,8 @@ const DemoCredsBox = () => {
   return (
     <div style={{ width: '100%', marginTop: '0.8em', marginBottom: '0.8em' }}>
       <Alert severity="info">
-        <AlertTitle>Demo Account Credentials</AlertTitle>
-        {demoCreds}
+        <AlertTitle>VariaMos Bug Tracker</AlertTitle>
+        Login to report your issue
       </Alert>
     </div>
   );

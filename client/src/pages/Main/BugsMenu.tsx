@@ -18,7 +18,6 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import CommentOutlinedIcon from '@material-ui/icons/CommentOutlined';
 
 interface BugsMenuProps {
-  projectId: string;
   bugId: string;
   currentData: BugPayload;
   isResolved: boolean;
@@ -26,7 +25,6 @@ interface BugsMenuProps {
 }
 
 const BugsMenu: React.FC<BugsMenuProps> = ({
-  projectId,
   bugId,
   currentData,
   isResolved,
@@ -45,15 +43,15 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
   };
 
   const handleDeleteBug = () => {
-    dispatch(deleteBug(projectId, bugId, history));
+    dispatch(deleteBug(bugId, history));
   };
 
   const handleCloseBug = () => {
-    dispatch(closeReopenBug(projectId, bugId, 'close'));
+    dispatch(closeReopenBug(bugId, 'close'));
   };
 
   const handleReopenBug = () => {
-    dispatch(closeReopenBug(projectId, bugId, 'reopen'));
+    dispatch(closeReopenBug(bugId, 'reopen'));
   };
 
   return (
@@ -80,7 +78,7 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
         <MenuItem
           onClick={handleCloseMenu}
           component={RouterLink}
-          to={`/projects/${projectId}/bugs/${bugId}`}
+          to={`/bugs/${bugId}`}
         >
           <OpenInNewIcon style={{ marginRight: '10px' }} />
           Bug Details
@@ -126,7 +124,6 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
         >
           <BugForm
             isEditMode={true}
-            projectId={projectId}
             bugId={bugId}
             currentData={currentData}
           />
@@ -154,7 +151,7 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
           }}
           title="Post a note"
         >
-          <NoteForm isEditMode={false} projectId={projectId} bugId={bugId} />
+          <NoteForm isEditMode={false} bugId={bugId} />
         </FormDialog>
       </Menu>
     </div>

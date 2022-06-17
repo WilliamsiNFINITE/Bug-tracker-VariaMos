@@ -1,9 +1,9 @@
 import CSS from 'csstype';
 
 const colors = {
-  low: '#FFD700',
-  medium: '#FF8C00',
-  high: '#ff402c',
+  low: '#00FF7F',
+  medium: '#FFA500',
+  high: '#FE010f',
   closed: '#008000',
   open: '#000080',
   closedBg: '#e2ffe2',
@@ -14,7 +14,7 @@ export const priorityStyles = (
   priority: 'low' | 'medium' | 'high'
 ): CSS.Properties => {
   return {
-    color: priority === 'low' ? '#000' : '#fff',
+    color: priority === 'low' ? '#fff' : '#fff',
     backgroundColor: colors[priority],
     borderRadius: '4px',
     fontWeight: 500,

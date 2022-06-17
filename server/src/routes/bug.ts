@@ -12,11 +12,11 @@ import middleware from '../middleware';
 const router = express.Router();
 const { auth } = middleware;
 
-router.get('/:projectId/bugs', auth, getBugs);
-router.post('/:projectId/bugs', auth, createBug);
-router.put('/:projectId/bugs/:bugId', auth, updateBug);
-router.delete('/:projectId/bugs/:bugId', auth, deleteBug);
-router.post('/:projectId/bugs/:bugId/close', auth, closeBug);
-router.post('/:projectId/bugs/:bugId/reopen', auth, reopenBug);
+router.get('/', auth, getBugs);
+router.post('/', auth, createBug);
+router.put('/:bugId', auth, updateBug);
+router.delete('/:bugId', auth, deleteBug);
+router.post('/:bugId/close', auth, closeBug);
+router.post('/:bugId/reopen', auth, reopenBug);
 
 export default router;

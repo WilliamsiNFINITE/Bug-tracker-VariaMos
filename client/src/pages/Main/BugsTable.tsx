@@ -48,13 +48,13 @@ const BugsTable: React.FC<{ bugs: BugState[] }> = ({ bugs }) => {
               <TableCell
                 align="center"
                 onClick={() =>
-                  history.push(`/projects/${b.projectId}/bugs/${b.id}`)
+                  history.push(`/bugs/${b.id}`)
                 }
                 className={classes.clickableCell}
               >
                 <Link
                   component={RouterLink}
-                  to={`/projects/${b.projectId}/bugs/${b.id}`}
+                  to={`/bugs/${b.id}`}
                   color="secondary"
                 >
                   {b.title}
@@ -92,7 +92,6 @@ const BugsTable: React.FC<{ bugs: BugState[] }> = ({ bugs }) => {
               <TableCell align="center">{b.notes.length}</TableCell>
               <TableCell align="center">
                 <BugsMenu
-                  projectId={b.projectId}
                   bugId={b.id}
                   currentData={{
                     title: b.title,

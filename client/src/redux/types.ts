@@ -11,12 +11,6 @@ export interface User {
   username: string;
 }
 
-export interface ProjectMember {
-  id: number;
-  joinedAt: Date;
-  member: User;
-}
-
 export interface Note {
   id: number;
   bugId: string;
@@ -26,19 +20,8 @@ export interface Note {
   updatedAt: Date;
 }
 
-export interface ProjectState {
-  id: string;
-  name: string;
-  members: ProjectMember[];
-  bugs: Array<{ id: string }>;
-  createdBy: User;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface BugState {
   id: string;
-  projectId: string;
   title: string;
   description: string;
   priority: BugPriority;
@@ -53,16 +36,6 @@ export interface BugState {
   updatedAt?: Date;
   createdAt: Date;
 }
-
-export type ProjectSortValues =
-  | 'newest'
-  | 'oldest'
-  | 'a-z'
-  | 'z-a'
-  | 'most-bugs'
-  | 'least-bugs'
-  | 'most-members'
-  | 'least-members';
 
 export type BugSortValues =
   | 'newest'
@@ -82,11 +55,6 @@ export type BugFilterValues = 'all' | 'closed' | 'open';
 export interface CredentialsPayload {
   username: string;
   password: string;
-}
-
-export interface ProjectPayload {
-  name: string;
-  members: string[];
 }
 
 export interface BugPayload {

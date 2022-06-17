@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAuthState } from '../../redux/slices/authSlice';
-import { selectProjectById } from '../../redux/slices/projectsSlice';
 import { deleteNote } from '../../redux/slices/bugsSlice';
 import { Note } from '../../redux/types';
 import { RootState } from '../../redux/store';
@@ -30,17 +29,14 @@ const menuItems = [
 
 const NotesCard: React.FC<{
   notes: Note[];
-  projectId: string;
   bugId: string;
   isMobile: boolean;
-}> = ({ notes, projectId, bugId, isMobile }) => {
+}> = ({ notes, bugId, isMobile }) => {
   const classes = useMainPageStyles();
   const dispatch = useDispatch();
   const { user } = useSelector(selectAuthState);
-  const project = useSelector((state: RootState) =>
-    selectProjectById(state, projectId)
-  );
   const [sortBy, setSortBy] = useState<NoteSortValues>('newest');
+  console.log(user);
 
   const handleSortChange = (e: React.ChangeEvent<{ value: unknown }>) => {
     setSortBy(e.target.value as NoteSortValues);
@@ -49,7 +45,7 @@ const NotesCard: React.FC<{
   const sortedNotes = sortNotes(notes, sortBy);
 
   const handleDeleteNote = (noteId: number) => {
-    dispatch(deleteNote(projectId, bugId, noteId));
+    dispatch(deleteNote(bugId, noteId));
   };
 
   return (
@@ -90,7 +86,7 @@ const NotesCard: React.FC<{
         }
         title="Post a note"
       >
-        <NoteForm isEditMode={false} projectId={projectId} bugId={bugId} />
+        <NoteForm isEditMode={false} bugId={bugId} />
       </FormDialog>
       <div className={classes.notesWrapper}>
         <Divider />
@@ -142,15 +138,13 @@ const NotesCard: React.FC<{
                     >
                       <NoteForm
                         isEditMode={true}
-                        projectId={projectId}
                         bugId={bugId}
                         noteId={n.id}
                         currentBody={n.body}
                       />
                     </FormDialog>
                   )}
-                  {(n.author.id === user?.id ||
-                    user?.id === project?.createdBy.id) && (
+                  {(n.author.id === user?.id) && (
                     <ConfirmDialog
                       title="Confirm Delete Note"
                       contentText="Are you sure you want to delete the note?"

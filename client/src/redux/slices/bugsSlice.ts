@@ -16,7 +16,7 @@ import { History } from 'history';
 import { getErrorMsg } from '../../utils/helperFuncs';
 
 interface InitialBugState {
-  bugs: { [projectId: string]: BugState[] };
+  bugs: BugState[];
   fetchLoading: boolean;
   fetchError: string | null;
   submitLoading: boolean;
@@ -26,7 +26,7 @@ interface InitialBugState {
 }
 
 const initialState: InitialBugState = {
-  bugs: {},
+  bugs: [],
   fetchLoading: false,
   fetchError: null,
   submitLoading: false,
@@ -41,21 +41,18 @@ const bugsSlice = createSlice({
   reducers: {
     setBugs: (
       state,
-      action: PayloadAction<{ bugs: BugState[]; projectId: string }>
+      action: PayloadAction<BugState[]>
     ) => {
-      state.bugs[action.payload.projectId] = action.payload.bugs;
+      state.bugs = action.payload;
       state.fetchLoading = false;
       state.fetchError = null;
     },
     addBug: (
       state,
-      action: PayloadAction<{ bug: BugState; projectId: string }>
+      action: PayloadAction<BugState>
     ) => {
-      if (action.payload.projectId in state.bugs) {
-        state.bugs[action.payload.projectId].push(action.payload.bug);
-      } else {
-        state.bugs[action.payload.projectId] = [action.payload.bug];
-      }
+      state.bugs.push(action.payload);
+
       state.submitLoading = false;
       state.submitError = null;
     },
@@ -64,13 +61,9 @@ const bugsSlice = createSlice({
       action: PayloadAction<{
         data: EditedBugData;
         bugId: string;
-        projectId: string;
       }>
     ) => {
-      state.bugs[action.payload.projectId] = state.bugs[
-        action.payload.projectId
-      ].map((b) =>
-        b.id === action.payload.bugId ? { ...b, ...action.payload.data } : b
+      state.bugs = state.bugs.map((b) => b.id === action.payload.bugId ? {...b, ...action.payload.data } : b
       );
 
       state.submitLoading = false;
@@ -78,33 +71,25 @@ const bugsSlice = createSlice({
     },
     removeBug: (
       state,
-      action: PayloadAction<{ bugId: string; projectId: string }>
+      action: PayloadAction<string>
     ) => {
-      state.bugs[action.payload.projectId] = state.bugs[
-        action.payload.projectId
-      ].filter((b) => b.id !== action.payload.bugId);
+      state.bugs = state.bugs.filter((b) => b.id !== action.payload);
     },
     updateBugStatus: (
       state,
       action: PayloadAction<{
         data: ClosedReopenedBugData;
         bugId: string;
-        projectId: string;
       }>
     ) => {
-      state.bugs[action.payload.projectId] = state.bugs[
-        action.payload.projectId
-      ].map((b) =>
-        b.id === action.payload.bugId ? { ...b, ...action.payload.data } : b
+      state.bugs = state.bugs.map((b) => b.id === action.payload.bugId ? {...b, ...action.payload.data } : b
       );
     },
     addNote: (
       state,
-      action: PayloadAction<{ note: Note; bugId: string; projectId: string }>
+      action: PayloadAction<{ note: Note; bugId: string }>
     ) => {
-      state.bugs[action.payload.projectId] = state.bugs[
-        action.payload.projectId
-      ].map((b) =>
+      state.bugs = state.bugs.map((b) =>
         b.id === action.payload.bugId
           ? { ...b, notes: [...b.notes, action.payload.note] }
           : b
@@ -118,10 +103,9 @@ const bugsSlice = createSlice({
         data: { body: string; updatedAt: Date };
         noteId: number;
         bugId: string;
-        projectId: string;
       }>
     ) => {
-      const bug = state.bugs[action.payload.projectId].find(
+      const bug = state.bugs.find(
         (b) => b.id === action.payload.bugId
       );
 
@@ -130,9 +114,7 @@ const bugsSlice = createSlice({
           n.id === action.payload.noteId ? { ...n, ...action.payload.data } : n
         );
 
-        state.bugs[action.payload.projectId] = state.bugs[
-          action.payload.projectId
-        ].map((b) =>
+        state.bugs = state.bugs.map((b) =>
           b.id === action.payload.bugId ? { ...b, notes: updatedNotes } : b
         );
 
@@ -145,10 +127,9 @@ const bugsSlice = createSlice({
       action: PayloadAction<{
         noteId: number;
         bugId: string;
-        projectId: string;
       }>
     ) => {
-      const bug = state.bugs[action.payload.projectId].find(
+      const bug = state.bugs.find(
         (b) => b.id === action.payload.bugId
       );
 
@@ -157,9 +138,7 @@ const bugsSlice = createSlice({
           (n) => n.id !== action.payload.noteId
         );
 
-        state.bugs[action.payload.projectId] = state.bugs[
-          action.payload.projectId
-        ].map((b) =>
+        state.bugs = state.bugs.map((b) =>
           b.id === action.payload.bugId ? { ...b, notes: updatedNotes } : b
         );
       }
@@ -172,6 +151,7 @@ const bugsSlice = createSlice({
       state.fetchLoading = false;
       state.fetchError = action.payload;
     },
+
     setSubmitBugLoading: (state) => {
       state.submitLoading = true;
       state.submitError = null;
@@ -210,38 +190,52 @@ export const {
   filterBugsBy,
 } = bugsSlice.actions;
 
-export const fetchBugsByProjectId = (projectId: string): AppThunk => {
+export const fetchBugs = (): AppThunk => {
   return async (dispatch) => {
     try {
+      
       dispatch(setFetchBugsLoading());
-      const projectBugs = await bugService.getBugs(projectId);
-      dispatch(setBugs({ bugs: projectBugs, projectId }));
-    } catch (e) {
+      
+      const allBugs = await bugService.getBugs();
+     
+      dispatch(setBugs(allBugs));
+    } catch (e: any) {
+      alert(e)
       dispatch(setFetchBugsError(getErrorMsg(e)));
     }
   };
 };
+/*
+export const fetchBugsById = (bugId: string): AppThunk => {
+  return async (dispatch) => {
+    try {
+      dispatch(setFetchBugsLoading());
+      const Bugs = await bugService.getBugs();
+      dispatch(selectBugsById(bugId)));
+    } catch (e) {
+      dispatch(setFetchBugsError(getErrorMsg(e)));
+    }
+  };
+};*/
 
 export const createNewBug = (
-  projectId: string,
   bugData: BugPayload,
   closeDialog?: () => void
 ): AppThunk => {
   return async (dispatch) => {
     try {
       dispatch(setSubmitBugLoading());
-      const newBug = await bugService.createBug(projectId, bugData);
-      dispatch(addBug({ bug: newBug, projectId }));
+      const newBug = await bugService.createBug(bugData);
+      dispatch(addBug(newBug));
       dispatch(notify('New bug added!', 'success'));
       closeDialog && closeDialog();
-    } catch (e) {
+    } catch (e: any) {
       dispatch(setSubmitBugError(getErrorMsg(e)));
     }
   };
 };
 
 export const editBug = (
-  projectId: string,
   bugId: string,
   bugData: BugPayload,
   closeDialog?: () => void
@@ -249,7 +243,7 @@ export const editBug = (
   return async (dispatch) => {
     try {
       dispatch(setSubmitBugLoading());
-      const updatedBug = await bugService.updateBug(projectId, bugId, bugData);
+      const updatedBug = await bugService.updateBug(bugId, bugData);
       const {
         title,
         description,
@@ -262,36 +256,33 @@ export const editBug = (
         updateBug({
           data: { title, description, priority, updatedAt, updatedBy },
           bugId,
-          projectId,
         })
       );
       dispatch(notify('Successfully updated the bug!', 'success'));
       closeDialog && closeDialog();
-    } catch (e) {
+    } catch (e: any) {
       dispatch(setSubmitBugError(getErrorMsg(e)));
     }
   };
 };
 
 export const deleteBug = (
-  projectId: string,
   bugId: string,
   history: History
 ): AppThunk => {
   return async (dispatch) => {
     try {
-      await bugService.deleteBug(projectId, bugId);
-      history.push(`/projects/${projectId}`);
-      dispatch(removeBug({ bugId, projectId }));
+      await bugService.deleteBug(bugId);
+      history.push(`/`);
+      dispatch(removeBug(bugId));
       dispatch(notify('Deleted the bug.', 'success'));
-    } catch (e) {
+    } catch (e: any) {
       dispatch(notify(getErrorMsg(e), 'error'));
     }
   };
 };
 
 export const closeReopenBug = (
-  projectId: string,
   bugId: string,
   action: 'close' | 'reopen'
 ): AppThunk => {
@@ -299,9 +290,9 @@ export const closeReopenBug = (
     try {
       let returnedData;
       if (action === 'close') {
-        returnedData = await bugService.closeBug(projectId, bugId);
+        returnedData = await bugService.closeBug(bugId);
       } else {
-        returnedData = await bugService.reopenBug(projectId, bugId);
+        returnedData = await bugService.reopenBug(bugId);
       }
       const {
         isResolved,
@@ -314,7 +305,6 @@ export const closeReopenBug = (
         updateBugStatus({
           data: { isResolved, closedAt, closedBy, reopenedAt, reopenedBy },
           bugId,
-          projectId,
         })
       );
       dispatch(
@@ -323,14 +313,13 @@ export const closeReopenBug = (
           'success'
         )
       );
-    } catch (e) {
+    } catch (e: any) {
       dispatch(notify(getErrorMsg(e), 'error'));
     }
   };
 };
 
 export const createNote = (
-  projectId: string,
   bugId: string,
   noteBody: string,
   closeDialog?: () => void
@@ -338,18 +327,17 @@ export const createNote = (
   return async (dispatch) => {
     try {
       dispatch(setSubmitBugLoading());
-      const newNote = await noteService.createNote(projectId, bugId, noteBody);
-      dispatch(addNote({ note: newNote, bugId, projectId }));
+      const newNote = await noteService.createNote(bugId, noteBody);
+      dispatch(addNote({ note: newNote, bugId }));
       dispatch(notify('New note added!', 'success'));
       closeDialog && closeDialog();
-    } catch (e) {
+    } catch (e: any) {
       dispatch(setSubmitBugError(getErrorMsg(e)));
     }
   };
 };
 
 export const editNote = (
-  projectId: string,
   bugId: string,
   noteId: number,
   noteBody: string,
@@ -359,33 +347,32 @@ export const editNote = (
     try {
       dispatch(setSubmitBugLoading());
       const returnedData = await noteService.editNote(
-        projectId,
+        bugId,
         noteId,
         noteBody
       );
       const { body, updatedAt } = returnedData as Note;
       dispatch(
-        updateNote({ data: { body, updatedAt }, noteId, bugId, projectId })
+        updateNote({ data: { body, updatedAt }, noteId, bugId })
       );
       dispatch(notify('Updated the note!', 'success'));
       closeDialog && closeDialog();
-    } catch (e) {
+    } catch (e: any) {
       dispatch(setSubmitBugError(getErrorMsg(e)));
     }
   };
 };
 
 export const deleteNote = (
-  projectId: string,
   bugId: string,
   noteId: number
 ): AppThunk => {
   return async (dispatch) => {
     try {
-      await noteService.deleteNote(projectId, noteId);
-      dispatch(removeNote({ noteId, bugId, projectId }));
+      await noteService.deleteNote(bugId, noteId);
+      dispatch(removeNote({ noteId, bugId }));
       dispatch(notify('Deleted the note.', 'success'));
-    } catch (e) {
+    } catch (e: any) {
       dispatch(notify(getErrorMsg(e), 'error'));
     }
   };
@@ -393,16 +380,13 @@ export const deleteNote = (
 
 export const selectBugsState = (state: RootState) => state.bugs;
 
-export const selectBugsByProjectId = (state: RootState, projectId: string) => {
-  return state.bugs.bugs?.[projectId];
+export const selectBugsById = (state: RootState, bugId: string) => {
+  return state.bugs.bugs.find((b) => b.id === bugId);
 };
 
-export const selectBugById = (
-  state: RootState,
-  projectId: string,
-  bugId: string
-) => {
-  return state.bugs.bugs?.[projectId].find((b) => b.id === bugId);
+export const selectBugsByProjectId = (state: RootState) => {
+  return state.bugs.bugs;
 };
+
 
 export default bugsSlice.reducer;

@@ -8,7 +8,6 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { Project } from './Project';
 import { User } from './User';
 import { Note } from './Note';
 
@@ -31,12 +30,6 @@ export class Bug extends BaseEntity {
     default: 'low',
   })
   priority: Priority;
-
-  @ManyToOne(() => Project, (project) => project)
-  @JoinColumn({ name: 'projectId' })
-  project: Project;
-  @Column()
-  projectId: string;
 
   @OneToMany(() => Note, (note) => note.bug)
   @JoinColumn()

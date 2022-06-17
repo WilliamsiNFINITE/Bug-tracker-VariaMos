@@ -1,13 +1,11 @@
 import { Request, Response } from 'express';
-import { Member } from '../entity/Member';
 import { Bug } from '../entity/Bug';
 import { Note } from '../entity/Note';
-import { Project } from '../entity/Project';
+import { User } from '../entity/User';
 import { createBugValidator } from '../utils/validators';
 
 const fieldsToSelect = [
   'bug.id',
-  'bug.projectId',
   'bug.title',
   'bug.description',
   'bug.priority',
@@ -33,17 +31,9 @@ const fieldsToSelect = [
   'noteAuthor.username',
 ];
 
-export const getBugs = async (req: Request, res: Response) => {
-  const { projectId } = req.params;
-
-  const projectMembers = await Member.find({ projectId });
-
-  if (!projectMembers.map((m) => m.memberId).includes(req.user)) {
-    return res.status(401).send({ message: 'Access is denied.' });
-  }
+export const getBugs = async (_req: Request, res: Response) => {
 
   const bugs = await Bug.createQueryBuilder('bug')
-    .where('"projectId" = :projectId', { projectId })
     .leftJoinAndSelect('bug.createdBy', 'createdBy')
     .leftJoinAndSelect('bug.updatedBy', 'updatedBy')
     .leftJoinAndSelect('bug.closedBy', 'closedBy')
@@ -58,7 +48,6 @@ export const getBugs = async (req: Request, res: Response) => {
 
 export const createBug = async (req: Request, res: Response) => {
   const { title, description, priority } = req.body;
-  const { projectId } = req.params;
 
   const { errors, valid } = createBugValidator(title, description, priority);
 
@@ -66,18 +55,10 @@ export const createBug = async (req: Request, res: Response) => {
     return res.status(400).send({ message: Object.values(errors)[0] });
   }
 
-  const projectMembers = await Member.find({ projectId });
-  const memberIds = projectMembers.map((m) => m.memberId);
-
-  if (!memberIds.includes(req.user)) {
-    return res.status(401).send({ message: 'Access is denied.' });
-  }
-
   const newBug = Bug.create({
     title,
     description,
     priority,
-    projectId,
     createdById: req.user,
   });
   await newBug.save();
@@ -98,19 +79,18 @@ export const createBug = async (req: Request, res: Response) => {
 
 export const updateBug = async (req: Request, res: Response) => {
   const { title, description, priority } = req.body;
-  const { projectId, bugId } = req.params;
+  const { bugId } = req.params;
+
+  const currentUser = await User.findOne(req.user);
+
+  if (currentUser?.isAdmin !== true) {
+    return res.status(403).send({ message: 'Permission denied.'});
+  }
 
   const { errors, valid } = createBugValidator(title, description, priority);
 
   if (!valid) {
     return res.status(400).send({ message: Object.values(errors)[0] });
-  }
-
-  const projectMembers = await Member.find({ projectId });
-  const memberIds = projectMembers.map((m) => m.memberId);
-
-  if (!memberIds.includes(req.user)) {
-    return res.status(401).send({ message: 'Access is denied.' });
   }
 
   const targetBug = await Bug.findOne({ id: bugId });
@@ -141,27 +121,19 @@ export const updateBug = async (req: Request, res: Response) => {
 };
 
 export const deleteBug = async (req: Request, res: Response) => {
-  const { projectId, bugId } = req.params;
-
-  const targetProject = await Project.findOne({
-    id: projectId,
-  });
-
-  if (!targetProject) {
-    return res.status(404).send({ message: 'Invalid project ID.' });
-  }
+  const { bugId } = req.params;
 
   const targetBug = await Bug.findOne({ id: bugId });
 
-  if (!targetBug) {
-    return res.status(404).send({ message: 'Invalid bug ID.' });
+  const currentUser = await User.findOne(req.user);
+
+  if (currentUser?.isAdmin !== true) {
+    return res.status(403).send({ message: 'Permission denied.'});
   }
 
-  if (
-    targetProject.createdById !== req.user &&
-    targetBug.createdById !== req.user
-  ) {
-    return res.status(401).send({ message: 'Access is denied.' });
+
+  if (!targetBug) {
+    return res.status(404).send({ message: 'Invalid bug ID.' });
   }
 
   await Note.delete({ bugId });
@@ -170,13 +142,12 @@ export const deleteBug = async (req: Request, res: Response) => {
 };
 
 export const closeBug = async (req: Request, res: Response) => {
-  const { projectId, bugId } = req.params;
+  const { bugId } = req.params;
 
-  const projectMembers = await Member.find({ projectId });
-  const memberIds = projectMembers.map((m) => m.memberId);
+  const currentUser = await User.findOne(req.user);
 
-  if (!memberIds.includes(req.user)) {
-    return res.status(401).send({ message: 'Access is denied.' });
+  if (currentUser?.isAdmin !== true) {
+    return res.status(403).send({ message: 'Permission denied.'});
   }
 
   const targetBug = await Bug.findOne({ id: bugId });
@@ -213,13 +184,12 @@ export const closeBug = async (req: Request, res: Response) => {
 };
 
 export const reopenBug = async (req: Request, res: Response) => {
-  const { projectId, bugId } = req.params;
+  const { bugId } = req.params;
 
-  const projectMembers = await Member.find({ projectId });
-  const memberIds = projectMembers.map((m) => m.memberId);
+  const currentUser = await User.findOne(req.user);
 
-  if (!memberIds.includes(req.user)) {
-    return res.status(401).send({ message: 'Access is denied.' });
+  if (currentUser?.isAdmin !== true) {
+    return res.status(403).send({ message: 'Permission denied.'});
   }
 
   const targetBug = await Bug.findOne({ id: bugId });

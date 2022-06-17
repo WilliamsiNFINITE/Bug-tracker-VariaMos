@@ -8,4 +8,7 @@ export class User extends BaseModel {
 
   @Column()
   passwordHash: string;
+
+  @Column()
+  isAdmin: boolean;
 }

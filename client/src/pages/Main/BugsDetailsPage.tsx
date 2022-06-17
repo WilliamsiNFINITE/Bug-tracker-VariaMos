@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectBugById,
+  selectBugsById,
   deleteBug,
   closeReopenBug,
 } from '../../redux/slices/bugsSlice';
@@ -24,7 +24,6 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 
 interface ParamTypes {
-  projectId: string;
   bugId: string;
 }
 
@@ -32,11 +31,11 @@ const BugsDetailsPage = () => {
   const classes = useMainPageStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { projectId, bugId } = useParams<ParamTypes>();
+  const { bugId } = useParams<ParamTypes>();
   const history = useHistory();
   const dispatch = useDispatch();
   const bug = useSelector((state: RootState) =>
-    selectBugById(state, projectId, bugId)
+    selectBugsById(state, bugId)
   );
 
   if (!bug) {
@@ -74,15 +73,15 @@ const BugsDetailsPage = () => {
   } = bug;
 
   const handleDeleteBug = () => {
-    dispatch(deleteBug(projectId, bugId, history));
+    dispatch(deleteBug(bugId, history));
   };
 
   const handleCloseBug = () => {
-    dispatch(closeReopenBug(projectId, bugId, 'close'));
+    dispatch(closeReopenBug(bugId, 'close'));
   };
 
   const handleReopenBug = () => {
-    dispatch(closeReopenBug(projectId, bugId, 'reopen'));
+    dispatch(closeReopenBug(bugId, 'reopen'));
   };
 
   const statusCSS: CSS.Properties = {
@@ -158,7 +157,6 @@ const BugsDetailsPage = () => {
       >
         <BugForm
           isEditMode={true}
-          projectId={projectId}
           bugId={id}
           currentData={{ title, description, priority }}
         />
@@ -235,7 +233,6 @@ const BugsDetailsPage = () => {
       </Paper>
       <NotesCard
         notes={notes}
-        projectId={projectId}
         bugId={id}
         isMobile={isMobile}
       />

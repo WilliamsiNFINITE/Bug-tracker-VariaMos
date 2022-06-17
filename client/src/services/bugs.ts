@@ -3,55 +3,53 @@ import backendUrl from '../backendUrl';
 import { setConfig } from './auth';
 import { BugPayload } from '../redux/types';
 
-const baseUrl = `${backendUrl}/projects`;
+const baseUrl = `${backendUrl}/bugs`;
 
-const getBugs = async (projectId: string) => {
-  const response = await axios.get(`${baseUrl}/${projectId}/bugs`, setConfig());
+const getBugs = async () => {
+  debugger;
+  const response = await axios.get(baseUrl, setConfig());
+  console.log(response.data);
   return response.data;
 };
 
-const createBug = async (projectId: string, bugData: BugPayload) => {
-  const response = await axios.post(
-    `${baseUrl}/${projectId}/bugs`,
-    bugData,
-    setConfig()
-  );
+const createBug = async (bugData: BugPayload) => {
+  debugger;
+  const response = await axios.post(baseUrl,bugData,setConfig());
   return response.data;
 };
 
 const updateBug = async (
-  projectId: string,
   bugId: string,
   bugData: BugPayload
 ) => {
   const response = await axios.put(
-    `${baseUrl}/${projectId}/bugs/${bugId}`,
+    `${baseUrl}/${bugId}`,
     bugData,
     setConfig()
   );
   return response.data;
 };
 
-const deleteBug = async (projectId: string, bugId: string) => {
+const deleteBug = async (bugId: string) => {
   const response = await axios.delete(
-    `${baseUrl}/${projectId}/bugs/${bugId}`,
+    `${baseUrl}/${bugId}`,
     setConfig()
   );
   return response.data;
 };
 
-const closeBug = async (projectId: string, bugId: string) => {
+const closeBug = async (bugId: string) => {
   const response = await axios.post(
-    `${baseUrl}/${projectId}/bugs/${bugId}/close`,
+    `${baseUrl}/${bugId}/close`,
     null,
     setConfig()
   );
   return response.data;
 };
 
-const reopenBug = async (projectId: string, bugId: string) => {
+const reopenBug = async (bugId: string) => {
   const response = await axios.post(
-    `${baseUrl}/${projectId}/bugs/${bugId}/reopen`,
+    `${baseUrl}/${bugId}/reopen`,
     null,
     setConfig()
   );

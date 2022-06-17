@@ -20,7 +20,6 @@ const validationSchema = yup.object({
 
 interface NoteFormProps {
   closeDialog?: () => void;
-  projectId: string;
   bugId: string;
   isEditMode: boolean;
   currentBody?: string;
@@ -30,7 +29,6 @@ interface NoteFormProps {
 const NoteForm: React.FC<NoteFormProps> = ({
   closeDialog,
   isEditMode,
-  projectId,
   bugId,
   currentBody,
   noteId,
@@ -47,11 +45,11 @@ const NoteForm: React.FC<NoteFormProps> = ({
   });
 
   const handleCreateNote = ({ body }: { body: string }) => {
-    dispatch(createNote(projectId, bugId, body, closeDialog));
+    dispatch(createNote(bugId, body, closeDialog));
   };
 
   const handleUpdateNote = ({ body }: { body: string }) => {
-    dispatch(editNote(projectId, bugId, noteId as number, body, closeDialog));
+    dispatch(editNote(bugId, noteId as number, body, closeDialog));
   };
 
   return (

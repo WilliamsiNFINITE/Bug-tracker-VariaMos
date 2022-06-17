@@ -1,8 +1,7 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
 import LoginPage from './pages/Auth/LoginPage';
 import SignupPage from './pages/Auth/SignupPage';
-import ProjectsPage from './pages/Main/ProjectsPage';
-import ProjectDetailsPage from './pages/Main/ProjectDetailsPage';
+import BugsPage from './pages/Main/BugsPage';
 import BugDetailsPage from './pages/Main/BugsDetailsPage';
 import NotFoundPage from './pages/Main/NotFoundPage';
 import { useSelector } from 'react-redux';
@@ -11,24 +10,24 @@ import storage from './utils/localStorage';
 
 import { Container, useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
+import { selectBugsState } from './redux/slices/bugsSlice';
 
 const Routes = () => {
   const { user } = useSelector(selectAuthState);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
-
   const isLoggedIn = storage.loadUser() || user;
 
   return (
     <Container disableGutters={isMobile}>
       <Switch>
         <Route exact path="/">
-          {isLoggedIn ? <ProjectsPage /> : <Redirect to="/login" />}
+          {isLoggedIn ? <BugsPage isMobile={false} /> : <Redirect to="/login" />}
         </Route>
-        <Route exact path="/projects/:projectId">
-          {isLoggedIn ? <ProjectDetailsPage /> : <Redirect to="/login" />}
+        <Route exact path="/bugs">
+          {isLoggedIn ?  <BugsPage isMobile={false} /> : <Redirect to="/login" />}
         </Route>
-        <Route exact path="/projects/:projectId/bugs/:bugId">
+        <Route exact path="/bugs/:bugId">
           {user ? <BugDetailsPage /> : <Redirect to="/" />}
         </Route>
         <Route exact path="/login">

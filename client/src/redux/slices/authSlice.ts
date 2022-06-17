@@ -3,10 +3,10 @@ import { RootState, AppThunk } from '../store';
 import authService from '../../services/auth';
 import storage from '../../utils/localStorage';
 import { CredentialsPayload, UserState } from '../types';
-import { fetchProjects } from './projectsSlice';
 import { notify } from './notificationSlice';
 import { fetchUsers } from './usersSlice';
 import { getErrorMsg } from '../../utils/helperFuncs';
+import { fetchBugs } from './bugsSlice';
 
 interface InitialAuthState {
   user: UserState | null;
@@ -64,10 +64,10 @@ export const login = (credentials: CredentialsPayload): AppThunk => {
       storage.saveUser(userData);
       authService.setToken(userData.token);
 
-      dispatch(fetchProjects());
+      dispatch(fetchBugs());
       dispatch(fetchUsers());
       dispatch(notify(`Welcome back, ${userData.username}!`, 'success'));
-    } catch (e) {
+    } catch (e: any) {
       dispatch(setAuthError(getErrorMsg(e)));
     }
   };
@@ -76,6 +76,7 @@ export const login = (credentials: CredentialsPayload): AppThunk => {
 export const signup = (credentials: CredentialsPayload): AppThunk => {
   return async (dispatch) => {
     try {
+      debugger;
       dispatch(setAuthLoading());
       const userData = await authService.signup(credentials);
       dispatch(setUser(userData));
@@ -83,12 +84,12 @@ export const signup = (credentials: CredentialsPayload): AppThunk => {
       storage.saveUser(userData);
       authService.setToken(userData.token);
 
-      dispatch(fetchProjects());
+      dispatch(fetchBugs());
       dispatch(fetchUsers());
       dispatch(
         notify(`Hi, ${userData.username}! Welcome to Bug Tracker :D`, 'success')
       );
-    } catch (e) {
+    } catch (e: any) {
       dispatch(setAuthError(getErrorMsg(e)));
     }
   };
@@ -106,9 +107,10 @@ export const autoLogin = (): AppThunk => {
   return (dispatch) => {
     const loggedUser = storage.loadUser();
     if (loggedUser) {
+      debugger;
       dispatch(setUser(loggedUser));
       authService.setToken(loggedUser.token);
-      dispatch(fetchProjects());
+      dispatch(fetchBugs());
       dispatch(fetchUsers());
     }
   };

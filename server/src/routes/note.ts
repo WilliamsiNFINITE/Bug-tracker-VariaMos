@@ -5,8 +5,8 @@ import middleware from '../middleware';
 const router = express.Router();
 const { auth } = middleware;
 
-router.post('/:projectId/bugs/:bugId/notes', auth, postNote);
-router.delete('/:projectId/notes/:noteId', auth, deleteNote);
-router.put('/:projectId/notes/:noteId', auth, updateNote);
+router.post('/:bugId/notes', auth, postNote);
+router.delete('/:bugId/notes/:noteId', auth, deleteNote);
+router.put('/:bugId/notes/:noteId', auth, updateNote);
 
 export default router;

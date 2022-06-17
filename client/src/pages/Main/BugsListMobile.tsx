@@ -23,7 +23,7 @@ const BugsListMobile: React.FC<{ bugs: BugState[] }> = ({ bugs }) => {
           <div className={classes.listItemWrapper}>
             <Link
               component={RouterLink}
-              to={`/projects/${b.projectId}/bugs/${b.id}`}
+              to={`/bugs/${b.id}`}
               color="secondary"
               variant="h6"
             >
@@ -85,7 +85,6 @@ const BugsListMobile: React.FC<{ bugs: BugState[] }> = ({ bugs }) => {
                 </Typography>
               </div>
               <BugsMenu
-                projectId={b.projectId}
                 bugId={b.id}
                 currentData={{
                   title: b.title,

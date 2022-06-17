@@ -2,15 +2,14 @@ import axios from 'axios';
 import backendUrl from '../backendUrl';
 import { setConfig } from './auth';
 
-const baseUrl = `${backendUrl}/projects`;
+const baseUrl = `${backendUrl}/bugs`;
 
 const createNote = async (
-  projectId: string,
   bugId: string,
   noteBody: string
 ) => {
   const response = await axios.post(
-    `${baseUrl}/${projectId}/bugs/${bugId}/notes`,
+    `${baseUrl}/${bugId}/notes`,
     { body: noteBody },
     setConfig()
   );
@@ -18,21 +17,21 @@ const createNote = async (
 };
 
 const editNote = async (
-  projectId: string,
+  bugId: string,
   noteId: number,
   noteBody: string
 ) => {
   const response = await axios.put(
-    `${baseUrl}/${projectId}/notes/${noteId}`,
+    `${baseUrl}/${bugId}/notes/${noteId}`,
     { body: noteBody },
     setConfig()
   );
   return response.data;
 };
 
-const deleteNote = async (projectId: string, noteId: number) => {
+const deleteNote = async (bugId: string, noteId: number) => {
   const response = await axios.delete(
-    `${baseUrl}/${projectId}/notes/${noteId}`,
+    `${baseUrl}/${bugId}/notes/${noteId}`,
     setConfig()
   );
   return response.data;
