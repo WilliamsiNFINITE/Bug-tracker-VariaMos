@@ -29,6 +29,8 @@ export const signupUser = async (req: Request, res: Response) => {
   const user = User.create({ username, passwordHash });
   await user.save();
 
+  const isAdmin: boolean = false;
+
   const token = jwt.sign(
     {
       id: user.id,
@@ -41,6 +43,7 @@ export const signupUser = async (req: Request, res: Response) => {
     id: user.id,
     username: user.username,
     token,
+    isAdmin
   });
 };
 
@@ -67,9 +70,13 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 
   const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET);
+
+  const isAdmin: boolean = user.isAdmin;
+
   return res.status(201).json({
     id: user.id,
     username: user.username,
     token,
+    isAdmin,
   });
 };

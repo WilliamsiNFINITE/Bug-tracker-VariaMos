@@ -60,9 +60,9 @@ export const login = (credentials: CredentialsPayload): AppThunk => {
       dispatch(setAuthLoading());
       const userData = await authService.login(credentials);
       dispatch(setUser(userData));
-
       storage.saveUser(userData);
       authService.setToken(userData.token);
+      authService.setisAdmin(userData.isAdmin);
 
       dispatch(fetchBugs());
       dispatch(fetchUsers());
@@ -76,13 +76,13 @@ export const login = (credentials: CredentialsPayload): AppThunk => {
 export const signup = (credentials: CredentialsPayload): AppThunk => {
   return async (dispatch) => {
     try {
-      debugger;
       dispatch(setAuthLoading());
       const userData = await authService.signup(credentials);
       dispatch(setUser(userData));
 
       storage.saveUser(userData);
       authService.setToken(userData.token);
+      authService.setisAdmin(userData.isAdmin);
 
       dispatch(fetchBugs());
       dispatch(fetchUsers());
@@ -107,9 +107,9 @@ export const autoLogin = (): AppThunk => {
   return (dispatch) => {
     const loggedUser = storage.loadUser();
     if (loggedUser) {
-      debugger;
       dispatch(setUser(loggedUser));
       authService.setToken(loggedUser.token);
+      authService.setisAdmin(loggedUser.isAdmin);
       dispatch(fetchBugs());
       dispatch(fetchUsers());
     }

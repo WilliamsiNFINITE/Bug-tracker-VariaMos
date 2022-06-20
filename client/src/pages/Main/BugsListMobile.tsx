@@ -1,5 +1,5 @@
 import { Link as RouterLink } from 'react-router-dom';
-import { BugState } from '../../redux/types';
+import { BugState, UserState } from '../../redux/types';
 import BugsMenu from './BugsMenu';
 import { formatDateTime, truncateString } from '../../utils/helperFuncs';
 import { priorityStyles, statusStyles } from '../../styles/customStyles';
@@ -9,7 +9,7 @@ import { useMainPageStyles } from '../../styles/muiStyles';
 import QuestionAnswerTwoToneIcon from '@material-ui/icons/QuestionAnswerTwoTone';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
-const BugsListMobile: React.FC<{ bugs: BugState[] }> = ({ bugs }) => {
+const BugsListMobile: React.FC<{ bugs: BugState[], user: UserState | null}> = ({ bugs, user }) => {
   const classes = useMainPageStyles();
 
   return (
@@ -92,6 +92,7 @@ const BugsListMobile: React.FC<{ bugs: BugState[] }> = ({ bugs }) => {
                   priority: b.priority,
                 }}
                 isResolved={b.isResolved}
+                isAdmin={user?.isAdmin}
                 iconSize="default"
               />
             </div>

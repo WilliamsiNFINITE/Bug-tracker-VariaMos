@@ -36,7 +36,6 @@ const NotesCard: React.FC<{
   const dispatch = useDispatch();
   const { user } = useSelector(selectAuthState);
   const [sortBy, setSortBy] = useState<NoteSortValues>('newest');
-  console.log(user);
 
   const handleSortChange = (e: React.ChangeEvent<{ value: unknown }>) => {
     setSortBy(e.target.value as NoteSortValues);

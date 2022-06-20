@@ -6,14 +6,11 @@ import { BugPayload } from '../redux/types';
 const baseUrl = `${backendUrl}/bugs`;
 
 const getBugs = async () => {
-  debugger;
   const response = await axios.get(baseUrl, setConfig());
-  console.log(response.data);
   return response.data;
 };
 
 const createBug = async (bugData: BugPayload) => {
-  debugger;
   const response = await axios.post(baseUrl,bugData,setConfig());
   return response.data;
 };

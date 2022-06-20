@@ -18,6 +18,8 @@ import { useTheme } from '@material-ui/core/styles';
 import { Paper, Typography, useMediaQuery } from '@material-ui/core';
 import { useMainPageStyles } from '../../styles/muiStyles';
 import BugReportOutlinedIcon from '@material-ui/icons/BugReportOutlined';
+import { selectAuthState } from '../../redux/slices/authSlice';
+import { selectUsersState } from '../../redux/slices/usersSlice';
 
 
 const BugsPage: React.FC<{ isMobile: boolean }> = ({
@@ -32,6 +34,8 @@ const BugsPage: React.FC<{ isMobile: boolean }> = ({
     selectBugsState
   );
   const [filterValue, setFilterValue] = useState('');
+
+  const { user, loading, error } = useSelector(selectAuthState);
 
   useEffect(() => {
     if (!bugs) {
@@ -81,9 +85,9 @@ const BugsPage: React.FC<{ isMobile: boolean }> = ({
       return (
         <div>
           {isMobile ? (
-            <BugsListMobile bugs={filteredSortedBugs} />
+            <BugsListMobile bugs={filteredSortedBugs} user={user}/>
           ) : (
-            <BugsTable bugs={filteredSortedBugs} />
+            <BugsTable bugs={filteredSortedBugs} user={user}/>
           )}
         </div>
       );

@@ -14,9 +14,15 @@ const setToken = (newToken: string) => {
   token = newToken;
 };
 
+let isAdmin: boolean = false;
+
+const setisAdmin = (admin: boolean) => {
+  isAdmin = admin;
+}
+
 export const setConfig = () => {
   return {
-    headers: { 'x-auth-token': token },
+    headers: { 'x-auth-token': token , 'admin': isAdmin},
   };
 };
 
@@ -30,6 +36,6 @@ const signup = async (credentials: Credentials) => {
   return response.data;
 };
 
-const authService = { login, signup, setToken };
+const authService = { login, signup, setToken, setisAdmin };
 
 export default authService;

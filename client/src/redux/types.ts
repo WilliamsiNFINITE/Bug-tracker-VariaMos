@@ -2,6 +2,7 @@ export interface UserState {
   id: string;
   username: string;
   token: string;
+  isAdmin: boolean;
 }
 
 export type BugPriority = 'low' | 'medium' | 'high';

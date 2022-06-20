@@ -22,6 +22,7 @@ import RedoIcon from '@material-ui/icons/Redo';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import { selectAuthState } from '../../redux/slices/authSlice';
 
 interface ParamTypes {
   bugId: string;
@@ -37,6 +38,7 @@ const BugsDetailsPage = () => {
   const bug = useSelector((state: RootState) =>
     selectBugsById(state, bugId)
   );
+  const { user } = useSelector(selectAuthState);
 
   if (!bug) {
     return (
@@ -225,11 +227,13 @@ const BugsDetailsPage = () => {
             <strong>{updatedBy.username}</strong>
           </Typography>
         )}
+        {user?.isAdmin ? (
         <div className={classes.btnsWrapper}>
           {closeReopenBtns()}
           {updateBugBtn()}
           {deleteBugBtn()}
         </div>
+        ) : '' }
       </Paper>
       <NotesCard
         notes={notes}

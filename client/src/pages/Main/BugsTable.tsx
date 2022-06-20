@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { BugState } from '../../redux/types';
+import { BugState, UserState } from '../../redux/types';
 import BugsMenu from './BugsMenu';
 import { formatDateTime } from '../../utils/helperFuncs';
 import { priorityStyles, statusStyles } from '../../styles/customStyles';
@@ -26,7 +26,7 @@ const tableHeaders = [
   'Actions',
 ];
 
-const BugsTable: React.FC<{ bugs: BugState[] }> = ({ bugs }) => {
+const BugsTable: React.FC<{ bugs: BugState[], user: UserState | null }> = ({ bugs, user }) => {
   const classes = useTableStyles();
   const history = useHistory();
 
@@ -99,6 +99,7 @@ const BugsTable: React.FC<{ bugs: BugState[] }> = ({ bugs }) => {
                     priority: b.priority,
                   }}
                   isResolved={b.isResolved}
+                  isAdmin={user?.isAdmin}
                 />
               </TableCell>
             </TableRow>

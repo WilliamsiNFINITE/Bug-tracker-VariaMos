@@ -22,6 +22,7 @@ interface BugsMenuProps {
   currentData: BugPayload;
   isResolved: boolean;
   iconSize?: 'small' | 'default' | 'large';
+  isAdmin: boolean | undefined;
 }
 
 const BugsMenu: React.FC<BugsMenuProps> = ({
@@ -29,6 +30,7 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
   currentData,
   isResolved,
   iconSize,
+  isAdmin,
 }) => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -59,6 +61,7 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
       <IconButton onClick={handleOpenMenu} size="small">
         <MoreHorizIcon color="primary" fontSize={iconSize || 'large'} />
       </IconButton>
+
       <Menu
         anchorEl={anchorEl}
         keepMounted
@@ -83,36 +86,20 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
           <OpenInNewIcon style={{ marginRight: '10px' }} />
           Bug Details
         </MenuItem>
-        {isResolved ? (
-          <ConfirmDialog
-            title="Re-open the Bug"
-            contentText="Are you sure you want to re-open the bug?"
-            actionBtnText="Re-open Bug"
-            triggerBtn={{
-              type: 'menu',
-              text: 'Re-open Bug',
-              icon: RedoIcon,
-              iconStyle: { marginRight: '10px' },
-              closeMenu: handleCloseMenu,
-            }}
-            actionFunc={handleReopenBug}
-          />
-        ) : (
-          <ConfirmDialog
-            title="Close the Bug"
-            contentText="Are you sure you want to close the bug?"
-            actionBtnText="Close Bug"
-            triggerBtn={{
-              type: 'menu',
-              text: 'Close Bug',
-              icon: DoneOutlineIcon,
-              iconStyle: { marginRight: '10px' },
-              closeMenu: handleCloseMenu,
-            }}
-            actionFunc={handleCloseBug}
-          />
-        )}
         <FormDialog
+          triggerBtn={{
+            type: 'menu',
+            text: 'Leave A Note',
+            icon: CommentOutlinedIcon,
+            iconStyle: { marginRight: '10px' },
+            closeMenu: handleCloseMenu,
+          }}
+          title="Post a note"
+        >
+          <NoteForm isEditMode={false} bugId={bugId} />
+        </FormDialog>
+          {isAdmin ? (
+          <FormDialog
           triggerBtn={{
             type: 'menu',
             text: 'Update Bug',
@@ -128,31 +115,52 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
             currentData={currentData}
           />
         </FormDialog>
-        <ConfirmDialog
-          title="Confirm Delete Bug"
-          contentText="Are you sure you want to permanently delete the bug?"
-          actionBtnText="Delete Bug"
-          triggerBtn={{
-            type: 'menu',
-            text: 'Delete Bug',
-            icon: DeleteOutlineIcon,
-            iconStyle: { marginRight: '10px' },
-            closeMenu: handleCloseMenu,
-          }}
-          actionFunc={handleDeleteBug}
+          ): ''}
+        {(isResolved && isAdmin) ? (
+          <ConfirmDialog
+            title="Re-open the Bug"
+            contentText="Are you sure you want to re-open the bug?"
+            actionBtnText="Re-open Bug"
+            triggerBtn={{
+              type: 'menu',
+              text: 'Re-open Bug',
+              icon: RedoIcon,
+              iconStyle: { marginRight: '10px' },
+              closeMenu: handleCloseMenu,
+            }}
+            actionFunc={handleReopenBug}
+          />
+        ) : '' }
+        {(!isResolved && isAdmin) ? (
+          <ConfirmDialog
+            title="Close the Bug"
+            contentText="Are you sure you want to close the bug?"
+            actionBtnText="Close Bug"
+            triggerBtn={{
+              type: 'menu',
+              text: 'Close Bug',
+              icon: DoneOutlineIcon,
+              iconStyle: { marginRight: '10px' },
+              closeMenu: handleCloseMenu,
+            }}
+            actionFunc={handleCloseBug}
+          />
+        ) : '' }
+        {isAdmin ? (
+          <ConfirmDialog
+            title="Confirm Delete Bug"
+            contentText="Are you sure you want to permanently delete the bug?"
+            actionBtnText="Delete Bug"
+            triggerBtn={{
+              type: 'menu',
+              text: 'Delete Bug',
+              icon: DeleteOutlineIcon,
+              iconStyle: { marginRight: '10px' },
+              closeMenu: handleCloseMenu,
+            }}
+            actionFunc={handleDeleteBug}
         />
-        <FormDialog
-          triggerBtn={{
-            type: 'menu',
-            text: 'Leave A Note',
-            icon: CommentOutlinedIcon,
-            iconStyle: { marginRight: '10px' },
-            closeMenu: handleCloseMenu,
-          }}
-          title="Post a note"
-        >
-          <NoteForm isEditMode={false} bugId={bugId} />
-        </FormDialog>
+        ) : ''}
       </Menu>
     </div>
   );
