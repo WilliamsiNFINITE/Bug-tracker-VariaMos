@@ -14,6 +14,8 @@ import {
 import { notify } from './notificationSlice';
 import { History } from 'history';
 import { getErrorMsg } from '../../utils/helperFuncs';
+import userService from '../../services/users';
+import usersSlice from './usersSlice';
 
 interface InitialBugState {
   bugs: BugState[];
@@ -52,7 +54,6 @@ const bugsSlice = createSlice({
       action: PayloadAction<BugState>
     ) => {
       state.bugs.push(action.payload);
-
       state.submitLoading = false;
       state.submitError = null;
     },
@@ -387,6 +388,11 @@ export const selectBugsById = (state: RootState, bugId: string) => {
 export const selectBugsByProjectId = (state: RootState) => {
   return state.bugs.bugs;
 };
+
+export const selectAllAdmins = (state: RootState) => {
+  return state.users.users.filter((u) => u.isAdmin === true);
+};
+
 
 
 export default bugsSlice.reducer;

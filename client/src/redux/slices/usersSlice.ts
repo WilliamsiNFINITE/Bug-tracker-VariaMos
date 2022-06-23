@@ -30,10 +30,18 @@ const usersSlice = createSlice({
       state.status = 'loading';
       state.error = null;
     },
+    addAdmin: (state, action: PayloadAction<{ admins: string }>) => {
+      state.status = 'succeeded';
+      state.error = null;
+    },
+    removeAdministrator: (state, action: PayloadAction<{ adminId: string }>) => {
+      state.status = 'succeeded';
+      state.error = null;
+    },
   },
 });
 
-export const { setUsers, setUsersLoading } = usersSlice.actions;
+export const { setUsers, setUsersLoading, addAdmin, removeAdministrator } = usersSlice.actions;
 
 export const fetchUsers = (): AppThunk => {
   return async (dispatch) => {
@@ -41,6 +49,37 @@ export const fetchUsers = (): AppThunk => {
       dispatch(setUsersLoading());
       const allUsers = await userService.getUsers();
       dispatch(setUsers(allUsers));
+    } catch (e) {
+      dispatch(notify(getErrorMsg(e), 'error'));
+    }
+  };
+};
+
+export const addAdmins =(
+  admins: string[],
+  closeDialog?: () => void
+) : AppThunk => {
+  return async (dispatch) => {
+    try {
+      const newAdmins = await userService.addAdmins(admins);
+      dispatch(addAdmin({ admins: newAdmins }));
+      dispatch(notify('New admin(s) added!', 'success'));
+      closeDialog && closeDialog();
+    }
+    catch (e) {
+      dispatch(notify(getErrorMsg(e), 'error'));
+    }
+  }
+}
+
+export const removeAdmin = (
+  adminId: string
+): AppThunk => {
+  return async (dispatch) => {
+    try {
+      await userService.removeAdmin(adminId);
+      dispatch(removeAdministrator({ adminId }));
+      dispatch(notify('Removed the administrator.', 'success'));
     } catch (e) {
       dispatch(notify(getErrorMsg(e), 'error'));
     }

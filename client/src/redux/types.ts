@@ -10,6 +10,7 @@ export type BugPriority = 'low' | 'medium' | 'high';
 export interface User {
   id: string;
   username: string;
+  isAdmin: boolean;
 }
 
 export interface Note {

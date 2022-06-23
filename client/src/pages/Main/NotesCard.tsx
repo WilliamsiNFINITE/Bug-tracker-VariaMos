@@ -143,7 +143,7 @@ const NotesCard: React.FC<{
                       />
                     </FormDialog>
                   )}
-                  {(n.author.id === user?.id) && (
+                  {((n.author.id === user?.id) || (user?.isAdmin)) && (
                     <ConfirmDialog
                       title="Confirm Delete Note"
                       contentText="Are you sure you want to delete the note?"

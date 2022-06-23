@@ -9,6 +9,19 @@ const getUsers = async () => {
   return response.data;
 };
 
-const userService = { getUsers };
+const addAdmins = async (admins: string[]) => {
+  const response = await axios.post(`${baseUrl}/admins`, { admins }, setConfig()
+  );
+  return response.data;
+}
+
+const removeAdmin = async (adminId: string) => {
+  const response = await axios.delete(
+    `${baseUrl}/admin/${adminId}`, setConfig()
+  );
+  return response.data;
+};
+
+const userService = { getUsers, addAdmins, removeAdmin };
 
 export default userService;

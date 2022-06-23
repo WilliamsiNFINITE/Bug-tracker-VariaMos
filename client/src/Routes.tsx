@@ -28,7 +28,7 @@ const Routes = () => {
           {isLoggedIn ?  <BugsPage isMobile={false} /> : <Redirect to="/login" />}
         </Route>
         <Route exact path="/bugs/:bugId">
-          {user ? <BugDetailsPage /> : <Redirect to="/" />}
+          <BugDetailsPage />
         </Route>
         <Route exact path="/login">
           {!isLoggedIn ? <LoginPage /> : <Redirect to="/" />}
