@@ -12,6 +12,7 @@ import {
   Note,
   BugFilterValues,
   AssignedAdmins,
+  User,
 } from '../types';
 import { notify } from './notificationSlice';
 import { History } from 'history';
@@ -333,10 +334,7 @@ export const assignBugTo = (
   return async (dispatch) => {
     try {
       const AssignmentArray = await assignmentService.assignBug(bugId, admins);
-      
-      console.log("slice received: ", AssignmentArray);
       dispatch(assignBug({ assignments: AssignmentArray, bugId }));
-      
       dispatch(notify('Bug assigned!', 'success'));
       closeDialog && closeDialog();
     }
@@ -355,7 +353,6 @@ export const createNote = (
     try {
       dispatch(setSubmitBugLoading());
       const newNote = await noteService.createNote(bugId, noteBody);
-      console.log("new note: ", newNote);
       dispatch(addNote({ note: newNote, bugId }));
       dispatch(notify('New note added!', 'success'));
       closeDialog && closeDialog();
@@ -419,7 +416,5 @@ export const selectBugsByProjectId = (state: RootState) => {
 export const selectAllAdmins = (state: RootState) => {
   return state.users.users.filter((u) => u.isAdmin === true);
 };
-
-
 
 export default bugsSlice.reducer;

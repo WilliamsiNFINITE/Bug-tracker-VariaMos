@@ -37,10 +37,10 @@ export class createSchema1610529720088 implements MigrationInterface {
       `ALTER TABLE "bugs" ADD CONSTRAINT "FK_df9f856721165a7d9e57705fb26" FOREIGN KEY ("updatedById") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
-      `ALTER TABLE "assignedAdmins" ADD CONSTRAINT "FK_da3e8adedb86281bf9203b1b0ec" FOREIGN KEY ("bugId") REFERENCES "bugs"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
+      `ALTER TABLE "assignedAdmins" ADD CONSTRAINT "FK_da3e8adedb86281bf9203b1b0ec" FOREIGN KEY ("bugId") REFERENCES "bugs"("id") ON DELETE CASCADE ON UPDATE CASCADE`
     );
     await queryRunner.query(
-      `ALTER TABLE "assignedAdmins" ADD CONSTRAINT "FK_b8b1af4785a6d102a8704912178" FOREIGN KEY ("adminId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
+      `ALTER TABLE "assignedAdmins" ADD CONSTRAINT "FK_b8b1af4785a6d102a8704912178" FOREIGN KEY ("adminId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE`
     );
   }
 

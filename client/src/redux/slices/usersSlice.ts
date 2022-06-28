@@ -86,6 +86,8 @@ export const removeAdmin = (
   };
 };
 
-export const selectUsersState = (state: RootState) => state.users;
+export const selectUsersState = (state: RootState) => {
+  return state.users;
+}
 
 export default usersSlice.reducer;

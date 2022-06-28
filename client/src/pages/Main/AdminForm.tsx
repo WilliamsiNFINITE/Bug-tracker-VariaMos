@@ -18,6 +18,7 @@ import { useFormStyles } from '../../styles/muiStyles';
 import GroupIcon from '@material-ui/icons/Group';
 import { addAdmins } from '../../redux/slices/usersSlice';
 import { assignBugTo } from '../../redux/slices/bugsSlice';
+import { selectAuthState } from '../../redux/slices/authSlice';
 
 interface BaseType {
     closeDialog?: () => void;
@@ -35,10 +36,17 @@ const AdminForm: React.FC<MakeAdmin> = ({
     currentAdmins,
     bugId
 }) => {
+   
     const classes = useFormStyles();
     const dispatch = useDispatch();
     const { users } = useSelector(selectUsersState);
     const [admins, setAdmins] = useState<string[]>([]);
+
+    const user = useSelector(selectAuthState).user;
+    const AllUsers: User[] = Object.assign([], users);
+
+    if (user) {AllUsers.push(user);}
+    console.log("all users: ", AllUsers)
 
     const selectAdminsOnChange = (e: any, selectedOption: User[]) => {
         setAdmins(selectedOption.map((s) => s.id));
@@ -70,7 +78,7 @@ const AdminForm: React.FC<MakeAdmin> = ({
               filterSelectedOptions
               onChange={selectAdminsOnChange}
               options={
-                    users.filter((u) => !currentAdmins?.includes(u.id))
+                users.filter((u) => !currentAdmins?.includes(u.id))
               }
               getOptionLabel={(option) => option.username}
               renderInput={(params) => (
@@ -134,7 +142,7 @@ const AdminForm: React.FC<MakeAdmin> = ({
               filterSelectedOptions
               onChange={selectAdminsOnChange}
               options={
-                    users.filter((u) => currentAdmins?.includes(u.id))
+                  AllUsers.filter((u) => currentAdmins?.includes(u.id))
               }
               getOptionLabel={(option) => option.username}
               renderInput={(params) => (

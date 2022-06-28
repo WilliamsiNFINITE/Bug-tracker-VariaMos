@@ -64,9 +64,5 @@ export const assignBug = async (req: Request, res: Response) => {
   ])
   .getMany();
 
-  console.log("updatedAssignments :", updatedAssignments);
-
   res.status(201).json(updatedAssignments);
-
-
 };

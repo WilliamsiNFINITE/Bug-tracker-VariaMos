@@ -44,7 +44,8 @@ export interface BugState {
   reopenedAt?: Date;
   updatedAt?: Date;
   createdAt: Date;
-  assignments: AssignedAdmins[]; 
+  assignments: AssignedAdmins[];
+  image: File;
 }
 
 export type BugSortValues =

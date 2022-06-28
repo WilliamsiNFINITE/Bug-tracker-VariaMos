@@ -16,6 +16,7 @@ import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import CommentOutlinedIcon from '@material-ui/icons/CommentOutlined';
+import ControlPointIcon from '@material-ui/icons/ControlPoint';
 import AdminForm from './AdminForm';
 import { selectAuthState } from '../../redux/slices/authSlice';
 
@@ -38,6 +39,9 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const admins = useSelector(selectAllAdmins);
+  const { user } = useSelector(selectAuthState);
+  
+  if (user) {admins.push(user);}
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -169,7 +173,7 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
           triggerBtn={{
             type: 'menu',
             text: 'Assign bug',
-            icon: EditOutlinedIcon,
+            icon: ControlPointIcon,
             iconStyle: { marginRight: '10px' },
             closeMenu: handleCloseMenu,
           }}
