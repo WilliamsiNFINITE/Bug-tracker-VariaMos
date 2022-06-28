@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from './User';
 import { Note } from './Note';
+import { AssignedAdmins } from './AssignedAdmins';
 
 type Priority = 'low' | 'medium' | 'high';
 
@@ -73,4 +74,8 @@ export class Bug extends BaseEntity {
 
   @Column({ nullable: true })
   updatedAt: Date;
+
+  @OneToMany(() => AssignedAdmins, (assignment) => assignment.bug)
+  @JoinColumn()
+  assignments: AssignedAdmins[];
 }

@@ -23,7 +23,7 @@ export const addAdmins = async (req: Request, res: Response) => {
   if (adminsIds.length === 0) {
     return res
     .status(400)
-    .send({ message: 'Admins field must not be an empty array.' });
+    .send({ message: 'You have to select at least one user' });
   }
 
   let cpt: number = adminsIds.length;

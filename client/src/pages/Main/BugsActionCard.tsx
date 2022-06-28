@@ -56,6 +56,7 @@ const BugsActionCard: React.FC<{
   const { user } = useSelector(selectAuthState);
   const isAdmin = user?.isAdmin;
   const [viewAdmins, setViewAdmins] = useState(false);
+
   const handleSortChange = (e: React.ChangeEvent<{ value: unknown }>) => {
     const selectedValue = e.target.value as BugSortValues;
     dispatch(sortBugsBy(selectedValue));
@@ -166,10 +167,17 @@ const BugsActionCard: React.FC<{
               control={<Radio color="primary" />}
               label="Open"
             />
+            {isAdmin? (
+            <FormControlLabel
+              value="myBugs"
+              control={<Radio color="primary" />}
+              label="myBugs"
+            />
+            ) : '' }
           </RadioGroup>
         </FormControl>
       </div>
-      {admins.length > 1 && (
+          {admins.length > 0 && (
           <AdminsCard
           admins={ admins }
           viewAdmins={ viewAdmins}

@@ -29,6 +29,9 @@ const fieldsToSelect = [
   'note.updatedAt',
   'noteAuthor.id',
   'noteAuthor.username',
+  'assignment.adminId',
+  'assignment.bugId',
+  'assignment.joinedAt',
 ];
 
 export const getBugs = async (_req: Request, res: Response) => {
@@ -40,6 +43,7 @@ export const getBugs = async (_req: Request, res: Response) => {
     .leftJoinAndSelect('bug.reopenedBy', 'reopenedBy')
     .leftJoinAndSelect('bug.notes', 'note')
     .leftJoinAndSelect('note.author', 'noteAuthor')
+    .leftJoinAndSelect('bug.assignments', 'assignment')
     .select(fieldsToSelect)
     .getMany();
 
@@ -71,6 +75,7 @@ export const createBug = async (req: Request, res: Response) => {
     .leftJoinAndSelect('bug.reopenedBy', 'reopenedBy')
     .leftJoinAndSelect('bug.notes', 'note')
     .leftJoinAndSelect('note.author', 'noteAuthor')
+    .leftJoinAndSelect('bug.assignments', 'assignment')
     .select(fieldsToSelect)
     .getOne();
 
@@ -114,6 +119,7 @@ export const updateBug = async (req: Request, res: Response) => {
     .leftJoinAndSelect('bug.reopenedBy', 'reopenedBy')
     .leftJoinAndSelect('bug.notes', 'note')
     .leftJoinAndSelect('note.author', 'noteAuthor')
+    .leftJoinAndSelect('bug.assignments', 'assignment')
     .select(fieldsToSelect)
     .getOne();
 
@@ -177,6 +183,7 @@ export const closeBug = async (req: Request, res: Response) => {
     .leftJoinAndSelect('bug.reopenedBy', 'reopenedBy')
     .leftJoinAndSelect('bug.notes', 'note')
     .leftJoinAndSelect('note.author', 'noteAuthor')
+    .leftJoinAndSelect('bug.assignments', 'assignment')
     .select(fieldsToSelect)
     .getOne();
 
@@ -219,8 +226,10 @@ export const reopenBug = async (req: Request, res: Response) => {
     .leftJoinAndSelect('bug.reopenedBy', 'reopenedBy')
     .leftJoinAndSelect('bug.notes', 'note')
     .leftJoinAndSelect('note.author', 'noteAuthor')
+    .leftJoinAndSelect('bug.assignments', 'assignment')
     .select(fieldsToSelect)
     .getOne();
 
   return res.status(201).json(relationedBug);
 };
+

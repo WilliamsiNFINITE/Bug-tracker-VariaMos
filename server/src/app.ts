@@ -6,6 +6,7 @@ import authRoutes from './routes/auth';
 import bugRoutes from './routes/bug';
 import noteRoutes from './routes/note';
 import userRoutes from './routes/user';
+import assignmentRoutes from './routes/assignment';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use('/', authRoutes);
 app.use('/users', userRoutes);
 app.use('/bugs', bugRoutes);
 app.use('/bugs', noteRoutes);
+app.use('/bugs', assignmentRoutes);
 
 app.use(middleware.unknownEndPointHandler);
 app.use(middleware.errorHandler);

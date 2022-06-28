@@ -5,6 +5,7 @@ import {
   selectBugsById,
   deleteBug,
   closeReopenBug,
+  selectAllAdmins,
 } from '../../redux/slices/bugsSlice';
 import { RootState } from '../../redux/store';
 import FormDialog from '../../components/FormDialog';
@@ -23,6 +24,7 @@ import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { selectAuthState } from '../../redux/slices/authSlice';
+import AdminForm from './AdminForm';
 
 interface ParamTypes {
   bugId: string;
@@ -39,7 +41,8 @@ const BugsDetailsPage = () => {
     selectBugsById(state, bugId)
   );
   const { user } = useSelector(selectAuthState);
-
+  const admins = useSelector(selectAllAdmins);
+  
   if (!bug) {
     return (
       <div className={classes.root}>
@@ -72,6 +75,7 @@ const BugsDetailsPage = () => {
     reopenedBy,
     reopenedAt,
     notes,
+    assignments,
   } = bug;
 
   const handleDeleteBug = () => {
@@ -183,6 +187,26 @@ const BugsDetailsPage = () => {
     );
   };
 
+  const assignBugBtn = () => {
+    return (
+      <FormDialog
+        triggerBtn={{
+          type: isMobile ? 'round' : 'normal',
+          text: 'Assign bug',
+          icon: EditOutlinedIcon,
+          style: { marginLeft: '1em' },
+        }}
+        title="Assign the bug to specific admin(s)"
+      >
+        <AdminForm
+          editMode=""
+          currentAdmins={admins.map((a) => a.id)}
+          bugId={bugId}
+        />
+      </FormDialog>
+    );
+  };
+
   return (
     <div className={classes.root}>
       <Paper className={classes.detailsHeader}>
@@ -232,6 +256,7 @@ const BugsDetailsPage = () => {
           {closeReopenBtns()}
           {updateBugBtn()}
           {deleteBugBtn()}
+          {assignBugBtn()}
         </div>
         ) : '' }
       </Paper>

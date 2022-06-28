@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../store';
 import bugService from '../../services/bugs';
+import assignmentService from '../../services/assignment';
 import noteService from '../../services/notes';
 import {
   BugState,
@@ -10,12 +11,14 @@ import {
   ClosedReopenedBugData,
   Note,
   BugFilterValues,
+  AssignedAdmins,
 } from '../types';
 import { notify } from './notificationSlice';
 import { History } from 'history';
 import { getErrorMsg } from '../../utils/helperFuncs';
 import userService from '../../services/users';
 import usersSlice from './usersSlice';
+import { useSelector } from 'react-redux';
 
 interface InitialBugState {
   bugs: BugState[];
@@ -85,6 +88,18 @@ const bugsSlice = createSlice({
     ) => {
       state.bugs = state.bugs.map((b) => b.id === action.payload.bugId ? {...b, ...action.payload.data } : b
       );
+    },
+    assignBug: (
+        state,
+        action: PayloadAction<{ assignments: AssignedAdmins[]; bugId: string }>
+    ) => {
+      state.bugs = state.bugs.map((b) =>
+        b.id === action.payload.bugId
+          ? { ...b, assignments: action.payload.assignments }
+          : b
+      );
+      state.submitLoading = false;
+      state.submitError = null;
     },
     addNote: (
       state,
@@ -170,8 +185,9 @@ const bugsSlice = createSlice({
     filterBugsBy: (state, action: PayloadAction<BugFilterValues>) => {
       state.filterBy = action.payload;
     },
-  },
-});
+  }
+}
+)
 
 export const {
   setBugs,
@@ -189,6 +205,7 @@ export const {
   clearSubmitBugError,
   sortBugsBy,
   filterBugsBy,
+  assignBug,
 } = bugsSlice.actions;
 
 export const fetchBugs = (): AppThunk => {
@@ -206,18 +223,6 @@ export const fetchBugs = (): AppThunk => {
     }
   };
 };
-/*
-export const fetchBugsById = (bugId: string): AppThunk => {
-  return async (dispatch) => {
-    try {
-      dispatch(setFetchBugsLoading());
-      const Bugs = await bugService.getBugs();
-      dispatch(selectBugsById(bugId)));
-    } catch (e) {
-      dispatch(setFetchBugsError(getErrorMsg(e)));
-    }
-  };
-};*/
 
 export const createNewBug = (
   bugData: BugPayload,
@@ -320,6 +325,27 @@ export const closeReopenBug = (
   };
 };
 
+export const assignBugTo = (
+  bugId: string,
+  admins: string[],
+  closeDialog?: () => void
+) : AppThunk => {
+  return async (dispatch) => {
+    try {
+      const AssignmentArray = await assignmentService.assignBug(bugId, admins);
+      
+      console.log("slice received: ", AssignmentArray);
+      dispatch(assignBug({ assignments: AssignmentArray, bugId }));
+      
+      dispatch(notify('Bug assigned!', 'success'));
+      closeDialog && closeDialog();
+    }
+    catch (e) {
+      dispatch(notify(getErrorMsg(e), 'error'));
+    }
+  };
+};
+
 export const createNote = (
   bugId: string,
   noteBody: string,
@@ -329,6 +355,7 @@ export const createNote = (
     try {
       dispatch(setSubmitBugLoading());
       const newNote = await noteService.createNote(bugId, noteBody);
+      console.log("new note: ", newNote);
       dispatch(addNote({ note: newNote, bugId }));
       dispatch(notify('New note added!', 'success'));
       closeDialog && closeDialog();

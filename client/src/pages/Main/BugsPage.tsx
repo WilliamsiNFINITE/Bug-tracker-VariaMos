@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchBugs,
-  selectBugsById,
   selectBugsByProjectId,
   selectBugsState,
 } from '../../redux/slices/bugsSlice';
@@ -14,12 +13,12 @@ import sortBugs from '../../utils/sortBugs';
 import filterBugs from '../../utils/filterBugs';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import InfoText from '../../components/InfoText';
-import { useTheme } from '@material-ui/core/styles';
 import { Paper, Typography, useMediaQuery } from '@material-ui/core';
 import { useMainPageStyles } from '../../styles/muiStyles';
 import BugReportOutlinedIcon from '@material-ui/icons/BugReportOutlined';
 import { selectAuthState } from '../../redux/slices/authSlice';
 import { selectUsersState } from '../../redux/slices/usersSlice';
+import { BugState } from '../../redux/types';
 
 
 const BugsPage: React.FC<{ isMobile: boolean }> = ({
@@ -36,6 +35,7 @@ const BugsPage: React.FC<{ isMobile: boolean }> = ({
   const [filterValue, setFilterValue] = useState('');
 
   const { user, loading, error } = useSelector(selectAuthState);
+  const userId = user?.id;
 
   useEffect(() => {
     if (!bugs) {
@@ -45,16 +45,15 @@ const BugsPage: React.FC<{ isMobile: boolean }> = ({
   }, []);
 
   const filteredSortedBugs =
-  bugs &&
-  sortBugs(
-    bugs.filter(
-      (b) =>
-        b.title.toLowerCase().includes(filterValue.toLowerCase()) &&
-        filterBugs(filterBy, b)
-    ),
-    sortBy
-  );
-
+    bugs &&
+    sortBugs(
+      bugs.filter(
+        (b) =>
+          b.title.toLowerCase().includes(filterValue.toLowerCase()) &&
+          filterBugs(filterBy, b, userId)
+      ),
+      sortBy
+    );
 
   const bugsDataToDisplay = () => {
     if (fetchLoading) {

@@ -16,6 +16,9 @@ export class createSchema1610529720088 implements MigrationInterface {
       `CREATE TABLE "bugs" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" character varying(60) NOT NULL, "description" character varying NOT NULL, "priority" "bugs_priority_enum" NOT NULL DEFAULT 'low', "isResolved" boolean NOT NULL DEFAULT false, "closedById" uuid, "closedAt" TIMESTAMP, "reopenedById" uuid, "reopenedAt" TIMESTAMP, "createdById" uuid NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedById" uuid, "updatedAt" TIMESTAMP, CONSTRAINT "PK_dadac7f01b703d50496ae1d3e74" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
+      `CREATE TABLE "assignedAdmins" ("id" SERIAL NOT NULL, "bugId" uuid NOT NULL, "adminId" uuid NOT NULL, "joinedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_28b53062261b996d9c99fa12404" PRIMARY KEY ("id"))`
+    );
+    await queryRunner.query(
       `ALTER TABLE "notes" ADD CONSTRAINT "FK_d358080cb403fe88e62cc9cba58" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
@@ -32,6 +35,12 @@ export class createSchema1610529720088 implements MigrationInterface {
     );
     await queryRunner.query(
       `ALTER TABLE "bugs" ADD CONSTRAINT "FK_df9f856721165a7d9e57705fb26" FOREIGN KEY ("updatedById") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
+    );
+    await queryRunner.query(
+      `ALTER TABLE "assignedAdmins" ADD CONSTRAINT "FK_da3e8adedb86281bf9203b1b0ec" FOREIGN KEY ("bugId") REFERENCES "bugs"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
+    );
+    await queryRunner.query(
+      `ALTER TABLE "assignedAdmins" ADD CONSTRAINT "FK_b8b1af4785a6d102a8704912178" FOREIGN KEY ("adminId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
   }
 
@@ -54,9 +63,17 @@ export class createSchema1610529720088 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "notes" DROP CONSTRAINT "FK_d358080cb403fe88e62cc9cba58"`
     );
+    await queryRunner.query(
+      `ALTER TABLE "assignedAdmins" DROP CONSTRAINT "FK_b8b1af4785a6d102a8704912178"`
+    );
+    await queryRunner.query(
+      `ALTER TABLE "assignedAdmins" DROP CONSTRAINT "FK_da3e8adedb86281bf9203b1b0ec"`
+    );
+
     await queryRunner.query(`DROP TABLE "bugs"`);
     await queryRunner.query(`DROP TYPE "bugs_priority_enum"`);
     await queryRunner.query(`DROP TABLE "notes"`);
     await queryRunner.query(`DROP TABLE "users"`);
+    await queryRunner.query(`DROP TABLE "assignedAdmins"`);
   }
 }

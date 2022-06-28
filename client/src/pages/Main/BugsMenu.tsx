@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { deleteBug, closeReopenBug } from '../../redux/slices/bugsSlice';
-import { BugPayload } from '../../redux/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteBug, closeReopenBug, selectAllAdmins } from '../../redux/slices/bugsSlice';
+import { BugPayload, User } from '../../redux/types';
 import ConfirmDialog from '../../components/ConfirmDialog';
 import FormDialog from '../../components/FormDialog';
 import BugForm from './BugForm';
@@ -16,6 +16,8 @@ import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import CommentOutlinedIcon from '@material-ui/icons/CommentOutlined';
+import AdminForm from './AdminForm';
+import { selectAuthState } from '../../redux/slices/authSlice';
 
 interface BugsMenuProps {
   bugId: string;
@@ -35,6 +37,7 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
   const history = useHistory();
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const admins = useSelector(selectAllAdmins);
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -161,6 +164,24 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
             actionFunc={handleDeleteBug}
         />
         ) : ''}
+        {isAdmin ? (
+          <FormDialog
+          triggerBtn={{
+            type: 'menu',
+            text: 'Assign bug',
+            icon: EditOutlinedIcon,
+            iconStyle: { marginRight: '10px' },
+            closeMenu: handleCloseMenu,
+          }}
+          title="Assign the bug to specific admins"
+        >
+          <AdminForm
+            editMode=""
+            currentAdmins={admins.map((a) => a.id)}
+            bugId={bugId}
+          />
+        </FormDialog>
+        ) : '' }
       </Menu>
     </div>
   );

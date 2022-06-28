@@ -22,6 +22,13 @@ export interface Note {
   updatedAt: Date;
 }
 
+export interface AssignedAdmins {
+  id: number;
+  bugId: string;
+  adminId: string;
+  joinedAt: Date;
+}
+
 export interface BugState {
   id: string;
   title: string;
@@ -37,6 +44,7 @@ export interface BugState {
   reopenedAt?: Date;
   updatedAt?: Date;
   createdAt: Date;
+  assignments: AssignedAdmins[]; 
 }
 
 export type BugSortValues =
@@ -52,7 +60,7 @@ export type BugSortValues =
   | 'most-notes'
   | 'least-notes';
 
-export type BugFilterValues = 'all' | 'closed' | 'open';
+export type BugFilterValues = 'all' | 'closed' | 'open' | 'myBugs';
 
 export interface CredentialsPayload {
   username: string;
