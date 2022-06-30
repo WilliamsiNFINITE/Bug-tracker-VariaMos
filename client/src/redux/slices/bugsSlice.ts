@@ -334,7 +334,12 @@ export const assignBugTo = (
   return async (dispatch) => {
     try {
       const AssignmentArray = await assignmentService.assignBug(bugId, admins);
+      console.log(AssignmentArray);
       dispatch(assignBug({ assignments: AssignmentArray, bugId }));
+      const adminsToSendNotif = AssignmentArray.map((a: any) => a.admin)
+      const adminsIdsToSendNotif = adminsToSendNotif.map((a: any) => a.id);
+      console.log(adminsIdsToSendNotif)
+      await userService.sendNotification(adminsIdsToSendNotif);
       dispatch(notify('Bug assigned!', 'success'));
       closeDialog && closeDialog();
     }

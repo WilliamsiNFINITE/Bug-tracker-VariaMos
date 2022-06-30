@@ -8,7 +8,7 @@ export const assignBug = async (req: Request, res: Response) => {
   const adminsIds = req.body.admins as string[];
 
   const currentUser = await User.findOne(req.user);
-  
+
   if (!currentUser?.isAdmin) {
     return res.status(403).send({ message: 'Permission denied.'});
   }
@@ -51,6 +51,7 @@ export const assignBug = async (req: Request, res: Response) => {
 
   await AssignedAdmins.insert(AssignmentsArray);
 
+  console.log(AssignmentsArray);
   const updatedAssignments = await AssignedAdmins.createQueryBuilder('assignment')
   .leftJoinAndSelect('assignment.admin', 'admin')
   .leftJoinAndSelect('assignment.bug', 'bug')
@@ -60,9 +61,11 @@ export const assignBug = async (req: Request, res: Response) => {
     'assignment.joinedAt',
     'admin.id',
     'admin.username',
+    'admin.email',
+    'admin.notificationsOn',
     'bug.id',
   ])
   .getMany();
 
-  res.status(201).json(updatedAssignments);
+  res.status(201).json(updatedAssignments)
 };

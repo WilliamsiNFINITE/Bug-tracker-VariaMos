@@ -11,4 +11,11 @@ export class User extends BaseModel {
 
   @Column()
   isAdmin: boolean;
+
+  @Column()
+  email: string;
+
+  @Column()
+  notificationsOn: boolean;
+  
 }

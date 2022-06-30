@@ -3,6 +3,8 @@ export interface UserState {
   username: string;
   token: string;
   isAdmin: boolean;
+  email: string;
+  notificationsOn: boolean;
 }
 
 export type BugPriority = 'low' | 'medium' | 'high';
@@ -11,6 +13,8 @@ export interface User {
   id: string;
   username: string;
   isAdmin: boolean;
+  email: string;
+  notificationsOn: boolean;
 }
 
 export interface Note {
@@ -66,12 +70,18 @@ export type BugFilterValues = 'all' | 'closed' | 'open' | 'myBugs';
 export interface CredentialsPayload {
   username: string;
   password: string;
+  email?: string;
 }
 
 export interface BugPayload {
   title: string;
   description: string;
   priority: BugPriority;
+}
+
+export interface EmailPayload {
+  email: string;
+  notificationsOn: boolean;
 }
 
 export interface EditedBugData extends BugPayload {

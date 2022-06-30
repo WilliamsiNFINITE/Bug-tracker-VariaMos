@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { UserState } from '../redux/types';
+import { EmailPayload, UserState } from '../redux/types';
 import DarkModeSwitch from './DarkModeSwitch';
 
 import { Button, Avatar, Typography } from '@material-ui/core';
@@ -8,6 +8,12 @@ import { useNavStyles } from '../styles/muiStyles';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
+import FormDialog from './FormDialog';
+import BugForm from '../pages/Main/BugForm';
+import EmailForm from '../pages/Main/EmailForm';
+import { useSelector } from 'react-redux';
+import { selectUsersState } from '../redux/slices/usersSlice';
 
 interface UserMenu {
   isMobile: boolean;
@@ -21,6 +27,12 @@ const UserButtonsDesktop: React.FC<UserMenu> = ({
   handleLogout,
 }) => {
   const classes = useNavStyles();
+  const email = user?.email;
+
+  let emailExist: boolean = false;
+  if (email) {
+      emailExist = true;
+  }
 
   if (isMobile) return null;
 
@@ -46,6 +58,33 @@ const UserButtonsDesktop: React.FC<UserMenu> = ({
           >
             Log Out
           </Button>
+          
+          <div className={classes.btnsWrapper}>
+          <FormDialog
+          triggerBtn={
+            isMobile
+              ? {
+                  color: "secondary",
+                  type: 'fab',
+                  variant: 'extended',
+                  text: 'Email',
+                  icon: AlternateEmailIcon,
+                }
+              : {
+                  color: "secondary",
+                  type: 'normal',
+                  variant: 'outlined',
+                  text: 'Email',
+                  icon: AlternateEmailIcon,
+                  size: 'small',
+                  style: { marginRight: '10em' },
+                }
+          }
+          title="Change your personnal settings"
+        >
+          <EmailForm emailExist={emailExist} />
+        </FormDialog>
+        </div>
           <DarkModeSwitch isMobile={isMobile} />
         </div>
       ) : (

@@ -24,6 +24,7 @@ import {
 } from '@material-ui/core';
 import { useAuthPageStyles } from '../../styles/muiStyles';
 import PersonIcon from '@material-ui/icons/Person';
+import AlternateEmail from '@material-ui/icons/AlternateEmail';
 import LockIcon from '@material-ui/icons/Lock';
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
@@ -34,6 +35,7 @@ interface InputValues {
   username: string;
   password: string;
   confirmPassword: string;
+  email?: string;
 }
 
 const validationSchema = yup.object({
@@ -71,11 +73,12 @@ const SignupPage = () => {
     username,
     password,
     confirmPassword,
+    email,
   }: InputValues) => {
     if (password !== confirmPassword) {
       return dispatch(setAuthError('Both passwords need to match.'));
     }
-    dispatch(signup({ username, password }));
+    dispatch(signup({ username, password, email }));
   };
 
   return (
@@ -166,6 +169,25 @@ const SignupPage = () => {
                 startAdornment: (
                   <InputAdornment position="start">
                     <EnhancedEncryptionIcon color="primary" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </div>
+          <div className={classes.inputField}>
+            <TextField
+              fullWidth
+              inputRef={register}
+              name="email"
+              type="text"
+              label="Email"
+              variant="outlined"
+              error={'email' in errors}
+              helperText={'email' in errors ? errors.email.message : ''}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AlternateEmail color="primary" />
                   </InputAdornment>
                 ),
               }}

@@ -21,6 +21,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const NavBar = () => {
   const { user } = useSelector(selectAuthState);
+
   const dispatch = useDispatch();
   const history = useHistory();
   const { pathname } = useLocation();
@@ -30,7 +31,7 @@ const NavBar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    history.push('/login');
+    history.push('/');
   };
 
   const handleGoBack = () => {

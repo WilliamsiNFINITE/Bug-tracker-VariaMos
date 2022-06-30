@@ -1,6 +1,7 @@
 interface AuthErrors {
   username?: string;
   password?: string;
+  email?: string;
 }
 
 interface BugErrors {
@@ -9,7 +10,7 @@ interface BugErrors {
   priority?: string;
 }
 
-export const registerValidator = (username: string, password: string) => {
+export const registerValidator = (username: string, password: string, email?: string) => {
   const errors: AuthErrors = {};
 
   if (
@@ -27,6 +28,12 @@ export const registerValidator = (username: string, password: string) => {
 
   if (!password || password.length < 6) {
     errors.password = 'Password must be atleast 6 characters long.';
+  }
+
+  if (email) {
+    if (!/^[a-zA-Z0-9.!#$%&''*+/=?^_{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email)) {
+      errors.email = 'Invalid email adress.';
+    }
   }
 
   return {

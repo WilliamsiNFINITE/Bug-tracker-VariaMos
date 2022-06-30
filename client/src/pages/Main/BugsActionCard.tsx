@@ -54,6 +54,7 @@ const BugsActionCard: React.FC<{
   const { sortBy, filterBy } = useSelector(selectBugsState);
   const admins = useSelector(selectAllAdmins);
   const { user } = useSelector(selectAuthState);
+
   const isAdmin = user?.isAdmin;
   const [viewAdmins, setViewAdmins] = useState(false);
 

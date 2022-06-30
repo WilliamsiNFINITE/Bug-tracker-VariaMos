@@ -1,5 +1,7 @@
+import { RepeatOneSharp } from '@material-ui/icons';
 import axios from 'axios';
 import backendUrl from '../backendUrl';
+import { EmailPayload } from '../redux/types';
 import { setConfig } from './auth';
 
 const baseUrl = `${backendUrl}/users`;
@@ -22,6 +24,21 @@ const removeAdmin = async (adminId: string) => {
   return response.data;
 };
 
-const userService = { getUsers, addAdmins, removeAdmin };
+const changeSettings = async (data: EmailPayload) => {
+  const response = await axios.post(
+    `${baseUrl}/email`, data, setConfig()
+  );
+  return response.data;
+}
+
+const sendNotification = async (adminsIds: string[]) => {
+  const response = await axios.post(
+    `${baseUrl}/sendNotification`, adminsIds, setConfig()
+  );
+  return response.data;
+}
+
+
+const userService = { getUsers, addAdmins, removeAdmin, changeSettings, sendNotification };
 
 export default userService;

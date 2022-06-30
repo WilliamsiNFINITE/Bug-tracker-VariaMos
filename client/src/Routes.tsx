@@ -22,10 +22,10 @@ const Routes = () => {
     <Container disableGutters={isMobile}>
       <Switch>
         <Route exact path="/">
-          {isLoggedIn ? <BugsPage isMobile={false} /> : <Redirect to="/login" />}
+          {<BugsPage isMobile={false} />}
         </Route>
         <Route exact path="/bugs">
-          {isLoggedIn ?  <BugsPage isMobile={false} /> : <Redirect to="/login" />}
+          {<BugsPage isMobile={false} />}
         </Route>
         <Route exact path="/bugs/:bugId">
           <BugDetailsPage />

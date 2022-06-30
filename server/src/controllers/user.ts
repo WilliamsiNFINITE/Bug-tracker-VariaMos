@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import { User } from '../entity/User';
 import { Not } from 'typeorm';
+import nodemailer from 'nodemailer';
+import { EMAIL, PASSWORD } from '../utils/config';
 
 export const getAllUsers = async (req: Request, res: Response) => {
   const users = await User.find({
     where: { id: Not(req.user) },
-    select: ['id', 'username', 'isAdmin'],
+    select: ['id', 'username', 'isAdmin', 'email', 'notificationsOn'],
   });
 
   res.json(users);
@@ -48,6 +50,8 @@ export const addAdmins = async (req: Request, res: Response) => {
       'user.id',
       'user.username',
       'user.isAdmin',
+      'user.email',
+      'user.notificationsOn',
     ])
     .getMany();
 
@@ -73,4 +77,96 @@ export const removeAdmin = async (req: Request, res: Response) => {
   }
 
   res.status(204).end();
+};
+
+export const changeSettings = async (req: Request, res: Response) => {
+  const currentUser = await User.findOne(req.user);
+  const { email, notifications } = req.body;
+
+  if (email) {
+    if (!/^[a-zA-Z0-9.!#$%&''*+/=?^_{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+    .test(email)) {
+      return res.status(400).send({ message: 'Invalid e-mail adress.' });
+    }
+  }
+
+  if (currentUser) {
+    
+    if (email && email !== '') {
+      currentUser.email = email;
+    }
+    
+    if (notifications === 'on') {
+      currentUser.notificationsOn = true;
+    }
+    else if (notifications === 'off') {
+      currentUser.notificationsOn = false;
+    }
+    currentUser?.save();
+  }
+
+  res.status(201).json(currentUser);
+}
+
+export const sendNotification = async (req: Request, res: Response) => {
+  const adminsIds = req.body;
+
+  const admins: User[] = [];
+
+  for (let adminId of adminsIds) {
+    const admin = await User.findOne({
+      where: { id: adminId }
+    });
+    if (admin) {
+      admins.push(admin);
+    }
+  }
+
+  // send e-mail to each admin that has notifications on
+  for (let admin of admins) {
+    
+    if (admin.notificationsOn === true) {
+      console.log(`Going to send email to ${admin.username}...`);
+
+      let transporter = nodemailer.createTransport({
+        maxMessages: 300,
+        pool: true,
+        service: "hotmail", // outlook is hotmail service
+        secure: false,
+        auth: { 
+          user: EMAIL,
+          pass: PASSWORD,
+        }
+      });
+      
+      let email = {
+        from: EMAIL,
+        to: admin.email,
+        subject: "VariaMos | New Bug Assigned",
+        text: `Hello ${admin.username}, you have been assigned a bug on VariaMos BugTracker !
+        \nIf you want to stop receiving those emails turn your notifications off. 
+        \nPlease do not reply to this email.
+        \n\nThe VariaMos Team.`
+      };
+
+      transporter.verify(function (error, _success) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Server is ready to take our messages");
+        }
+      });
+     
+      transporter.sendMail(email, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info);
+        }
+      });    
+      
+    }
+  }
+
+  res.status(201).json(admins);
 };

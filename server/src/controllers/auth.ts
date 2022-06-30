@@ -6,8 +6,8 @@ import { JWT_SECRET } from '../utils/config';
 import { registerValidator, loginValidator } from '../utils/validators';
 
 export const signupUser = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  const { errors, valid } = registerValidator(username, password);
+  const { username, password, email } = req.body;
+  const { errors, valid } = registerValidator(username, password, email);
 
   if (!valid) {
     return res.status(400).send({ message: Object.values(errors)[0] });
@@ -26,10 +26,11 @@ export const signupUser = async (req: Request, res: Response) => {
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
-  const user = User.create({ username, passwordHash });
+  const user = User.create({ username, passwordHash, email });
   await user.save();
 
   const isAdmin: boolean = false;
+  const notificationsOn: boolean = true;
 
   const token = jwt.sign(
     {
@@ -43,7 +44,9 @@ export const signupUser = async (req: Request, res: Response) => {
     id: user.id,
     username: user.username,
     token,
-    isAdmin
+    isAdmin,
+    email,
+    notificationsOn,
   });
 };
 
@@ -73,10 +76,15 @@ export const loginUser = async (req: Request, res: Response) => {
 
   const isAdmin: boolean = user.isAdmin;
 
+  const email = user.email;
+  const notificationsOn = user.notificationsOn;
+
   return res.status(201).json({
     id: user.id,
     username: user.username,
     token,
     isAdmin,
+    email,
+    notificationsOn,
   });
 };

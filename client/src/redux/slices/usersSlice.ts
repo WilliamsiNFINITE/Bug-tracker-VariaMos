@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../store';
 import userService from '../../services/users';
-import { User } from '../types';
+import { EmailPayload, User } from '../types';
 import { notify } from './notificationSlice';
 import { getErrorMsg } from '../../utils/helperFuncs';
+import { string } from 'yup';
 
 interface InitialBugState {
   users: User[];
@@ -38,10 +39,16 @@ const usersSlice = createSlice({
       state.status = 'succeeded';
       state.error = null;
     },
+    ChangeSettings: (state, action: PayloadAction<{ data: EmailPayload; userId: string }>) => {
+      state.users = state.users.map((u) => u.id === action.payload.userId ? {...u, ...action.payload.data } : u
+      );
+      state.status = 'succeeded';
+      state.error = null;
+    }
   },
 });
 
-export const { setUsers, setUsersLoading, addAdmin, removeAdministrator } = usersSlice.actions;
+export const { setUsers, setUsersLoading, addAdmin, removeAdministrator, ChangeSettings } = usersSlice.actions;
 
 export const fetchUsers = (): AppThunk => {
   return async (dispatch) => {
@@ -80,6 +87,23 @@ export const removeAdmin = (
       await userService.removeAdmin(adminId);
       dispatch(removeAdministrator({ adminId }));
       dispatch(notify('Removed the administrator.', 'success'));
+    } catch (e) {
+      dispatch(notify(getErrorMsg(e), 'error'));
+    }
+  };
+};
+
+export const changeSettings = (
+  data: EmailPayload,
+  closeDialog?: () => void
+): AppThunk => {
+  return async (dispatch) => {
+    try {
+      const updatedUser: User = await userService.changeSettings(data);
+      const userId = updatedUser.id;
+      dispatch(ChangeSettings( { data, userId }));
+      dispatch(notify('New settings saved!', 'success'));
+      closeDialog && closeDialog();
     } catch (e) {
       dispatch(notify(getErrorMsg(e), 'error'));
     }

@@ -6,6 +6,8 @@ interface User {
   username: string;
   token: string;
   isAdmin: boolean;
+  email: string;
+  notificationsOn: boolean;
 }
 
 const saveUser = (user: User) => {

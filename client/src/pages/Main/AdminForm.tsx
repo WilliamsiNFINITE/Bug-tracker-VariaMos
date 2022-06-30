@@ -46,7 +46,6 @@ const AdminForm: React.FC<MakeAdmin> = ({
     const AllUsers: User[] = Object.assign([], users);
 
     if (user) {AllUsers.push(user);}
-    console.log("all users: ", AllUsers)
 
     const selectAdminsOnChange = (e: any, selectedOption: User[]) => {
         setAdmins(selectedOption.map((s) => s.id));
