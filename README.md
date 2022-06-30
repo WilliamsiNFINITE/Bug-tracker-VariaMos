@@ -74,7 +74,7 @@ npm start
 
 Open ormconfig.js & update the local PostgreSQL credentials to match with yours.
 
-To compile the project, run this command:
+To compile the project, go to server dir & run this command:
 `npx tsc --project .\tsconfig.json`
 
 To run the migrations, go to server dir & run this command:
