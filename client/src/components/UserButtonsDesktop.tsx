@@ -38,14 +38,14 @@ const UserButtonsDesktop: React.FC<UserMenu> = ({
 
   return (
     <div>
-      {user ? (
+      {user?.username !== "user" ? (
         <div className={classes.btnsWrapper}>
           <div className={classes.userInfo}>
             <Avatar className={classes.avatar}>
-              {user.username.slice(0, 1)}
+              {user?.username.slice(0, 1)}
             </Avatar>
             <Typography color="secondary" variant="body1">
-              {user.username}
+              {user?.username}
             </Typography>
           </div>
           <Button

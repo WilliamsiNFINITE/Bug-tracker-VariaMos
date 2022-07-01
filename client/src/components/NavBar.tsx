@@ -1,9 +1,10 @@
 import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAuthState, logout } from '../redux/slices/authSlice';
+import { selectAuthState, logout, login } from '../redux/slices/authSlice';
 import UserButtonsDesktop from './UserButtonsDesktop';
 import UserMenuMobile from './UserMenuMobile';
 import BugIcon from '../svg/bug-logo.svg';
+import { CredentialsPayload } from '../redux/types';
 
 import {
   AppBar,
@@ -31,6 +32,12 @@ const NavBar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    const autoUserCredentials: CredentialsPayload = {
+      username: "user",
+      password: "pass",
+    };
+
+    dispatch(login(autoUserCredentials))
     history.push('/');
   };
 

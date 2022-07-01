@@ -11,6 +11,8 @@ import storage from './utils/localStorage';
 import { Container, useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import { selectBugsState } from './redux/slices/bugsSlice';
+import { UserState } from './redux/types';
+import { updateShorthandPropertyAssignment } from 'typescript';
 
 const Routes = () => {
   const { user } = useSelector(selectAuthState);
@@ -31,10 +33,10 @@ const Routes = () => {
           <BugDetailsPage />
         </Route>
         <Route exact path="/login">
-          {!isLoggedIn ? <LoginPage /> : <Redirect to="/" />}
+          {user?.username === "user" ? <LoginPage /> : <Redirect to="/" />}
         </Route>
         <Route exact path="/signup">
-          {!isLoggedIn ? <SignupPage /> : <Redirect to="/" />}
+          {user?.username === "user" ? <SignupPage /> : <Redirect to="/" />}
         </Route>
         <Route>
           <NotFoundPage />
