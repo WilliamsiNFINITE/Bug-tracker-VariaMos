@@ -1,7 +1,7 @@
 import { RepeatOneSharp } from '@material-ui/icons';
 import axios from 'axios';
 import backendUrl from '../backendUrl';
-import { EmailPayload } from '../redux/types';
+import { SettingsPayload, InviteAdminPayload } from '../redux/types';
 import { setConfig } from './auth';
 
 const baseUrl = `${backendUrl}/users`;
@@ -17,6 +17,12 @@ const addAdmins = async (admins: string[]) => {
   return response.data;
 }
 
+const inviteAdmin = async(data: InviteAdminPayload) => {
+  const response = await axios.post(`${baseUrl}/inviteAdmin`, { data }, setConfig()
+  );
+  return response.data;
+}
+
 const removeAdmin = async (adminId: string) => {
   const response = await axios.delete(
     `${baseUrl}/admin/${adminId}`, setConfig()
@@ -24,21 +30,22 @@ const removeAdmin = async (adminId: string) => {
   return response.data;
 };
 
-const changeSettings = async (data: EmailPayload) => {
+const changeSettings = async (data: SettingsPayload) => {
   const response = await axios.post(
     `${baseUrl}/email`, data, setConfig()
   );
   return response.data;
 }
 
-const sendNotification = async (adminsIds: string[]) => {
+const sendNotification = async (adminsIds: string) => {
+  console.log(" id avant la route: ", adminsIds)
   const response = await axios.post(
-    `${baseUrl}/sendNotification`, adminsIds, setConfig()
+    `${baseUrl}/sendNotification`, { adminsIds }, setConfig()
   );
   return response.data;
 }
 
 
-const userService = { getUsers, addAdmins, removeAdmin, changeSettings, sendNotification };
+const userService = { getUsers, addAdmins, inviteAdmin, removeAdmin, changeSettings, sendNotification };
 
 export default userService;

@@ -227,13 +227,21 @@ export const fetchBugs = (): AppThunk => {
 
 export const createNewBug = (
   bugData: BugPayload,
-  closeDialog?: () => void
+  closeDialog?: () => void,
+  file?: File
 ): AppThunk => {
   return async (dispatch) => {
     try {
+      console.log(file);
       dispatch(setSubmitBugLoading());
-      const newBug = await bugService.createBug(bugData);
-      dispatch(addBug(newBug));
+      if (file) {
+        const newBug = await bugService.createBug(bugData, file);
+        dispatch(addBug(newBug));
+      }
+      else {
+        const newBug = await bugService.createBug(bugData);
+        dispatch(addBug(newBug));
+      }
       dispatch(notify('New bug added!', 'success'));
       closeDialog && closeDialog();
     } catch (e: any) {
@@ -333,13 +341,21 @@ export const assignBugTo = (
 ) : AppThunk => {
   return async (dispatch) => {
     try {
+      // return an array with the assignments and the number of new admins assigned
       const AssignmentArray = await assignmentService.assignBug(bugId, admins);
-      console.log(AssignmentArray);
-      dispatch(assignBug({ assignments: AssignmentArray, bugId }));
-      const adminsToSendNotif = AssignmentArray.map((a: any) => a.admin)
+      const Assignments = AssignmentArray[0];
+      // array of admins assigned to this bug
+      const Admins: User[] = Assignments.map((a: any) => a.admin);
+      const nb_admins = AssignmentArray[1];
+      dispatch(assignBug({ assignments: Assignments, bugId }));
+      // we only want to send a notification to the new assigned admins
+      const adminsToSendNotif = Admins.slice(Admins.length - nb_admins);
       const adminsIdsToSendNotif = adminsToSendNotif.map((a: any) => a.id);
-      console.log(adminsIdsToSendNotif)
-      await userService.sendNotification(adminsIdsToSendNotif);
+      for (let id of adminsIdsToSendNotif) {
+        console.log("au tour de ", id);
+        console.log(typeof(id))
+        await userService.sendNotification(id);
+      }
       dispatch(notify('Bug assigned!', 'success'));
       closeDialog && closeDialog();
     }
@@ -352,13 +368,21 @@ export const assignBugTo = (
 export const createNote = (
   bugId: string,
   noteBody: string,
-  closeDialog?: () => void
-): AppThunk => {
+  isReply: boolean,
+  noteId?: number,
+  closeDialog?: () => void,
+) : AppThunk => {
   return async (dispatch) => {
     try {
       dispatch(setSubmitBugLoading());
-      const newNote = await noteService.createNote(bugId, noteBody);
-      dispatch(addNote({ note: newNote, bugId }));
+      if (noteId) {
+        const newNote = await noteService.createNote(bugId, noteBody, isReply, noteId);
+        dispatch(addNote({ note: newNote, bugId }));
+      }
+      else {
+        const newNote = await noteService.createNote(bugId, noteBody, isReply);
+        dispatch(addNote({ note: newNote, bugId }));
+      }
       dispatch(notify('New note added!', 'success'));
       closeDialog && closeDialog();
     } catch (e: any) {

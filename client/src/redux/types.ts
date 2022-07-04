@@ -79,9 +79,16 @@ export interface BugPayload {
   priority: BugPriority;
 }
 
-export interface EmailPayload {
+export interface SettingsPayload {
   email: string;
   notificationsOn: boolean;
+  newPassword: string;
+  oldPassword: string;
+}
+
+export interface InviteAdminPayload {
+  email: string;
+  login: string;
 }
 
 export interface EditedBugData extends BugPayload {

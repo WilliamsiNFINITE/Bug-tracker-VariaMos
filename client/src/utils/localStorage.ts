@@ -16,7 +16,7 @@ const saveUser = (user: User) => {
 
 const loadUser = () => {
   const userKey = localStorage.getItem(storageKeyUser);
-  console.log("userkey: ", userKey);
+  //console.log("userkey: ", userKey);
   if (userKey) {
     return JSON.parse(userKey);
   }

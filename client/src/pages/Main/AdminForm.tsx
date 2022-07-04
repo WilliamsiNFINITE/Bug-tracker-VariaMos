@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUsersState } from '../../redux/slices/usersSlice';
-import { User } from '../../redux/types';
+import { inviteAdmin, selectUsersState } from '../../redux/slices/usersSlice';
+import { InviteAdminPayload, User } from '../../redux/types';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import TitleIcon from '@material-ui/icons/Title';
 
 import {
   TextField,
@@ -24,8 +28,14 @@ interface BaseType {
     closeDialog?: () => void;
   }
 
+  
+const validationSchema = yup.object({
+    email: yup.string(),
+    login: yup.string()
+    });
+
 interface MakeAdmin extends BaseType {
-    editMode: 'admin' | '';
+    editMode: 'admin' | 'assign';
     currentAdmins: string[];
     bugId?: string;
   }
@@ -34,9 +44,10 @@ const AdminForm: React.FC<MakeAdmin> = ({
     closeDialog,
     editMode,
     currentAdmins,
-    bugId
+    bugId,
 }) => {
-   
+
+    const [select, setSelect]= useState('');
     const classes = useFormStyles();
     const dispatch = useDispatch();
     const { users } = useSelector(selectUsersState);
@@ -44,6 +55,14 @@ const AdminForm: React.FC<MakeAdmin> = ({
 
     const user = useSelector(selectAuthState).user;
     const AllUsers: User[] = Object.assign([], users);
+    const { register, control, handleSubmit, errors } = useForm({
+      mode: 'onChange',
+      resolver: yupResolver(validationSchema),
+      defaultValues: {
+        email: '',
+        login: '',
+      },
+    });
 
     if (user) {AllUsers.push(user);}
 
@@ -64,20 +83,57 @@ const AdminForm: React.FC<MakeAdmin> = ({
         }
     };
 
+    const handleInviteAdmin = (data: InviteAdminPayload) => {
+      dispatch(inviteAdmin(data, closeDialog));
+    }
+
+    const SelectAddAdmin = () => {
+      setSelect("add");
+    }
+
+    const SelectInviteAdmin = () => {
+      setSelect("invite");
+    }
+
     return (
         <form
-          onSubmit={
-                handleAddAdmins
-          }
+          onSubmit={select === "invite" ? handleSubmit(handleInviteAdmin) : handleAddAdmins}
         >
-            {editMode === "admin" ? (
+      {select === "" && editMode !== 'assign' ? (
+        <Button
+          size="large"
+          color="primary"
+          variant="contained"
+          fullWidth
+          className={classes.submitBtn}
+          type="button"
+          onClick={SelectAddAdmin} 
+      >
+        ADD ADMINISTRATOR (user must already exist)
+      </Button>
+      ) : '' }
+      {select === "" && editMode !== 'assign' ? (
+      <Button
+        size="large"
+        color="primary"
+        variant="contained"
+        fullWidth
+        className={classes.submitBtn}
+        type="button"
+        onClick={SelectInviteAdmin}
+      >
+        INVITE ADMINISTRATOR 
+      </Button>
+      ) : '' }
+
+          {editMode === "admin" && select === "add" ? (
             <Autocomplete
               style={{ marginTop: 0 }}
               multiple
               filterSelectedOptions
               onChange={selectAdminsOnChange}
               options={
-                users.filter((u) => !currentAdmins?.includes(u.id))
+                users.filter((u) => !currentAdmins?.includes(u.id) && u.username !== "user")
               }
               getOptionLabel={(option) => option.username}
               renderInput={(params) => (
@@ -134,7 +190,7 @@ const AdminForm: React.FC<MakeAdmin> = ({
                 ))
               }
             />
-            ) : 
+            ) : editMode === 'assign' && 
             <Autocomplete
               style={{ marginTop: 0 }}
               multiple
@@ -198,7 +254,7 @@ const AdminForm: React.FC<MakeAdmin> = ({
               }
             />
           }
-          {editMode === "admin" ? (
+          {editMode === "admin" && select === "add" ? (
           <Button
             size="large"
             color="primary"
@@ -210,7 +266,7 @@ const AdminForm: React.FC<MakeAdmin> = ({
            Add New Administrators
 
           </Button>
-          ) : (
+          ) : editMode === 'assign' && (
             <Button
             size="large"
             color="primary"
@@ -223,6 +279,55 @@ const AdminForm: React.FC<MakeAdmin> = ({
 
           </Button>
         )}
+
+        {editMode === "admin" && select === "invite" ? (
+          <><><TextField
+            className={classes.fieldMargin}
+            inputRef={register}
+            name="email"
+            required
+            fullWidth
+            type="text"
+            label="Email Adress"
+            variant="outlined"
+            error={'email' in errors}
+            helperText={'email' in errors ? errors.email?.message : ''}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <TitleIcon color="primary" />
+                </InputAdornment>
+              ),
+            }} /><TextField
+              className={classes.fieldMargin}
+              inputRef={register}
+              name="login"
+              required
+              fullWidth
+              type="text"
+              label="Login"
+              variant="outlined"
+              error={'login' in errors}
+              helperText={'login' in errors ? errors.login?.message : ''}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <TitleIcon color="primary" />
+                  </InputAdornment>
+                ),
+              }} /></><Button
+                size="large"
+                color="primary"
+                variant="contained"
+                fullWidth
+                className={classes.submitBtn}
+                type="submit"
+              >
+              Invite Administrator
+
+            </Button></>
+
+        ) : '' }
 
         </form>
       );

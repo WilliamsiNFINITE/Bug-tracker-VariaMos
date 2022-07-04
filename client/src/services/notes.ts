@@ -6,14 +6,19 @@ const baseUrl = `${backendUrl}/bugs`;
 
 const createNote = async (
   bugId: string,
-  noteBody: string
+  noteBody: string,
+  isReply: boolean,
+  noteId?: number
 ) => {
-  const response = await axios.post(
-    `${baseUrl}/${bugId}/notes`,
-    { body: noteBody },
-    setConfig()
-  );
-  return response.data;
+  if (noteId) {
+    const response = await axios.post(`${baseUrl}/${bugId}/notes`,{ body: noteBody, isReply, noteId },setConfig());
+    return response.data;
+  }
+  else {
+    console.log(noteId)
+    const response = await axios.post(`${baseUrl}/${bugId}/notes`,{ body: noteBody, isReply },setConfig());
+    return response.data;
+  }
 };
 
 const editNote = async (

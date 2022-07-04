@@ -20,10 +20,13 @@ import {
   InputAdornment,
   FormLabel,
   FormControl,
+  Input,
+  Container,
 } from '@material-ui/core';
 import { useFormStyles } from '../../styles/muiStyles';
 import TitleIcon from '@material-ui/icons/Title';
 import SubjectIcon from '@material-ui/icons/Subject';
+import React from 'react';
 
 const validationSchema = yup.object({
   title: yup
@@ -51,6 +54,23 @@ const BugForm: React.FC<BugFormProps> = ({
   const classes = useFormStyles();
   const dispatch = useDispatch();
   const { submitError, submitLoading } = useSelector(selectBugsState);
+  const [fileSelected, setFileSelected] = React.useState<File>() // also tried <string | Blob>
+
+  const handleImageChange = function (e: React.ChangeEvent<HTMLInputElement>) {
+    const fileList = e.target.files;
+
+    if (!fileList) return;
+    
+    setFileSelected(fileList[0]);
+  };
+/*
+   const uploadFile = function (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
+    const formData = new FormData();
+    formData.append("image", fileSelected, fileSelected.name);
+
+     // line above ^ gives me the error below
+  };*/
+
   const { register, control, handleSubmit, errors } = useForm({
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
@@ -62,7 +82,13 @@ const BugForm: React.FC<BugFormProps> = ({
   });
 
   const handleCreateBug = (data: BugPayload) => {
-    dispatch(createNewBug(data, closeDialog));
+    if (fileSelected) {
+      dispatch(createNewBug(data, closeDialog, fileSelected, ));
+    }
+    else {
+      dispatch(createNewBug(data, closeDialog));
+    }
+    
   };
 
   const handleUpdateBug = (data: BugPayload) => {
@@ -113,6 +139,22 @@ const BugForm: React.FC<BugFormProps> = ({
           ),
         }}
       />
+
+        <Container>
+          <label htmlFor="photo">
+            <input
+              accept="image/*"
+              style={{ display: "inline" }}
+              id="photo"
+              name="image"
+              type="file"
+              multiple={false}
+              onChange={handleImageChange}
+            />
+          </label>
+        </Container>
+
+
       <Controller
         control={control}
         name="priority"

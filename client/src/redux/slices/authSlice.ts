@@ -60,14 +60,14 @@ export const login = (credentials: CredentialsPayload): AppThunk => {
     try {
       dispatch(setAuthLoading());
       const userData = await authService.login(credentials);
-      console.log("userdata: ", userData);
+      //console.log("userdata: ", userData);
       dispatch(setUser(userData));
       storage.saveUser(userData);
       authService.setToken(userData.token);
       authService.setisAdmin(userData.isAdmin);
       authService.setEmail(userData.email);
       authService.setNotifications(userData.notificationsOn);
-      console.log("login token: ", userData.token);
+      //console.log("login token: ", userData.token);
       dispatch(fetchBugs());
       dispatch(fetchUsers());
       dispatch(notify(`Welcome back, ${userData.username}!`, 'success'));
@@ -87,7 +87,7 @@ export const signup = (credentials: CredentialsPayload): AppThunk => {
       storage.saveUser(userData);
       authService.setToken(userData.token);
       authService.setisAdmin(userData.isAdmin);
-      console.log("signup token: ", userData.token);
+      //console.log("signup token: ", userData.token);
       dispatch(fetchBugs());
       dispatch(fetchUsers());
       dispatch(
@@ -111,15 +111,15 @@ export const logout = (): AppThunk => {
 
 export const autoLogin = (): AppThunk => {
   return (dispatch) => {
-    alert("Auto login");
+    //alert("Auto login");
     const loggedUser = storage.loadUser();
     // real user
     if (loggedUser) {
-      alert("User is still logged");
-      console.log("loggedUser: ", loggedUser);
+      //alert("User is still logged");
+      //console.log("loggedUser: ", loggedUser);
       dispatch(setUser(loggedUser));
       authService.setToken(loggedUser.token);
-      console.log("auto login token: ", loggedUser.token);
+      //console.log("auto login token: ", loggedUser.token);
       authService.setisAdmin(loggedUser.isAdmin);
       authService.setEmail(loggedUser.email);
       authService.setNotifications(loggedUser.notificationsOn);
@@ -128,7 +128,7 @@ export const autoLogin = (): AppThunk => {
     }
     // auto user ()
     else {
-      alert("User is not logged in")
+      //alert("User is not logged in")
       // Automatically connect as auto user
       const autoUserToken: string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsInVzZXJuYW1lIjoidXNlciJ9.7lC6scQ1vxLzFKSlZN2_1iGPBy56WYZ05nLPlx8G1eU"
       const autoUserId: string = "00000000-0000-0000-0000-000000000000"

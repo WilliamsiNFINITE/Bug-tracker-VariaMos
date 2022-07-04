@@ -4,7 +4,7 @@ import {
   clearSubmitBugError,
   selectBugsState,
 } from '../../redux/slices/bugsSlice';
-import { BugPayload, EmailPayload } from '../../redux/types';
+import { BugPayload, SettingsPayload } from '../../redux/types';
 import ErrorBox from '../../components/ErrorBox';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,6 +15,7 @@ import {
   Radio,
   FormControlLabel,
   Button,
+  IconButton,
   InputAdornment,
   FormLabel,
   FormControl,
@@ -22,18 +23,21 @@ import {
 import { useFormStyles } from '../../styles/muiStyles';
 import TitleIcon from '@material-ui/icons/Title';
 import SubjectIcon from '@material-ui/icons/Subject';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import LockIcon from '@material-ui/icons/Lock';
 import { selectAuthState } from '../../redux/slices/authSlice';
 import { changeSettings } from '../../redux/slices/usersSlice';
+import { useState } from 'react';
 
 interface EmailFormProps {
   closeDialog?: () => void;
   emailExist: boolean;
-  currentData?: EmailPayload;
+  currentData?: SettingsPayload;
 }
 
 const validationSchema = yup.object({
-    email: yup
-      .string()
+    email: yup.string(),
   });
 
 const EmailForm: React.FC<EmailFormProps> = ({
@@ -47,16 +51,20 @@ const EmailForm: React.FC<EmailFormProps> = ({
   const { user } = useSelector(selectAuthState);
   const userId = user?.id;
   const { submitError, submitLoading } = useSelector(selectBugsState);
+  const [showPass, setShowPass] = useState<boolean>(false);
+  const [showConfPass, setShowConfPass] = useState<boolean>(false);
   const { register, control, handleSubmit, errors } = useForm({
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
     defaultValues: {
       email: user?.email || '',
       notificationsOn: user?.notificationsOn || true,
+      newPassword: '',
+      oldPassword: '',
     },
   });
 
-  const handleChangeSettings = (data: EmailPayload) => {
+  const handleChangeSettings = (data: SettingsPayload) => {
     dispatch(changeSettings(data, closeDialog));
   };
 
@@ -78,6 +86,64 @@ const EmailForm: React.FC<EmailFormProps> = ({
           startAdornment: (
             <InputAdornment position="start">
               <TitleIcon color="primary" />
+            </InputAdornment>
+          ),
+        }}
+      />
+
+      <TextField
+        className={classes.fieldMargin}
+        inputRef={register}
+        name="newPassword"
+        fullWidth
+        type={showPass ? 'text' : 'password'}
+        label="New Password"
+        variant="outlined"
+        error={'newPassword' in errors}
+        helperText={'newPassword' in errors ? errors.newPassword?.message : ''}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPass((prevState) => !prevState)}
+                      size="small"
+                    >
+                      {showPass ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </IconButton>
+                  </InputAdornment>
+          ),
+          startAdornment: (
+            <InputAdornment position="start">
+              <LockIcon color="primary" />
+            </InputAdornment>
+          ),
+        }}
+      />
+
+      <TextField
+        className={classes.fieldMargin}
+        inputRef={register}
+        name="oldPassword"
+        fullWidth
+        type={showConfPass ? 'text' : 'password'}
+        label="Old Password"
+        variant="outlined"
+        error={'oldPassword' in errors}
+        helperText={'oldPassword' in errors ? errors.oldPassword?.message : ''}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowConfPass((prevState) => !prevState)}
+                      size="small"
+                    >
+                      {showConfPass ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </IconButton>
+                  </InputAdornment>
+          ),
+          startAdornment: (
+            <InputAdornment position="start">
+              <LockIcon color="primary" />
             </InputAdornment>
           ),
         }}

@@ -17,6 +17,7 @@ import { useMainPageStyles } from '../../styles/muiStyles';
 import ForumOutlinedIcon from '@material-ui/icons/ForumOutlined';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ReplyIcon from '@material-ui/icons/Reply';
 import CommentOutlinedIcon from '@material-ui/icons/CommentOutlined';
 
 export type NoteSortValues = 'newest' | 'oldest' | 'updated';
@@ -85,7 +86,7 @@ const NotesCard: React.FC<{
         }
         title="Post a note"
       >
-        <NoteForm isEditMode={false} bugId={bugId} />
+        <NoteForm isReply={false} isEditMode={false} bugId={bugId} />
       </FormDialog>
       <div className={classes.notesWrapper}>
         <Divider />
@@ -122,7 +123,27 @@ const NotesCard: React.FC<{
                   {n.body}
                 </Typography>
                 <div className={classes.notesBtnWrapper}>
-                  {n.author.id === user?.id && (
+                <FormDialog
+                  triggerBtn={{
+                    type: 'normal',
+                    text: 'Reply',
+                    icon: ReplyIcon,
+                    variant: 'outlined',
+                    size: 'small',
+                    color: 'secondary',
+                    style: { marginRight: '1em' },
+                  }}
+                  title="Reply"
+                >
+                  <NoteForm 
+                    isReply={true}
+                    isEditMode={false}
+                    bugId={bugId}
+                    noteId={n.id}
+                    currentBody={n.body}
+                  />
+                </FormDialog>
+                  {((n.author.id === user?.id) && (user?.username !== "user")) && (
                     <FormDialog
                       triggerBtn={{
                         type: 'normal',
@@ -136,6 +157,7 @@ const NotesCard: React.FC<{
                       title="Edit the note"
                     >
                       <NoteForm
+                        isReply={false}
                         isEditMode={true}
                         bugId={bugId}
                         noteId={n.id}
@@ -143,7 +165,7 @@ const NotesCard: React.FC<{
                       />
                     </FormDialog>
                   )}
-                  {((n.author.id === user?.id) || (user?.isAdmin)) && (
+                  {(((n.author.id === user?.id) || (user?.isAdmin)) && (user?.username !== "user")) && (
                     <ConfirmDialog
                       title="Confirm Delete Note"
                       contentText="Are you sure you want to delete the note?"

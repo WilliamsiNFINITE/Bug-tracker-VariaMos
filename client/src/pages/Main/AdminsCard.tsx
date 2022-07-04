@@ -54,7 +54,7 @@ const AdminsCard: React.FC<{
             fontSize={isMobile ? 'default' : 'large'}
             style={{ marginRight: '0.2em' }}
           />
-          Admins
+          Other Admins
         </Typography>
         <div className={classes.filterMembersInput}>
           <FilterBar

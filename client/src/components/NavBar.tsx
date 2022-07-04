@@ -31,14 +31,14 @@ const NavBar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logout());/*
     const autoUserCredentials: CredentialsPayload = {
       username: "user",
       password: "pass",
     };
 
-    dispatch(login(autoUserCredentials))
-    history.push('/');
+    dispatch(login(autoUserCredentials))*/
+    //history.push('/');
   };
 
   const handleGoBack = () => {
@@ -60,7 +60,7 @@ const NavBar = () => {
             color="secondary"
           >
             <img src={BugIcon} alt="logo" className={classes.svgImage} />
-            BugTracker
+            VariaMosBugTracker
           </Button>
           {!isMobile && (
             <Typography variant="caption" color="secondary">

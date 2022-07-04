@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../store';
 import userService from '../../services/users';
-import { EmailPayload, User } from '../types';
+import { SettingsPayload, InviteAdminPayload, User } from '../types';
 import { notify } from './notificationSlice';
 import { getErrorMsg } from '../../utils/helperFuncs';
 import { string } from 'yup';
@@ -39,7 +39,7 @@ const usersSlice = createSlice({
       state.status = 'succeeded';
       state.error = null;
     },
-    ChangeSettings: (state, action: PayloadAction<{ data: EmailPayload; userId: string }>) => {
+    ChangeSettings: (state, action: PayloadAction<{ data: SettingsPayload; userId: string }>) => {
       state.users = state.users.map((u) => u.id === action.payload.userId ? {...u, ...action.payload.data } : u
       );
       state.status = 'succeeded';
@@ -62,7 +62,7 @@ export const fetchUsers = (): AppThunk => {
   };
 };
 
-export const addAdmins =(
+export const addAdmins = (
   admins: string[],
   closeDialog?: () => void
 ) : AppThunk => {
@@ -76,8 +76,25 @@ export const addAdmins =(
     catch (e) {
       dispatch(notify(getErrorMsg(e), 'error'));
     }
-  }
-}
+  };
+};
+
+export const inviteAdmin = (
+  data: InviteAdminPayload,
+  closeDialog?: () => void
+) : AppThunk => {
+  return async (dispatch) => {
+    try {
+      const newAdmin = await userService.inviteAdmin(data);
+      dispatch(addAdmin({ admins: newAdmin }));
+      dispatch(notify('New admin added! Email was sent successfully!', 'success'));
+      closeDialog && closeDialog();
+    }
+    catch (e) {
+    dispatch(notify(getErrorMsg(e), 'error'));
+    }
+  };
+};
 
 export const removeAdmin = (
   adminId: string
@@ -94,7 +111,7 @@ export const removeAdmin = (
 };
 
 export const changeSettings = (
-  data: EmailPayload,
+  data: SettingsPayload,
   closeDialog?: () => void
 ): AppThunk => {
   return async (dispatch) => {

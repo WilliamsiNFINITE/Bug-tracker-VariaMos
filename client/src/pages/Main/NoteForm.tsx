@@ -21,6 +21,7 @@ const validationSchema = yup.object({
 interface NoteFormProps {
   closeDialog?: () => void;
   bugId: string;
+  isReply: boolean;
   isEditMode: boolean;
   currentBody?: string;
   noteId?: number;
@@ -28,6 +29,7 @@ interface NoteFormProps {
 
 const NoteForm: React.FC<NoteFormProps> = ({
   closeDialog,
+  isReply,
   isEditMode,
   bugId,
   currentBody,
@@ -45,7 +47,7 @@ const NoteForm: React.FC<NoteFormProps> = ({
   });
 
   const handleCreateNote = ({ body }: { body: string }) => {
-    dispatch(createNote(bugId, body, closeDialog));
+    dispatch(createNote(bugId, body, isReply, noteId, closeDialog));
   };
 
   const handleUpdateNote = ({ body }: { body: string }) => {
@@ -56,39 +58,75 @@ const NoteForm: React.FC<NoteFormProps> = ({
     <form
       onSubmit={handleSubmit(isEditMode ? handleUpdateNote : handleCreateNote)}
     >
-      <TextField
-        multiline
-        rows={1}
-        rowsMax={4}
-        inputRef={register}
-        name="body"
-        placeholder="Type a note..."
-        required
-        fullWidth
-        type="text"
-        label="Note"
-        variant="outlined"
-        error={'body' in errors}
-        helperText={'body' in errors ? errors.body?.message : ''}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <CommentIcon color="primary" />
-            </InputAdornment>
-          ),
-        }}
-      />
-      <Button
-        size="large"
-        color="primary"
-        variant="contained"
-        fullWidth
-        className={classes.submitBtn}
-        type="submit"
-        disabled={submitLoading}
-      >
-        {isEditMode ? 'Update Note' : 'Submit Note'}
-      </Button>
+    {!isReply ? (
+      <><TextField
+          multiline
+          rows={1}
+          rowsMax={4}
+          inputRef={register}
+          name="body"
+          placeholder="Type a note..."
+          required
+          fullWidth
+          type="text"
+          label="Note"
+          variant="outlined"
+          error={'body' in errors}
+          helperText={'body' in errors ? errors.body?.message : ''}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <CommentIcon color="primary" />
+              </InputAdornment>
+            ),
+          }} /><Button
+            size="large"
+            color="primary"
+            variant="contained"
+            fullWidth
+            className={classes.submitBtn}
+            type="submit"
+            disabled={submitLoading}
+          >
+            {isEditMode ? 'Update Note' : 'Submit Note'}
+          </Button></>
+    ) : 
+    
+    <><TextField
+          multiline
+          rows={1}
+          rowsMax={4}
+          inputRef={register}
+          name="body"
+          placeholder="Type a response..."
+          required
+          fullWidth
+          type="text"
+          label="Note"
+          variant="outlined"
+          error={'body' in errors}
+          helperText={'body' in errors ? errors.body?.message : ''}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <CommentIcon color="primary" />
+              </InputAdornment>
+            ),
+          }} /><Button
+            size="large"
+            color="primary"
+            variant="contained"
+            fullWidth
+            className={classes.submitBtn}
+            type="submit"
+            disabled={submitLoading}
+          >
+            Submit response
+          </Button></>
+    
+    
+    
+    }
       {submitError && (
         <ErrorBox
           errorMsg={submitError}

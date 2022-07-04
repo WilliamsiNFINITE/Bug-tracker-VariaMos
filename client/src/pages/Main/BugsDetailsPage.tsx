@@ -199,7 +199,7 @@ const BugsDetailsPage = () => {
         title="Assign the bug to specific admin(s)"
       >
         <AdminForm
-          editMode=""
+          editMode="assign"
           currentAdmins={admins.map((a) => a.id)}
           bugId={bugId}
         />

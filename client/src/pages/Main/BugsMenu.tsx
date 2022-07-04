@@ -103,7 +103,7 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
           }}
           title="Post a note"
         >
-          <NoteForm isEditMode={false} bugId={bugId} />
+          <NoteForm isReply={false} isEditMode={false} bugId={bugId} />
         </FormDialog>
           {isAdmin ? (
           <FormDialog
@@ -180,7 +180,7 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
           title="Assign the bug to specific admins"
         >
           <AdminForm
-            editMode=""
+            editMode="assign"
             currentAdmins={admins.map((a) => a.id)}
             bugId={bugId}
           />

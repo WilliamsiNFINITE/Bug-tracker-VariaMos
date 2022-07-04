@@ -51,7 +51,7 @@ export const assignBug = async (req: Request, res: Response) => {
 
   await AssignedAdmins.insert(AssignmentsArray);
 
-  console.log(AssignmentsArray);
+  //console.log(AssignmentsArray);
   const updatedAssignments = await AssignedAdmins.createQueryBuilder('assignment')
   .leftJoinAndSelect('assignment.admin', 'admin')
   .leftJoinAndSelect('assignment.bug', 'bug')
@@ -67,5 +67,5 @@ export const assignBug = async (req: Request, res: Response) => {
   ])
   .getMany();
 
-  res.status(201).json(updatedAssignments)
+  res.status(201).json([updatedAssignments, adminsIds.length])
 };

@@ -10,8 +10,8 @@ const getBugs = async () => {
   return response.data;
 };
 
-const createBug = async (bugData: BugPayload) => {
-  const response = await axios.post(baseUrl,bugData,setConfig());
+const createBug = async (bugData: BugPayload, file?: File) => {
+  const response = await axios.post(baseUrl, bugData ,setConfig());
   return response.data;
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { EmailPayload, UserState } from '../redux/types';
+import { SettingsPayload, UserState } from '../redux/types';
 import DarkModeSwitch from './DarkModeSwitch';
 
 import { Button, Avatar, Typography } from '@material-ui/core';
@@ -8,7 +8,7 @@ import { useNavStyles } from '../styles/muiStyles';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
+import SettingsIcon from '@material-ui/icons/Settings';
 import FormDialog from './FormDialog';
 import BugForm from '../pages/Main/BugForm';
 import EmailForm from '../pages/Main/EmailForm';
@@ -48,42 +48,43 @@ const UserButtonsDesktop: React.FC<UserMenu> = ({
               {user?.username}
             </Typography>
           </div>
-          <Button
-            color="secondary"
-            variant="outlined"
-            size="small"
-            className={classes.lastBtn}
-            onClick={handleLogout}
-            startIcon={<PowerSettingsNewIcon />}
-          >
-            Log Out
-          </Button>
+          <div>
+            <Button
+              color="secondary"
+              variant="outlined"
+              size="small"
+              className={classes.lastBtn}
+              onClick={handleLogout}
+              startIcon={<PowerSettingsNewIcon />}
+            >
+              Log Out
+            </Button>
+            
           
-          <div className={classes.btnsWrapper}>
-          <FormDialog
-          triggerBtn={
-            isMobile
-              ? {
-                  color: "secondary",
-                  type: 'fab',
-                  variant: 'extended',
-                  text: 'Email',
-                  icon: AlternateEmailIcon,
-                }
-              : {
-                  color: "secondary",
-                  type: 'normal',
-                  variant: 'outlined',
-                  text: 'Email',
-                  icon: AlternateEmailIcon,
-                  size: 'small',
-                  style: { marginRight: '10em' },
-                }
-          }
-          title="Change your personnal settings"
-        >
-          <EmailForm emailExist={emailExist} />
-        </FormDialog>
+            <FormDialog
+            triggerBtn={
+              isMobile
+                ? {
+                    color: "secondary",
+                    type: 'fab',
+                    variant: 'extended',
+                    text: 'Email',
+                    icon: SettingsIcon,
+                  }
+                : {
+                    color: "secondary",
+                    type: 'normal',
+                    variant: 'outlined',
+                    text: 'Settings',
+                    icon: SettingsIcon,
+                    size: 'small',
+                    style: { marginLeft: '10px' },
+                  }
+            }
+            title="Change your personnal settings"
+          >
+            <EmailForm emailExist={emailExist} />
+          </FormDialog>
         </div>
           <DarkModeSwitch isMobile={isMobile} />
         </div>
