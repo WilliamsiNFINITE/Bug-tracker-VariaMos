@@ -54,22 +54,6 @@ const BugForm: React.FC<BugFormProps> = ({
   const classes = useFormStyles();
   const dispatch = useDispatch();
   const { submitError, submitLoading } = useSelector(selectBugsState);
-  const [fileSelected, setFileSelected] = React.useState<File>() // also tried <string | Blob>
-
-  const handleImageChange = function (e: React.ChangeEvent<HTMLInputElement>) {
-    const fileList = e.target.files;
-
-    if (!fileList) return;
-    
-    setFileSelected(fileList[0]);
-  };
-/*
-   const uploadFile = function (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
-    const formData = new FormData();
-    formData.append("image", fileSelected, fileSelected.name);
-
-     // line above ^ gives me the error below
-  };*/
 
   const { register, control, handleSubmit, errors } = useForm({
     mode: 'onChange',
@@ -81,85 +65,69 @@ const BugForm: React.FC<BugFormProps> = ({
     },
   });
 
-  const handleCreateBug = (data: BugPayload) => {
-    if (fileSelected) {
-      dispatch(createNewBug(data, closeDialog, fileSelected, ));
-    }
-    else {
-      dispatch(createNewBug(data, closeDialog));
-    }
-    
+  const handleCreateBug = async (data: BugPayload) => {
+    imageForm?.submit();
+    dispatch(createNewBug(data, closeDialog));  
   };
 
   const handleUpdateBug = (data: BugPayload) => {
     dispatch(editBug(bugId as string, data, closeDialog));
   };
 
+  const imageForm = document.getElementById("image-form") as HTMLFormElement;
+
   return (
+
+    <><form id="image-form" method="POST" action="http://localhost:3005/bugs/upload" encType="multipart/form-data">
+      <input type="file" name='image'></input>
+    </form>
+    <br></br>
     <form
       onSubmit={handleSubmit(isEditMode ? handleUpdateBug : handleCreateBug)}
     >
-      <TextField
-        inputRef={register}
-        name="title"
-        required
-        fullWidth
-        type="text"
-        label="Bug Title"
-        variant="outlined"
-        error={'title' in errors}
-        helperText={'title' in errors ? errors.title?.message : ''}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <TitleIcon color="primary" />
-            </InputAdornment>
-          ),
-        }}
-      />
-      <TextField
-        className={classes.fieldMargin}
-        multiline
-        rows={1}
-        rowsMax={4}
-        inputRef={register}
-        name="description"
-        required
-        fullWidth
-        type="text"
-        label="Description"
-        variant="outlined"
-        error={'description' in errors}
-        helperText={'description' in errors ? errors.description?.message : ''}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SubjectIcon color="primary" />
-            </InputAdornment>
-          ),
-        }}
-      />
+        <TextField
+          inputRef={register}
+          name="title"
+          required
+          fullWidth
+          type="text"
+          label="Bug Title"
+          variant="outlined"
+          error={'title' in errors}
+          helperText={'title' in errors ? errors.title?.message : ''}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <TitleIcon color="primary" />
+              </InputAdornment>
+            ),
+          }} />
+        <TextField
+          className={classes.fieldMargin}
+          multiline
+          rows={1}
+          rowsMax={4}
+          inputRef={register}
+          name="description"
+          required
+          fullWidth
+          type="text"
+          label="Description"
+          variant="outlined"
+          error={'description' in errors}
+          helperText={'description' in errors ? errors.description?.message : ''}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SubjectIcon color="primary" />
+              </InputAdornment>
+            ),
+          }} />
 
-        <Container>
-          <label htmlFor="photo">
-            <input
-              accept="image/*"
-              style={{ display: "inline" }}
-              id="photo"
-              name="image"
-              type="file"
-              multiple={false}
-              onChange={handleImageChange}
-            />
-          </label>
-        </Container>
-
-
-      <Controller
-        control={control}
-        name="priority"
-        as={
-          <FormControl className={classes.radioGroupForm}>
+        <Controller
+          control={control}
+          name="priority"
+          as={<FormControl className={classes.radioGroupForm}>
             <RadioGroup row defaultValue="low" className={classes.radioGroup}>
               <FormLabel className={classes.radioGroupLabel}>
                 Priority:
@@ -168,41 +136,36 @@ const BugForm: React.FC<BugFormProps> = ({
                 <FormControlLabel
                   value="low"
                   control={<Radio color="primary" />}
-                  label="Low"
-                />
+                  label="Low" />
                 <FormControlLabel
                   value="medium"
                   control={<Radio color="primary" />}
-                  label="Medium"
-                />
+                  label="Medium" />
                 <FormControlLabel
                   value="high"
                   control={<Radio color="primary" />}
-                  label="High"
-                />
+                  label="High" />
               </div>
             </RadioGroup>
-          </FormControl>
-        }
-      />
-      <Button
-        size="large"
-        color="primary"
-        variant="contained"
-        fullWidth
-        className={classes.submitBtn}
-        type="submit"
-        disabled={submitLoading}
-      >
-        {isEditMode ? 'Update Bug' : 'Create New Bug'}
-      </Button>
-      {submitError && (
-        <ErrorBox
-          errorMsg={submitError}
-          clearErrorMsg={() => dispatch(clearSubmitBugError())}
-        />
-      )}
-    </form>
+          </FormControl>} />
+        <Button
+          size="large"
+          color="primary"
+          variant="contained"
+          fullWidth
+          className={classes.submitBtn}
+          type="submit"
+          disabled={submitLoading}
+        >
+          {isEditMode ? 'Update Bug' : 'Create New Bug'}
+        </Button>
+        {submitError && (
+          <ErrorBox
+            errorMsg={submitError}
+            clearErrorMsg={() => dispatch(clearSubmitBugError())} />
+        )}
+      </form></>
+
   );
 };
 

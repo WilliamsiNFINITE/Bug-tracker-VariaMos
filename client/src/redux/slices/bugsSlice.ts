@@ -232,7 +232,7 @@ export const createNewBug = (
 ): AppThunk => {
   return async (dispatch) => {
     try {
-      console.log(file);
+      console.log("file: ", file);
       dispatch(setSubmitBugLoading());
       if (file) {
         const newBug = await bugService.createBug(bugData, file);

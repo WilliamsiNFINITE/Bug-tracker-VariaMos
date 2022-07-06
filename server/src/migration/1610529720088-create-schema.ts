@@ -13,7 +13,7 @@ export class createSchema1610529720088 implements MigrationInterface {
       `CREATE TYPE "bugs_priority_enum" AS ENUM('low', 'medium', 'high')`
     );
     await queryRunner.query(
-      `CREATE TABLE "bugs" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" character varying(60) NOT NULL, "description" character varying NOT NULL, "priority" "bugs_priority_enum" NOT NULL DEFAULT 'low', "isResolved" boolean NOT NULL DEFAULT false, "closedById" uuid, "closedAt" TIMESTAMP, "reopenedById" uuid, "reopenedAt" TIMESTAMP, "createdById" uuid NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedById" uuid, "updatedAt" TIMESTAMP, CONSTRAINT "PK_dadac7f01b703d50496ae1d3e74" PRIMARY KEY ("id"))`
+      `CREATE TABLE "bugs" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" character varying(60) NOT NULL, "description" character varying NOT NULL, "priority" "bugs_priority_enum" NOT NULL DEFAULT 'low', "isResolved" boolean NOT NULL DEFAULT false, "closedById" uuid, "closedAt" TIMESTAMP, "reopenedById" uuid, "reopenedAt" TIMESTAMP, "createdById" uuid NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedById" uuid, "updatedAt" TIMESTAMP, "filePath" character varying, CONSTRAINT "PK_dadac7f01b703d50496ae1d3e74" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "assignedAdmins" ("id" SERIAL NOT NULL, "bugId" uuid NOT NULL, "adminId" uuid NOT NULL, "joinedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_28b53062261b996d9c99fa12404" PRIMARY KEY ("id"))`

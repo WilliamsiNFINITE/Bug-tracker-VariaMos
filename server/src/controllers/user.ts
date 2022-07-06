@@ -19,6 +19,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
 };
 
 export const addAdmins = async (req: Request, res: Response) => {
+  console.log("dans le controller user add admin")
   const currentUser = await User.findOne(req.user);
 
   if (currentUser?.isAdmin !== true) {

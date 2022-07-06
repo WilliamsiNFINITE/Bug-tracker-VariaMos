@@ -15,6 +15,7 @@ const NotFoundPage = () => {
             variant="h6"
             className={classes.error404Text}
           >
+            
             ERROR: Page Not Found!
           </Typography>
         </div>

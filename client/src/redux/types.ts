@@ -49,7 +49,7 @@ export interface BugState {
   updatedAt?: Date;
   createdAt: Date;
   assignments: AssignedAdmins[];
-  image: File;
+  filePath: string;
 }
 
 export type BugSortValues =

@@ -78,4 +78,7 @@ export class Bug extends BaseEntity {
   @OneToMany(() => AssignedAdmins, (assignment) => assignment.bug)
   @JoinColumn()
   assignments: AssignedAdmins[];
+
+  @Column()
+  filePath: string;
 }

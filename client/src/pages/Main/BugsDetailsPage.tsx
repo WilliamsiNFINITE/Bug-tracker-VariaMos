@@ -25,6 +25,7 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { selectAuthState } from '../../redux/slices/authSlice';
 import AdminForm from './AdminForm';
+//import Images from '../../Images/1657069393054.jpg';
 
 interface ParamTypes {
   bugId: string;
@@ -76,6 +77,7 @@ const BugsDetailsPage = () => {
     reopenedAt,
     notes,
     assignments,
+    filePath,
   } = bug;
 
   const handleDeleteBug = () => {
@@ -224,6 +226,9 @@ const BugsDetailsPage = () => {
         >
           Status: {statusInfo()}
         </Typography>
+        {bug.filePath ? (
+        <img src={'/Images/' + bug.filePath}></img>
+        ) : '' }
         <Typography
           color="secondary"
           variant="subtitle2"
