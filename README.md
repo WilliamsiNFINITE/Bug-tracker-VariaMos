@@ -32,7 +32,7 @@ This bug tracker is a modified version of the open source one made by [amand33p]
 - [JSON Web Token](https://jwt.io/) - A standard to secure/authenticate HTTP requests
 - [Bcrypt.js](https://www.npmjs.com/package/bcryptjs) - For hashing passwords
 - [Crypto](https://nodejs.org/api/crypto.html) - For generating random passwords
-- [nodemailer](https://nodemailer.com/about/) - For email notifications
+- [Nodemailer](https://nodemailer.com/about/) - For email notifications
 - [Dotenv](https://www.npmjs.com/package/dotenv) - To load environment variables from a .env file
 
 ## Features
