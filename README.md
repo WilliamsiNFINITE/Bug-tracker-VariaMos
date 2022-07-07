@@ -41,6 +41,7 @@ This bug tracker is a modified version of the open source one made by [amand33p]
 - CRUD bugs, with title, description, priority & optional file (image, gif, video)
 - Email notifications (can be turned off)
 - Anyone can add a bug and leave notes
+- Users can create an account to receive email notifications
 - Admins can add/remove other admins, delete, close, update & assign bugs
 - Sort bugs by various parameters like priority, recentely closed etc.
 - Filter bugs by name/title/assignments & other parameters
