@@ -4,11 +4,6 @@ Bug tracking app made with PERN + TS
 
 This bug tracker is a modified version of the open source one made by [amand33p](https://github.com/amand33p)
 
-
-## Demo
-
-[Deployed on Netlify (front-end) & Heroku (back-end)](https://abugtracker.netlify.app)
-
 ## Built using
 
 #### Front-end
