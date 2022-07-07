@@ -64,9 +64,7 @@ PORT = 3005
 JWT_SECRET = "Your JWT secret"
 
 ```
-Note: JWT_SECRET is used to generate the JSON Web Token signature. 
-
-If you are not familiar with it, check this [documentation](https://jwt.io/introduction)
+##### Note: `JWT_SECRET` is used to generate the JSON Web Token signature. If you are not familiar with it, check the [documentation](https://jwt.io/introduction)
 
 #### Client:
 
@@ -89,6 +87,9 @@ To compile the project, go to server dir & run this command:
 
 To run the migrations, go to server dir & run this command:
 `npm run typeorm migration:run`
+
+To clear the database, go to server dir & run this command:
+`npm run typeorm schema:drop`
 
 Run backend development server:
 
