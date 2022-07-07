@@ -1,4 +1,4 @@
-# VariaMos Bug Tracker | PERN-TypeScript
+# VariaMos Bug Tracker | PERN-TypeScript <img src="https://variamos.azurewebsites.net/favicon.ico" width="40px" height="40px" />
 
 Bug tracking app made with PERN + TS
 
