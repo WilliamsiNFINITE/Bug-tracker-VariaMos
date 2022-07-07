@@ -1,5 +1,6 @@
-# Bug Tracker | PERN-TypeScript
+# VariaMos Bug Tracker | PERN-TypeScript
 
+This bug tracker is a modified version of the open source one made by [amand33p](https://github.com/amand33p)
 Bug tracking app made with PERN + TS
 
 ## Demo
@@ -32,10 +33,10 @@ Bug tracking app made with PERN + TS
 
 ## Features
 
-- Authentication (login/register w/ username & password)
-- CRUD projects, with ability to add members for group work
-- CRUD bugs, with title, description & priority
-- Project members can add, edit, close & reopen bugs etc.
+- Authentication (login/register w/ username, password & optional email adress)
+- CRUD bugs, with title, description, priority & optional file (image, gif, video)
+- Anyone can add a bug and leave notes
+- Admins can add/remove other admins, delete, close, update & 
 - Sort projects/bugs by various parameters like priority, recentely closed etc.
 - Filter projects/bugs by name/title & other parameters
 - CRUD notes, for guiding other members
