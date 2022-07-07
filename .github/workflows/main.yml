@@ -1,7 +1,7 @@
 name: LINT_AND_TEST
 
 on:
-  push:
+  #push:
     branches:
       - master
   workflow_dispatch:
