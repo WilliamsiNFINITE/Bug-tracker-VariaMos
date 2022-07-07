@@ -64,6 +64,9 @@ PORT = 3005
 JWT_SECRET = "Your JWT secret"
 
 ```
+Note: JWT_SECRET is used to generate the JSON Web Token signature. 
+
+If you are not familiar with it, check this: https://jwt.io/introduction
 
 #### Client:
 
