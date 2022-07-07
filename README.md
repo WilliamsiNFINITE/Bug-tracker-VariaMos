@@ -1,7 +1,9 @@
 # VariaMos Bug Tracker | PERN-TypeScript
 
-This bug tracker is a modified version of the open source one made by [amand33p](https://github.com/amand33p)
 Bug tracking app made with PERN + TS
+
+This bug tracker is a modified version of the open source one made by [amand33p](https://github.com/amand33p)
+
 
 ## Demo
 
@@ -29,17 +31,20 @@ Bug tracking app made with PERN + TS
 - [TypeORM](https://typeorm.io/) - TS-based ORM for mostly SQL-based databases
 - [JSON Web Token](https://jwt.io/) - A standard to secure/authenticate HTTP requests
 - [Bcrypt.js](https://www.npmjs.com/package/bcryptjs) - For hashing passwords
+- [Crypto](https://nodejs.org/api/crypto.html) - For generating random passwords
+- [nodemailer](https://nodemailer.com/about/) - For email notifications
 - [Dotenv](https://www.npmjs.com/package/dotenv) - To load environment variables from a .env file
 
 ## Features
 
 - Authentication (login/register w/ username, password & optional email adress)
 - CRUD bugs, with title, description, priority & optional file (image, gif, video)
+- Email notifications (can be turned off)
 - Anyone can add a bug and leave notes
-- Admins can add/remove other admins, delete, close, update & 
-- Sort projects/bugs by various parameters like priority, recentely closed etc.
-- Filter projects/bugs by name/title & other parameters
-- CRUD notes, for guiding other members
+- Admins can add/remove other admins, delete, close, update & assign bugs
+- Sort bugs by various parameters like priority, recentely closed etc.
+- Filter bugs by name/title/assignments & other parameters
+- CRUD notes, for guiding other members with possibility to reply
 - Descriptive color indicators for bug priority & status
 - Error management with descriptive messages
 - Toast notifications for actions: creating projects, removing membes etc.
