@@ -98,5 +98,5 @@ npm install
 npm run dev
 ```
 
-#### VariaMos online
-You can check the VariaMos application here: [www.variamos.tk](https://variamos.azurewebsites.net/)
+#### VariaMos online:
+You can check the VariaMos application here: [VariaMos](https://variamos.azurewebsites.net/)
