@@ -33,17 +33,20 @@ describe('testing application with backend', ()=>{
       cy.findByText('Must be at least 6 characters').should('be.visible')
       cy.get('input[name="confirmPassword"]').clear().type('passwords');
 
-      //Verify the email adress is right
+      //Put a wrong email adress
       cy.get('input[name="email"]').type('invalidemail');
-      cy.findByText('Invalid email adress.').should('be.visible')
-      cy.get('input[name="email"]').clear().type('valid@mail.com');
 
       //Verify that the second password should be the same
       cy.get('button[type="submit"]').click();
       cy.findByText('Both passwords need to match.').should('be.visible')
 
-      //Changing the second password and save the profile
+      //Changing the second password
       cy.get('input[name="confirmPassword"]').clear().type('password');
+
+      //Verify the email and save profile
+      cy.get('button[type="submit"]').click();
+      cy.findByText('Invalid email adress.').should('be.visible')
+      cy.get('input[name="email"]').clear().type('valid@mail.com');
       cy.get('button[type="submit"]').click();
       cy.findByText('Hi, username! Welcome to Bug Tracker :D').should('be.visible')
 
@@ -89,13 +92,13 @@ describe('testing application with backend', ()=>{
       cy.get('input[name="username"]').type('false_username');
       cy.get('input[name="password"]').type('false_password');
       cy.get('button[type="submit"]').click()
-      cy.findByText('User: \'false_username\' not found.\n').should('be.visible')
+      cy.findByText("User: 'false_username' not found.").should('be.visible')
 
     })
   })
 
   describe('user should be able to manage bugs', () => {
-    it('user should be able to report a bug', () => {
+    it('user should be able to report a bug without login', () => {
       //Visit the application
       cy.visit('http://localhost:3000');
 
@@ -146,11 +149,11 @@ describe('testing application with backend', ()=>{
 
       //Assert that it cant be added
       cy.findByText('A reported bug already has this title. Make sure this issue has not already been reported.').should('be.visible')
-
-      cy.get('button[class="MuiButtonBase-root MuiIconButton-root Component-closeButton-67"]').click()
-
     })
     it('creating other bugs for testing purposes',()=>{
+      //Close the previous Form
+      cy.get('button[aria-label="close"]').click()
+
       //Bug#2
       cy.findByRole('button', {  name: /add bug/i}).click()
       cy.get('input[name="title"]').type('title2');
@@ -165,18 +168,23 @@ describe('testing application with backend', ()=>{
       cy.findByRole('button', {  name: /create new bug/i}).click()
 
     })
-    it('user should be able to leave a note', ()=> {
+    it('user should be able to leave a note while logged in', ()=> {
+      //Logging in
+      cy.findByRole('button', {name: /log in/i }).click()
+      cy.get('input[name="username"]').type('username');
+      cy.get('input[name="password"]').type('password');
+      cy.get('button[type="submit"]').click()
+
       //find a bug to leave a note
       cy.findByRole('cell', {
-        name: /title/i
+        name: 'title'
       }).click()
-      cy.findByText('No notes added yet.').should('be.visible')
 
       //Open form, type the note and submit
       cy.findByRole('button', {
         name: /leave a note/i
       }).click();
-      cy.findByRole('textbox').type('This is my note')
+      cy.findByRole('textbox').type('This is my logged in note')
       cy.findByRole('button', {
         name: /submit note/i
       }).click()
@@ -189,8 +197,40 @@ describe('testing application with backend', ()=>{
       cy.findByText('Edit').click()
       cy.findByRole('textbox').clear().type('This is my edited note')
       cy.findByRole ('button', {
-        name: /submit response/i
+        name: /update note/i
       }).click()
+
+    })
+    it('user should be able to delete a note',()=>{
+      cy.findByText('Delete').click()
+      cy.findByRole('button', {
+        name: /delete note/i
+      }).click()
+
+    })
+    it('user should be able to leave a note without login', ()=> {
+      //Logging out
+      cy.findByRole('button', {name: /log out/i }).click() //TODO : quand je déco y'a un 404
+      cy.visit('http://localhost:3000');
+
+      //find a bug to leave a note
+      cy.findByRole('cell', {
+        name: 'title'
+      }).click()
+      cy.findByText('No notes added yet.').should('be.visible')
+
+      //Open form, type the note and submit
+      cy.findByRole('button', {
+        name: /leave a note/i
+      }).click();
+      cy.findByRole('textbox').type('This is my not logged in note')
+      cy.findByRole('button', {
+        name: /submit note/i
+      }).click()
+
+      //Check if it was added
+      cy.findByText('Reply').should('be.visible')
+
     })
     it('user should be able to reply to notes', ()=>{
       cy.findByText('Reply').click()
@@ -254,15 +294,17 @@ describe('testing application with backend', ()=>{
 
     })
     it('user should be able to search bugs', ()=>{
+      //Get to the main page
+      cy.findByText(/back to bugs list/i).click()
+
       //TODO : type title2
       cy.findByRole('textbox').type('title2')
-      //TODO : erase button
-      cy.get('button[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"]').click()
-      cy.findByRole('textbox').type('title2')
+      // //TODO : erase button
+      // cy.get('button[name="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"]').click()
+      // cy.findByRole('textbox').type('title2')
 
       //TODO verify element not on screen (title)
       //TODO : check results if positive
-
 
 
       //TODO : type negative
@@ -282,22 +324,20 @@ describe('testing application with backend', ()=>{
       cy.findByRole('radio', {
         name: /closed/i
       }).click()
+      cy.findByText('No matches found.').should('be.visible')
       //TODO check if change was made
-      cy.wait(5000)
 
       cy.visit('http://localhost:3000');
       cy.findByRole('radio', {
         name: /open/i
       }).click()
       //TODO check if change was made
-      cy.wait(5000)
 
       cy.visit('http://localhost:3000');
       cy.findByRole('radio', {
         name: /all/i
       }).click()
       //TODO check if change was made
-      cy.wait(5000)
 
     })
     it('user should be able to re-open a bug',()=>{
@@ -314,7 +354,6 @@ describe('testing application with backend', ()=>{
 
       //TODO : title az, --> verify that title is first
 
-      cy.wait(1000)
 
       //TODO : title az, --> verify that title is first
       cy.findByRole('button', {
@@ -325,7 +364,6 @@ describe('testing application with backend', ()=>{
         name: /title \(a \- z\)/i
       }).click()
 
-      cy.wait(1000)
       //TODO : title za, --> verify that title2 is first
       cy.findByRole('button', {
         name: /sort bugs by/i
@@ -335,7 +373,6 @@ describe('testing application with backend', ()=>{
         name: /title \(z \- a\)/i
       }).click()
 
-      cy.wait(1000)
       //TODO : prio hl,--> verify that title2 is first
       cy.findByRole('button', {
         name: /sort bugs by/i
@@ -345,7 +382,6 @@ describe('testing application with backend', ()=>{
         name: /priority \(high \- low\)/i
       }).click()
 
-      cy.wait(1000)
       //TODO : prio lh,--> verify that title is first
       cy.findByRole('button', {
         name: /sort bugs by/i
@@ -355,7 +391,6 @@ describe('testing application with backend', ()=>{
         name: /priority \(low \- high\)/i
       }).click()
 
-      cy.wait(1000)
       //TODO : recent clsd,
       cy.findByRole('button', {
         name: /sort bugs by/i
@@ -365,7 +400,6 @@ describe('testing application with backend', ()=>{
         name: /recently closed/i
       }).click()
 
-      cy.wait(1000)
       //TODO : recent r-opnd,
       cy.findByRole('button', {
         name: /sort bugs by/i
@@ -375,7 +409,6 @@ describe('testing application with backend', ()=>{
         name: /recently re\-opened/i
       }).click()
 
-      cy.wait(1000)
       //TODO : recent updtd,
       cy.findByRole('button', {
         name: /sort bugs by/i
@@ -385,7 +418,6 @@ describe('testing application with backend', ()=>{
         name: /recently updated/i
       }).click()
 
-      cy.wait(1000)
       //TODO : most notes,
       cy.findByRole('button', {
         name: /sort bugs by/i
@@ -395,7 +427,6 @@ describe('testing application with backend', ()=>{
         name: /most notes/i
       }).click()
 
-      cy.wait(1000)
       //TODO : least notes,
       cy.findByRole('button', {
         name: /sort bugs by/i
@@ -405,7 +436,6 @@ describe('testing application with backend', ()=>{
         name: /least notes/i
       }).click()
 
-      cy.wait(1000)
       //TODO : Newest,
       cy.findByRole('button', {
         name: /sort bugs by/i
@@ -415,7 +445,6 @@ describe('testing application with backend', ()=>{
         name: /newest/i
       }).click()
 
-      cy.wait(1000)
     })
   })
 })

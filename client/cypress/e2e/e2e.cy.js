@@ -33,17 +33,20 @@ describe('testing application without backend', ()=>{
       cy.findByText('Must be at least 6 characters').should('be.visible')
       cy.get('input[name="confirmPassword"]').clear().type('passwords');
 
-      //Verify the email adress is right
+      //Put a wrong email adress
       cy.get('input[name="email"]').type('invalidemail');
-      cy.findByText('Invalid email adress.').should('be.visible')
-      cy.get('input[name="email"]').clear().type('valid@mail.com');
 
       //Verify that the second password should be the same
       cy.get('button[type="submit"]').click();
       cy.findByText('Both passwords need to match.').should('be.visible')
 
-      //Changing the second password and save the profile
+      //Changing the second password
       cy.get('input[name="confirmPassword"]').clear().type('password');
+
+      //Verify the email and save profile
+      cy.get('button[type="submit"]').click();
+      cy.findByText('Invalid email adress.').should('be.visible')
+      cy.get('input[name="email"]').clear().type('valid@mail.com');
       cy.get('button[type="submit"]').click();
       cy.findByText('Network Error').should('be.visible')
 
