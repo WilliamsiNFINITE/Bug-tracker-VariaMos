@@ -109,7 +109,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          working-directory: client
+#          working-directory: client
           build: npm run build
           start: npm start
 #          record: true
