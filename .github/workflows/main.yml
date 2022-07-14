@@ -97,6 +97,8 @@ jobs:
   e2e_test:
     runs-on: ubuntu-latest
 #    needs: unit_integration_tests
+    env:
+      working-directory: ./client
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -104,13 +106,11 @@ jobs:
       # and run all Cypress tests
 
       - name: Install modules
-        working-directory: ./client
         run: npm install
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          working-directory: ./client
           build: npm run build
           start: 'npm start'
 #          record: true
