@@ -106,11 +106,13 @@ jobs:
       # and run all Cypress tests
 
       - name: Install modules
+        working-directory: ./client
         run: pwd
 #
 #      - name: Cypress run
 #        uses: cypress-io/github-action@v2
 #        with:
+#          working-directory: ./client
 #          build: npm run build
 #          start: 'npm start'
 ##          record: true
