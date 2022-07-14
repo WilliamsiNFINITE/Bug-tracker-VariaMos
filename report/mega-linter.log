@@ -1,0 +1,121 @@
+----------------------------------------------------------------------------------------------------
+-------------------------------------------- MegaLinter --------------------------------------------
+----------------------------------------------------------------------------------------------------
+ - Image Creation Date: 2022-05-15T19:58:30Z
+ - Image Revision: 7908c4d34
+ - Image Version: v5.13.0
+----------------------------------------------------------------------------------------------------
+The MegaLinter documentation can be found at:
+ - https://megalinter.github.io
+----------------------------------------------------------------------------------------------------
+GITHUB_REPOSITORY: WilliamsiNFINITE/Bug-tracker-VariaMos
+GITHUB_REF: refs/heads/master
+GITHUB_RUN_ID: 2669006592
+
+
+[Activation] JAVASCRIPT_ES has been set inactive, as none of these files has been found: ['.eslintrc.json', '.eslintrc.yml', '.eslintrc.yaml', '.eslintrc.js', '.eslintrc.cjs', 'package.json:eslintConfig']
+[Activation] TYPESCRIPT_ES has been set inactive, as none of these files has been found: ['.eslintrc.json', '.eslintrc.yml', '.eslintrc.yaml', '.eslintrc.js', '.eslintrc.cjs', 'package.json:eslintConfig']
+RST_RSTFMT has been temporary disabled in MegaLinter, please use a previous MegaLinter version or wait for the next one !
+Skipped linters: ACTION_ACTIONLINT, ANSIBLE_ANSIBLE_LINT, ARM_ARM_TTK, BASH_EXEC, BASH_SHELLCHECK, BASH_SHFMT, CLOJURE_CLJ_KONDO, CLOUDFORMATION_CFN_LINT, COFFEE_COFFEELINT, COPYPASTE_JSCPD, CPP_CPPLINT, CREDENTIALS_SECRETLINT, CSHARP_DOTNET_FORMAT, CSS_SCSS_LINT, C_CPPLINT, DART_DARTANALYZER, DOCKERFILE_DOCKERFILELINT, DOCKERFILE_HADOLINT, EDITORCONFIG_EDITORCONFIG_CHECKER, ENV_DOTENV_LINTER, GHERKIN_GHERKIN_LINT, GIT_GIT_DIFF, GO_GOLANGCI_LINT, GO_REVIVE, GRAPHQL_GRAPHQL_SCHEMA_LINTER, GROOVY_NPM_GROOVY_LINT, JAVASCRIPT_ES, JAVASCRIPT_PRETTIER, JAVASCRIPT_STANDARD, JAVA_CHECKSTYLE, JSON_JSONLINT, JSON_PRETTIER, JSON_V8R, JSX_ESLINT, KOTLIN_KTLINT, KUBERNETES_KUBECONFORM, KUBERNETES_KUBEVAL, LATEX_CHKTEX, LUA_LUACHECK, MARKDOWN_MARKDOWN_LINK_CHECK, MARKDOWN_MARKDOWN_TABLE_FORMATTER, MARKDOWN_REMARK_LINT, OPENAPI_SPECTRAL, PERL_PERLCRITIC, PHP_PHPCS, PHP_PHPLINT, PHP_PHPSTAN, PHP_PSALM, POWERSHELL_POWERSHELL, PROTOBUF_PROTOLINT, PUPPET_PUPPET_LINT, PYTHON_BANDIT, PYTHON_BLACK, PYTHON_FLAKE8, PYTHON_ISORT, PYTHON_MYPY, PYTHON_PYLINT, RAKU_RAKU, RST_RSTCHECK, RST_RSTFMT, RST_RST_LINT, RUBY_RUBOCOP, RUST_CLIPPY, R_LINTR, SALESFORCE_SFDX_SCANNER_APEX, SALESFORCE_SFDX_SCANNER_AURA, SALESFORCE_SFDX_SCANNER_LWC, SCALA_SCALAFIX, SNAKEMAKE_LINT, SNAKEMAKE_SNAKEFMT, SPELL_CSPELL, SPELL_MISSPELL, SQL_SQLFLUFF, SQL_SQL_LINT, SQL_TSQLLINT, SWIFT_SWIFTLINT, TEKTON_TEKTON_LINT, TERRAFORM_CHECKOV, TERRAFORM_KICS, TERRAFORM_TERRAFORM_FMT, TERRAFORM_TERRAGRUNT, TERRAFORM_TERRASCAN, TERRAFORM_TFLINT, TSX_ESLINT, TYPESCRIPT_ES, TYPESCRIPT_PRETTIER, TYPESCRIPT_STANDARD, VBDOTNET_DOTNET_FORMAT, XML_XMLLINT, YAML_PRETTIER, YAML_V8R, YAML_YAMLLINT
+To receive reports as email, please set variable EMAIL_REPORTER_EMAIL
+Listing all files in directory [/github/workspace], then filter with:
+- File extensions: .css, .htm, .html, .json, .json5, .jsonc, .md, .php, .saas, .scss
+- Excluding .gitignored files [0]: 
+Kept [16] files on [125] found files
+
++----MATCHING LINTERS--------------+---------------------+----------------+------------+
+| Descriptor | Linter              | Criteria            | Matching files | Format/Fix |
++------------+---------------------+---------------------+----------------+------------+
+| CSS        | stylelint           | .css|.scss|.saas    | 1              | yes        |
+| HTML       | htmlhint            | .html|.htm          | 1              | no         |
+| JSON       | eslint-plugin-jsonc | .json|.json5|.jsonc | 13             | yes        |
+| MARKDOWN   | markdownlint        | .md                 | 1              | yes        |
++------------+---------------------+---------------------+----------------+------------+
+
+
+[1m### Processed [HTML] files[0m
+- Using [htmlhint v1.1.4] https://megalinter.github.io/v5.13.0/descriptors/html_htmlhint
+- MegaLinter key: [HTML_HTMLHINT]
+- Rules config: [.htmlhintrc]
+[htmlhint] client/public/index.html
+[32m✅ Linted [HTML] files with [htmlhint] successfully - (0.42s)[0m
+[Text Reporter] Generated TEXT report: /github/workspace/report/linters_logs/SUCCESS-HTML_HTMLHINT.log
+
+[1m### Processed [CSS] files[0m
+- Using [stylelint v14.8.2] https://megalinter.github.io/v5.13.0/descriptors/css_stylelint
+- MegaLinter key: [CSS_STYLELINT]
+- Rules config: [.stylelintrc.json]
+[36m[stylelint] client/src/index.css - FIXED[0m
+[32m✅ Linted [CSS] files with [stylelint] successfully - (1.22s)[0m
+[Text Reporter] Generated TEXT report: /github/workspace/report/linters_logs/SUCCESS-CSS_STYLELINT.log
+
+[1m### Processed [MARKDOWN] files[0m
+- Using [markdownlint v0.31.1] https://megalinter.github.io/v5.13.0/descriptors/markdown_markdownlint
+- MegaLinter key: [MARKDOWN_MARKDOWNLINT]
+- Rules config: [.markdownlint.json]
+[36m[markdownlint] README.md - FIXED[0m
+--Error detail:
+/github/workspace/README.md:9 MD001/heading-increment/header-increment Heading levels should only increment by one level at a time [Expected: h3; Actual: h4]
+/github/workspace/README.md:53 MD001/heading-increment/header-increment Heading levels should only increment by one level at a time [Expected: h3; Actual: h4]
+/github/workspace/README.md:57 MD040/fenced-code-language Fenced code blocks should have a language specified [Context: "```"]
+/github/workspace/README.md:69 MD040/fenced-code-language Fenced code blocks should have a language specified [Context: "```"]
+/github/workspace/README.md:90 MD040/fenced-code-language Fenced code blocks should have a language specified [Context: "```"]
+
+[33m✅ Linted [MARKDOWN] files with [markdownlint]: Found 5 non blocking error(s) - (0.5s)[0m
+[Text Reporter] Generated TEXT report: /github/workspace/report/linters_logs/WARNING-MARKDOWN_MARKDOWNLINT.log
+Unable to get version for linter [eslint-plugin-jsonc]
+/node_modules/.bin/npm list eslint-plugin-jsonc returned output: (1) workspace@ /github/workspace
+└── (empty)
+
+
+Unable to extract version with regex re.compile('\\d+(\\.\\d+)+') from ERROR
+
+[1m### Processed [JSON] files[0m
+- Using [eslint-plugin-jsonc vERROR] https://megalinter.github.io/v5.13.0/descriptors/json_eslint_plugin_jsonc
+- MegaLinter key: [JSON_ESLINT_PLUGIN_JSONC]
+- Rules config: [.eslintrc-json.json]
+[eslint-plugin-jsonc] client/.netlify/state.json
+[eslint-plugin-jsonc] client/cypress/.eslintrc.json
+[eslint-plugin-jsonc] client/cypress/fixtures/example.json
+[eslint-plugin-jsonc] client/package-lock.json
+[eslint-plugin-jsonc] client/package.json
+[eslint-plugin-jsonc] client/public/manifest.json
+[eslint-plugin-jsonc] client/tsconfig.json
+[eslint-plugin-jsonc] package-lock.json
+[eslint-plugin-jsonc] package.json
+[eslint-plugin-jsonc] server/.eslintrc.json
+[eslint-plugin-jsonc] server/package-lock.json
+[eslint-plugin-jsonc] server/package.json
+[eslint-plugin-jsonc] server/tsconfig.json
+[32m✅ Linted [JSON] files with [eslint-plugin-jsonc] successfully - (2.97s)[0m
+[Text Reporter] Generated TEXT report: /github/workspace/report/linters_logs/SUCCESS-JSON_ESLINT_PLUGIN_JSONC.log
+
++----SUMMARY-+---------------------+---------------+-------+-------+--------+--------------+
+| Descriptor | Linter              | Mode          | Files | Fixed | Errors | Elapsed time |
++------------+---------------------+---------------+-------+-------+--------+--------------+
+| ✅ CSS     | stylelint           | list_of_files |     1 |     1 |      0 |        1.22s |
+| ✅ HTML    | htmlhint            | list_of_files |     1 |       |      0 |        0.42s |
+| ✅ JSON    | eslint-plugin-jsonc | list_of_files |    13 |     0 |      0 |        2.97s |
+| ◬ MARKDOWN | markdownlint        | list_of_files |     1 |     1 |      5 |         0.5s |
++------------+---------------------+---------------+-------+-------+--------+--------------+
+
+[34mYou could have same capabilities but better runtime performances if you use a MegaLinter flavor:[0m
+- [documentation] megalinter/megalinter/flavors/documentation@v5 (41 linters) https://megalinter.github.io/flavors/documentation/
+- [dart] megalinter/megalinter/flavors/dart@v5 (42 linters) https://megalinter.github.io/flavors/dart/
+- [ruby] megalinter/megalinter/flavors/ruby@v5 (42 linters) https://megalinter.github.io/flavors/ruby/
+- [rust] megalinter/megalinter/flavors/rust@v5 (42 linters) https://megalinter.github.io/flavors/rust/
+- [scala] megalinter/megalinter/flavors/scala@v5 (42 linters) https://megalinter.github.io/flavors/scala/
+- [swift] megalinter/megalinter/flavors/swift@v5 (42 linters) https://megalinter.github.io/flavors/swift/
+- [go] megalinter/megalinter/flavors/go@v5 (43 linters) https://megalinter.github.io/flavors/go/
+- [java] megalinter/megalinter/flavors/java@v5 (43 linters) https://megalinter.github.io/flavors/java/
+- [salesforce] megalinter/megalinter/flavors/salesforce@v5 (44 linters) https://megalinter.github.io/flavors/salesforce/
+- [php] megalinter/megalinter/flavors/php@v5 (46 linters) https://megalinter.github.io/flavors/php/
+- [terraform] megalinter/megalinter/flavors/terraform@v5 (47 linters) https://megalinter.github.io/flavors/terraform/
+- [dotnet] megalinter/megalinter/flavors/dotnet@v5 (49 linters) https://megalinter.github.io/flavors/dotnet/
+- [python] megalinter/megalinter/flavors/python@v5 (49 linters) https://megalinter.github.io/flavors/python/
+- [javascript] megalinter/megalinter/flavors/javascript@v5 (50 linters) https://megalinter.github.io/flavors/javascript/
+
+[GitHub Comment Reporter] No pull request has been found, so no comment has been posted
+[Updated Sources Reporter] copied 2 fixed source files in folder /github/workspace/report/updated_sources.
+Download it from artifacts then copy-paste it in your local repo to apply linters updates
+[33m◬ Successfully linted all files, but with ignored errors[0m
