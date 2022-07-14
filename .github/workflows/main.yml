@@ -105,7 +105,7 @@ jobs:
 
       - name: Install modules
         run: |
-          cd .\client\
+          cd client
           npm install
 
       - name: Cypress run
