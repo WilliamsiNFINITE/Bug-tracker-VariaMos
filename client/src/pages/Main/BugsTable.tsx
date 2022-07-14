@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { BugState, UserState } from '../../redux/types';
 import BugsMenu from './BugsMenu';
@@ -15,6 +15,7 @@ import {
   Paper,
 } from '@material-ui/core';
 import { useTableStyles } from '../../styles/muiStyles';
+import BugCard from './BugCard';
 
 const tableHeaders = [
   'Title',
@@ -29,6 +30,14 @@ const tableHeaders = [
 const BugsTable: React.FC<{ bugs: BugState[], user: UserState | null }> = ({ bugs, user }) => {
   const classes = useTableStyles();
   const history = useHistory();
+  const [viewBug, setViewBug] = useState(false);
+  const [bugId, setBugId] = useState('');
+
+  const actionsOnClick = (bugId: string) => {
+    //history.push(`/bugs/${bugId}`);
+    setViewBug(!viewBug);
+    setBugId(bugId);
+  }
 
   return (
     <Paper className={classes.table}>
@@ -48,18 +57,20 @@ const BugsTable: React.FC<{ bugs: BugState[], user: UserState | null }> = ({ bug
               <TableCell
                 align="center"
                 onClick={() =>
-                  history.push(`/bugs/${b.id}`)
+                  actionsOnClick(b.id)
                 }
                 className={classes.clickableCell}
               >
-                <Link
+                {/*<Link
                   component={RouterLink}
                   to={`/bugs/${b.id}`}
                   color="secondary"
-                >
+              >
                   {b.title}
-                </Link>
+              </Link>*/}
+              {b.title}
               </TableCell>
+              
               <TableCell align="center">
                 <div
                   style={{
@@ -106,7 +117,12 @@ const BugsTable: React.FC<{ bugs: BugState[], user: UserState | null }> = ({ bug
           ))}
         </TableBody>
       </Table>
+      <BugCard
+        viewBug={ viewBug }
+        bugId={ bugId }
+       />              
     </Paper>
+
   );
 };
 

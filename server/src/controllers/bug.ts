@@ -56,7 +56,6 @@ export const getBugs = async (_req: Request, res: Response) => {
 };
 
 export const createBug = async (req: Request, res: Response) => {
-  console.log("create")
   const { title, description, priority } = req.body;
   lastBugTitle = title;
   const { errors, valid } = createBugValidator(title, description, priority);
@@ -109,6 +108,7 @@ export const createBug = async (req: Request, res: Response) => {
 };
 
 export const updateBug = async (req: Request, res: Response) => {
+  console.log("update")
   const { title, description, priority } = req.body;
   const { bugId } = req.params;
 
@@ -119,7 +119,7 @@ export const updateBug = async (req: Request, res: Response) => {
   }
 
   const { errors, valid } = createBugValidator(title, description, priority);
-
+  lastBugTitle = title;
   if (!valid) {
     return res.status(400).send({ message: Object.values(errors)[0] });
   }
@@ -260,6 +260,7 @@ export const reopenBug = async (req: Request, res: Response) => {
 };
 
 export const saveFilePath = async(uploadedfilePath: string) => {
+  console.log("save file path")
   const targetBug = await Bug.findOne({ title: lastBugTitle });
   let found: boolean = false;
 

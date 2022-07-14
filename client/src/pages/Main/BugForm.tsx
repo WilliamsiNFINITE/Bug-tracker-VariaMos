@@ -10,7 +10,7 @@ import { BugPayload } from '../../redux/types';
 import ErrorBox from '../../components/ErrorBox';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
+import backendUrl from '../../backendUrl';
 import {
   TextField,
   RadioGroup,
@@ -71,6 +71,9 @@ const BugForm: React.FC<BugFormProps> = ({
   };
 
   const handleUpdateBug = (data: BugPayload) => {
+    console.log('avant')
+    imageForm?.submit();
+    console.log('apres')
     dispatch(editBug(bugId as string, data, closeDialog));
   };
 
@@ -78,8 +81,8 @@ const BugForm: React.FC<BugFormProps> = ({
 
   return (
 
-    <><form id="image-form" method="POST" action="http://localhost:3005/bugs/upload" encType="multipart/form-data">
-      <input type="file" name='image'></input>
+    <><form id="image-form" method="POST" action={backendUrl + '/bugs/upload'} encType="multipart/form-data">
+      <input type="file" name='image' accept="image/*, video/*"></input>
     </form>
     <br></br>
     <form

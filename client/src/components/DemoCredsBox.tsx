@@ -6,7 +6,7 @@ const DemoCredsBox = () => {
     <div style={{ width: '100%', marginTop: '0.8em', marginBottom: '0.8em' }}>
       <Alert severity="info">
         <AlertTitle>VariaMos Bug Tracker</AlertTitle>
-        Login to report your issue
+        Thank you for your help !
       </Alert>
     </div>
   );

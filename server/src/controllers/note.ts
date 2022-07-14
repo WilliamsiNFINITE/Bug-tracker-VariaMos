@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Note } from '../entity/Note';
 import nodemailer from 'nodemailer';
-import { EMAIL, PASSWORD } from '../utils/config';
+import { EMAIL, PASSWORD } from '../utils/variables';
 import { User } from '../entity/User';
 import { Bug } from '../entity/Bug';
 
