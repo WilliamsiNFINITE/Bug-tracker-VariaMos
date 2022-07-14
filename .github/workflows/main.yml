@@ -107,20 +107,17 @@ jobs:
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
 
-#      - name: Install modules
-#        run: |
-#          pwd
-#          npm install --force
-      - uses: bahmutov/npm-install@v1
-        with:
-          working-directory: client
+      - name: Install modules
+        run: |
+          pwd
+          npm install --force
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
           working-directory: client
-          build: npm run build --force
-          start: npm start --force
+#          build: pwd
+          start: pwd
 #          record: true
         env:
 #          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
