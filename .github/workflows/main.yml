@@ -111,12 +111,15 @@ jobs:
         run: |
           pwd
           npm install --force
+#      - uses: bahmutov/npm-install@v1
+#        with:
+#          working-directory: client
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
           working-directory: client
-#          build: npm run build --legacy-peer-deps
+          build: npm run build --legacy-peer-deps
           start: npm start --legacy-peer-deps
 #          record: true
         env:
