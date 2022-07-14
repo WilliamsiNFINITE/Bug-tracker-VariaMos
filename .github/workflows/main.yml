@@ -43,7 +43,7 @@ jobs:
           #           VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} # Validates all source when push on main, else just the git diff with main. Override with true if you always want to lint all sources
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
-          ENABLE_LINTERS: JAVASCRIPT_ES,TYPESCRIPT_ES,PHP_BUILTIN #disable copy-paste, spell checks
+          ENABLE_LINTERS: JAVASCRIPT_ES,TYPESCRIPT_ES,PHP_BUILTIN,YAML_YAMLLINT,MARKDOWN_MARKDOWNLINT,JSON_ESLINT_PLUGIN_JSONC,HTML_HTMLHINT,CSS_STYLELINT #disable copy-paste, spell checks
       # Upload MegaLinter artifacts
       - name: Archive production artifacts
         if: ${{ success() }} || ${{ failure() }}
