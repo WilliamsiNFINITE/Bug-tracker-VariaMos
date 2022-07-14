@@ -107,18 +107,15 @@ jobs:
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
 
-#      - name: Install modules
-#        run: |
-#          pwd
-#          npm install --force
-
-      - name: Cypress run
+      - name: Install modules
         run: |
           pwd
-          cd ./client
           npm install --force
+
+      - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
+          working-directory: client
           build: npm run build
           start: npm start
 #          record: true
