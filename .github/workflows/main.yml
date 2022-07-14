@@ -113,7 +113,7 @@ jobs:
           npm install --force
 
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           install: false
           working-directory: client
