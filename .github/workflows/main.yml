@@ -104,17 +104,16 @@ jobs:
       # and run all Cypress tests
 
       - name: Install modules
-        run: |
-          cd client
-          npm install
+        working-directory: ./client
+        run: npm install
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-#          working-directory: client
-#          build: npm run build
+          working-directory: ./client
+          build: npm run build
           start: 'npm start'
 #          record: true
-#        env:
+        env:
 #          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
