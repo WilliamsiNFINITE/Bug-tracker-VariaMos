@@ -6,6 +6,10 @@ on:
       - master
   workflow_dispatch:
 
+defaults:
+  run:
+    working-directory: ./client
+
 env: # Comment env block if you do not want to apply fixes
   # Apply linter fixes configuration
   APPLY_FIXES: all # When active, APPLY_FIXES must also be defined as environment variable (in github/workflows/mega-linter.yml or other CI tool)
@@ -104,7 +108,6 @@ jobs:
       # and run all Cypress tests
 
       - name: Install modules
-        working-directory: ./client
         run: |
           pwd
           npm install --force
@@ -112,7 +115,6 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          working-directory: ./client
           build: npm run build
           start: npm start
 #          record: true
