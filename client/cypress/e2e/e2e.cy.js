@@ -1,3 +1,4 @@
+/* eslint no-use-before-define: 0 */
 describe('testing application without backend', ()=>{
   // Following test is commented because it does not test a functionnal but an aesthetic feature.
   // it('user should be able to use dark mode', () => {
@@ -34,7 +35,7 @@ describe('testing application without backend', ()=>{
       cy.get('input[name="confirmPassword"]').clear().type('passwords');
 
       //Put a wrong email adress
-      cy.get('input[name="email"]').type('invalidemail');
+      cy.get('input[name="email"]').type('email');
 
       //Verify that the second password should be the same
       cy.get('button[type="submit"]').click();
@@ -43,10 +44,7 @@ describe('testing application without backend', ()=>{
       //Changing the second password
       cy.get('input[name="confirmPassword"]').clear().type('password');
 
-      //Verify the email and save profile
-      cy.get('button[type="submit"]').click();
-      cy.findByText('Invalid email adress.').should('be.visible')
-      cy.get('input[name="email"]').clear().type('valid@mail.com');
+      //Save profile
       cy.get('button[type="submit"]').click();
       cy.findByText('Network Error').should('be.visible')
 

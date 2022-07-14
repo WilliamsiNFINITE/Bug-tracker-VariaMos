@@ -5,6 +5,6 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-    pageLoadTimeout : 5000,
+    pageLoadTimeout : 10000,
   },
 });

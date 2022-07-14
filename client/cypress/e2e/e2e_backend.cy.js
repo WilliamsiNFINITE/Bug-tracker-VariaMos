@@ -1,3 +1,4 @@
+/* eslint no-use-before-define: 0 */
 describe('testing application with backend', ()=>{
   // Following test is commented because it does not test a functionnal but an aesthetic feature.
   // it('user should be able to use dark mode', () => {
