@@ -117,7 +117,7 @@ jobs:
         with:
           install: false
           working-directory: client
-          build: npm run build --force
+          build: pwd
           start: npm start --force
 #          record: true
         env:
