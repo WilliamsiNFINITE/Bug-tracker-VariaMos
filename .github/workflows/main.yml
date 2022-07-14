@@ -107,7 +107,7 @@ jobs:
         working-directory: ./client
         run: |
           pwd
-          npm install
+          npm install --force
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
