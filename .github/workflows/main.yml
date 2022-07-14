@@ -115,9 +115,10 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
+          install: false
           working-directory: client
-#          build: pwd
-          start: pwd
+          build: npm run build --force
+          start: npm start --force
 #          record: true
         env:
 #          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
