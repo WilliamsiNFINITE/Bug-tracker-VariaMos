@@ -116,8 +116,8 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           working-directory: client
-          build: npm run build --force
-          start: npm start --force
+          build: npm run build --legacy-peer-deps
+          start: npm start --legacy-peer-deps
 #          record: true
         env:
 #          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
