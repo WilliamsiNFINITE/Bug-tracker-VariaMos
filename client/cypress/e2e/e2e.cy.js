@@ -10,10 +10,10 @@ describe('testing application without backend', ()=>{
   // })
 
   describe('user should be able to manage profiles', () => {
-    beforeEach(() => {
-      cy.visit('http://localhost:3000');
-    })
+
     it('user should be able to sign up', () => {
+      cy.visit('http://localhost:3000');
+
       //Go to the form
       cy.findByRole('button', {
         name: /sign up/i
@@ -50,6 +50,8 @@ describe('testing application without backend', ()=>{
 
     })
     it('user should be able to log in', () => {
+      cy.visit('http://localhost:3000');
+
       //Go to form
       cy.findByRole('button', {
         name: /log in/i
