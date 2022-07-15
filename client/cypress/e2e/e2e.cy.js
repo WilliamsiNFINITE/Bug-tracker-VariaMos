@@ -12,7 +12,7 @@ describe('testing application without backend', ()=>{
   describe('user should be able to manage profiles', () => {
 
     it('user should be able to sign up', () => {
-      cy.visit('http://localhost:3000');
+      cy.visit('/');
 
       //Go to the form
       cy.findByRole('button', {
@@ -50,7 +50,7 @@ describe('testing application without backend', ()=>{
 
     })
     it('user should be able to log in', () => {
-      cy.visit('http://localhost:3000');
+      cy.visit('/');
 
       //Go to form
       cy.findByRole('button', {
@@ -70,7 +70,7 @@ describe('testing application without backend', ()=>{
   describe('user should be able to manage bugs', () => {
     it('user should be able to report a bug', () => {
       //Visit the application
-      cy.visit('http://localhost:3000');
+      cy.visit('/');
 
       //Open form
       cy.findByRole('button', {  name: /add bug/i}).click()
