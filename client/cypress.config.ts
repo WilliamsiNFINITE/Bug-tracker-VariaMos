@@ -6,5 +6,6 @@ export default defineConfig({
       // implement node event listeners here
     },
     pageLoadTimeout : 10000,
+    viewportHeight: 1060,
   },
 });
