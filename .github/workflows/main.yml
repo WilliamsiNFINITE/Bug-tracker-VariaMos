@@ -118,7 +118,11 @@ jobs:
           install: false
           working-directory: client
           build: npm run build --legacy-peer-deps
-          start: npm start --legacy-peer-deps
+          start: |
+            npm start --legacy-peer-deps
+            cd ../server
+            pwd
+            npm run dev
 #          record: true
         env:
 #          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
