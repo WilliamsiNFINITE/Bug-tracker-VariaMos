@@ -11,44 +11,44 @@ describe('testing application without backend', ()=>{
 
   describe('user should be able to manage profiles', () => {
 
-    it('user should be able to sign up', () => {
-      cy.visit('/');
-
-      //Go to the form
-      cy.findByRole('button', {
-        name: /sign up/i
-      }).click()
-
-      //Put a username with the minimum number of characters
-      cy.get('input[name="username"]').type('u');
-      cy.findByText('Must be at least 3 characters').should('be.visible')
-      cy.get('input[name="username"]').clear().type('username');
-
-      //Put a password with the minimum number of characters
-      cy.get('input[name="password"]').type('pass');
-      cy.findByText('Must be at least 6 characters').should('be.visible')
-      cy.get('input[name="password"]').clear().type('password');
-
-      //Put a different password
-      cy.get('input[name="confirmPassword"]').type('pass');
-      cy.findByText('Must be at least 6 characters').should('be.visible')
-      cy.get('input[name="confirmPassword"]').clear().type('passwords');
-
-      //Put a wrong email adress
-      cy.get('input[name="email"]').type('email');
-
-      //Verify that the second password should be the same
-      cy.get('button[type="submit"]').click();
-      cy.findByText('Both passwords need to match.').should('be.visible')
-
-      //Changing the second password
-      cy.get('input[name="confirmPassword"]').clear().type('password');
-
-      //Save profile
-      cy.get('button[type="submit"]').click();
-      cy.findByText('Network Error').should('be.visible')
-
-    })
+    // it('user should be able to sign up', () => {
+    //   cy.visit('/');
+    //
+    //   //Go to the form
+    //   cy.findByRole('button', {
+    //     name: /sign up/i
+    //   }).click()
+    //
+    //   //Put a username with the minimum number of characters
+    //   cy.get('input[name="username"]').type('u');
+    //   cy.findByText('Must be at least 3 characters').should('be.visible')
+    //   cy.get('input[name="username"]').clear().type('username');
+    //
+    //   //Put a password with the minimum number of characters
+    //   cy.get('input[name="password"]').type('pass');
+    //   cy.findByText('Must be at least 6 characters').should('be.visible')
+    //   cy.get('input[name="password"]').clear().type('password');
+    //
+    //   //Put a different password
+    //   cy.get('input[name="confirmPassword"]').type('pass');
+    //   cy.findByText('Must be at least 6 characters').should('be.visible')
+    //   cy.get('input[name="confirmPassword"]').clear().type('passwords');
+    //
+    //   //Put a wrong email adress
+    //   cy.get('input[name="email"]').type('email');
+    //
+    //   //Verify that the second password should be the same
+    //   cy.get('button[type="submit"]').click();
+    //   cy.findByText('Both passwords need to match.').should('be.visible')
+    //
+    //   //Changing the second password
+    //   cy.get('input[name="confirmPassword"]').clear().type('password');
+    //
+    //   //Save profile
+    //   cy.get('button[type="submit"]').click();
+    //   cy.findByText('Network Error').should('be.visible')
+    //
+    // })
     it('user should be able to log in', () => {
       cy.visit('/');
 
