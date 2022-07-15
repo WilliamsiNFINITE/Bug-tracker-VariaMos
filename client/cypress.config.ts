@@ -8,5 +8,6 @@ export default defineConfig({
     pageLoadTimeout : 60000,
     viewportHeight: 1060,
     projectId: "87jdpk",
+    baseUrl: 'http://localhost:3000'
   },
 });
