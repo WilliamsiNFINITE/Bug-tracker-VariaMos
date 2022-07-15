@@ -7,5 +7,6 @@ export default defineConfig({
     },
     pageLoadTimeout : 10000,
     viewportHeight: 1060,
+    projectId: "87jdpk",
   },
 });
