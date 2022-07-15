@@ -118,7 +118,7 @@ jobs:
           install: false
           working-directory: client
 #          build: npm run build
-          start: npm start
+          start: npm start --force
           record: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
