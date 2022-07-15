@@ -99,7 +99,7 @@ jobs:
 
 
   e2e_test:
-    runs-on: macos-latest
+    runs-on: windows-latest
 #    needs: unit_integration_tests
     steps:
       - name: Checkout
