@@ -10,11 +10,8 @@ describe('testing application without backend', ()=>{
   // })
 
   describe('user should be able to manage profiles', () => {
-    it('user should be able to visit baseURL', () => {
-      cy.visit('/');
-    })
-
     it('user should be able to sign up', () => {
+      cy.visit('/');
       cy.visit('/');
 
       //Go to the form
