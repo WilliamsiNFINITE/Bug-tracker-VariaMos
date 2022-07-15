@@ -119,7 +119,7 @@ jobs:
           working-directory: client
           build: npm run build
           start: npm start
-#          record: true
+          record: true
         env:
-#          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
