@@ -34,9 +34,7 @@ jobs:
           fetch-depth: 0
 
       - name: Dependencies
-        run: |
-          pwd
-          npm install
+        run: pwd
       # MegaLinter
       - name: MegaLinter
         id: ml
