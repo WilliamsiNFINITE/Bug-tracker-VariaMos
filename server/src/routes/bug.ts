@@ -17,6 +17,7 @@ const storage = multer.diskStorage({
     cb(null, '../client/public/Images')
   },
   filename: (_req, file, cb) => {
+    console.log("changing filename  ")
     const newFileName = Date.now() + path.extname(file.originalname)
     cb(null, newFileName);
     saveFilePath(newFileName);
@@ -31,7 +32,9 @@ const { auth } = middleware;
 router.get('/', auth, getBugs);
 router.post('/', auth, createBug);
 router.post('/upload', upload.single('image'), (_req, _res) => {
-  return;
+  if (typeof(window) !== "undefined") {
+    window.location.reload();
+  }
 });
 
 router.put('/:bugId', auth, updateBug);

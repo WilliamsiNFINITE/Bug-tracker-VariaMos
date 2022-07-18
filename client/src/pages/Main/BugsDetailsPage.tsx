@@ -18,32 +18,64 @@ import CSS from 'csstype';
 
 import { Paper, Typography, Divider, useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
-import { useMainPageStyles } from '../../styles/muiStyles';
+import { useMainPageStyles, useTableStyles } from '../../styles/muiStyles';
 import RedoIcon from '@material-ui/icons/Redo';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { selectAuthState } from '../../redux/slices/authSlice';
 import AdminForm from './AdminForm';
-//import Images from '../../Images/1657069393054.jpg';
-
+import { selectUsersState } from '../../redux/slices/usersSlice';
+/*
 interface ParamTypes {
   bugId: string;
-}
+}*/
 
-const BugsDetailsPage = () => {
+const BugsDetailsPage: React.FC<{
+  bugId: string;
+  }> = ({ bugId }) => {
+  const Tableclasses = useTableStyles();
   const classes = useMainPageStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { bugId } = useParams<ParamTypes>();
+  //const { bugId } = useParams<ParamTypes>();
   const history = useHistory();
   const dispatch = useDispatch();
   const bug = useSelector((state: RootState) =>
     selectBugsById(state, bugId)
   );
+  const assign = bug?.assignments;
+  const adminsAssignedIds = assign?.map((a) => a.adminId);
+  let isVideo: boolean = false;
+  if (bug?.filePath) {
+    if (bug?.filePath.includes("mp4")) {
+      isVideo = true;
+    }
+  }
+  const adminsAssigned: string[] = [];
   const { user } = useSelector(selectAuthState);
+  const users = useSelector(selectUsersState).users;
+  // create array containing the usernames of admins assigned to this specific bug
+  if (adminsAssignedIds) {
+    for (let i=0; i<adminsAssignedIds?.length; i++) {
+      if (users[i]) {
+      if (users[i].id === adminsAssignedIds[i]) {
+        adminsAssigned.push(users[i].username);
+        adminsAssigned.push(' ');
+      }
+    }
+      if (adminsAssignedIds[i] === user?.id) {
+        adminsAssigned.push(user.username);
+        adminsAssigned.push(' ');
+      }
+    }
+  }
+
   const admins = useSelector(selectAllAdmins);
-  
+  if (user?.isAdmin) {
+    admins.push(user);
+  }
+
   if (!bug) {
     return (
       <div className={classes.root}>
@@ -211,65 +243,77 @@ const BugsDetailsPage = () => {
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.detailsHeader}>
-        <Typography variant={isMobile ? 'h5' : 'h4'} color="secondary">
-          <strong>{title}</strong>
-        </Typography>
-        <Divider style={{ margin: '0.5em 0' }} />
-        <Typography color="secondary" variant="h6">
-          {description}
-        </Typography>
-        <Typography
-          color="secondary"
-          variant="subtitle2"
-          className={classes.marginText}
-        >
-          Status: {statusInfo()}
-        </Typography>
-        {bug.filePath ? (
-        <img src={'/Images/' + bug.filePath}></img>
-        ) : '' }
-        <Typography
-          color="secondary"
-          variant="subtitle2"
-          className={classes.marginText}
-        >
-          Priority:{' '}
-          <div
-            style={{
-              ...priorityStyles(priority),
-              display: 'inline',
-              padding: '0.20em 0.4em',
-              textTransform: 'capitalize',
-            }}
-          >
-            {priority}
-          </div>
-        </Typography>
-        <Typography color="secondary" variant="subtitle2">
-          Created: <em>{formatDateTime(createdAt)}</em> ~{' '}
-          <strong>{createdBy.username}</strong>
-        </Typography>
-        {updatedBy && updatedAt && (
-          <Typography color="secondary" variant="subtitle2">
-            Updated: <em>{formatDateTime(updatedAt)}</em> ~{' '}
-            <strong>{updatedBy.username}</strong>
+      <Paper className={Tableclasses.scrollableTable}>
+        <Paper className={classes.detailsHeader}>
+          <Typography variant={isMobile ? 'h5' : 'h4'} color="secondary">
+            <strong>{title}</strong>
           </Typography>
-        )}
-        {user?.isAdmin ? (
-        <div className={classes.btnsWrapper}>
-          {closeReopenBtns()}
-          {updateBugBtn()}
-          {deleteBugBtn()}
-          {assignBugBtn()}
-        </div>
-        ) : '' }
+          <Divider style={{ margin: '0.5em 0' }} />
+          <Typography color="secondary" variant="h6">
+            {description}
+          </Typography>
+          <Typography
+            color="secondary"
+            variant="subtitle2"
+            className={classes.marginText}
+          >
+            Status: {statusInfo()}
+          </Typography>
+          {(bug.filePath && !isVideo) ? (
+            <img src={'/Images/' + bug.filePath}></img>
+          ) : '' }
+          {(bug.filePath && isVideo) ? (
+            <video width="320" height="240" controls>
+            <source src={'/Images/' + bug.filePath} type="video/mp4"></source>
+            Your browser does not support the video tag.
+          </video>
+          ) : '' }
+
+
+          <Typography
+            color="secondary"
+            variant="subtitle2"
+            className={classes.marginText}
+          >
+            Priority:{' '}
+            <div
+              style={{
+                ...priorityStyles(priority),
+                display: 'inline',
+                padding: '0.20em 0.4em',
+                textTransform: 'capitalize',
+              }}
+            >
+              {priority}
+            </div>
+          </Typography>
+          <Typography color="secondary" variant="subtitle2">
+            Created by: <strong>{createdBy.username}</strong>
+          </Typography>
+          <Typography color="secondary" variant="subtitle2">
+            Assigned to: <strong>{adminsAssigned}</strong>
+          </Typography>
+          {updatedBy && updatedAt && (
+            <Typography color="secondary" variant="subtitle2">
+              Updated: <em>{formatDateTime(updatedAt)}</em> ~{' '}
+              <strong>{updatedBy.username}</strong>
+            </Typography>
+          )}
+          {user?.isAdmin ? (
+          <div className={classes.btnsWrapper}>
+            {closeReopenBtns()}
+            {updateBugBtn()}
+            {deleteBugBtn()}
+            {assignBugBtn()}
+          </div>
+          ) : '' }
+        </Paper>
+        <NotesCard
+          notes={notes}
+          bugId={id}
+          isMobile={isMobile}
+        />
       </Paper>
-      <NotesCard
-        notes={notes}
-        bugId={id}
-        isMobile={isMobile}
-      />
     </div>
   );
 };

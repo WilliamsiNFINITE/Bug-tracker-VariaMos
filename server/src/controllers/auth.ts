@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { User } from '../entity/User';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { JWT_SECRET } from '../utils/config';
+import { JWT_SECRET } from '../utils/variables';
 import { registerValidator, loginValidator } from '../utils/validators';
 
 export const signupUser = async (req: Request, res: Response) => {
