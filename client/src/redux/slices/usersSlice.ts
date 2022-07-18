@@ -5,6 +5,7 @@ import { SettingsPayload, InviteAdminPayload, User } from '../types';
 import { notify } from './notificationSlice';
 import { getErrorMsg } from '../../utils/helperFuncs';
 import { string } from 'yup';
+import { useState } from 'react';
 
 interface InitialBugState {
   users: User[];
@@ -85,9 +86,8 @@ export const inviteAdmin = (
 ) : AppThunk => {
   return async (dispatch) => {
     try {
-      const newAdmin = await userService.inviteAdmin(data);
-      dispatch(addAdmin({ admins: newAdmin }));
-      dispatch(notify('New admin added! Email was sent successfully!', 'success'));
+      await userService.inviteAdmin(data);
+      dispatch(notify('Email was sent successfully!', 'success'));
       closeDialog && closeDialog();
     }
     catch (e) {

@@ -19,6 +19,9 @@ export class createSchema1610529720088 implements MigrationInterface {
       `CREATE TABLE "assignedAdmins" ("id" SERIAL NOT NULL, "bugId" uuid NOT NULL, "adminId" uuid NOT NULL, "joinedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_28b53062261b996d9c99fa12404" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
+      `CREATE TABLE "inviteCodes" ("id" SERIAL NOT NULL, "codeHash" character varying, "joinedAt" TIMESTAMP NOT NULL DEFAULT now(), PRIMARY KEY ("id"))`
+    );
+    await queryRunner.query(
       `ALTER TABLE "notes" ADD CONSTRAINT "FK_d358080cb403fe88e62cc9cba58" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(

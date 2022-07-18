@@ -6,9 +6,9 @@ import { JWT_SECRET } from '../utils/variables';
 import { registerValidator, loginValidator } from '../utils/validators';
 
 export const signupUser = async (req: Request, res: Response) => {
-  const { username, password, email } = req.body;
+  const { username, password, email } = req.body.credentials;
+  const adminMode = req.body.adminMode;
   const { errors, valid } = registerValidator(username, password, email);
-
   if (!valid) {
     return res.status(400).send({ message: Object.values(errors)[0] });
   }
@@ -27,9 +27,17 @@ export const signupUser = async (req: Request, res: Response) => {
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
   const user = User.create({ username, passwordHash, email });
+
+  let isAdmin: boolean = false;
+  if (adminMode) {
+    user.isAdmin = true;
+    isAdmin = true;
+  }
+
   await user.save();
 
-  const isAdmin: boolean = false;
+
+
   const notificationsOn: boolean = true;
 
   const token = jwt.sign(

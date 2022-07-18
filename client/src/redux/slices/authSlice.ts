@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../store';
 import authService from '../../services/auth';
 import storage from '../../utils/localStorage';
-import { CredentialsPayload, UserState } from '../types';
+import { CredentialsPayload, InviteCodeData, UserState } from '../types';
 import { notify } from './notificationSlice';
 import { fetchUsers } from './usersSlice';
 import { getErrorMsg } from '../../utils/helperFuncs';
@@ -77,13 +77,13 @@ export const login = (credentials: CredentialsPayload): AppThunk => {
   };
 };
 
-export const signup = (credentials: CredentialsPayload): AppThunk => {
+export const signup = (credentials: CredentialsPayload, adminMode: boolean): AppThunk => {
   return async (dispatch) => {
     try {
       dispatch(setAuthLoading());
-      const userData = await authService.signup(credentials);
+      const userData = await authService.signup(credentials, adminMode);
       dispatch(setUser(userData));
-
+      console.log("user data", userData)
       storage.saveUser(userData);
       authService.setToken(userData.token);
       authService.setisAdmin(userData.isAdmin);
@@ -153,6 +153,22 @@ export const autoLogin = (): AppThunk => {
       }
     };
 };
+
+export const verifyCode = async (
+  inviteCode: InviteCodeData,
+  closeDialog?: () => void,
+  ): Promise<boolean> => {
+    try {
+      await authService.verifyInvitation(inviteCode);
+      notify(`Your invitation has been sucessfully validated!`, 'success');
+      closeDialog && closeDialog();
+      return true;
+    } catch (e: any) {
+      setAuthError(getErrorMsg(e));
+      return false;
+    }
+  };
+//};
 
 export const selectAuthState = (state: RootState) => state.auth;
 

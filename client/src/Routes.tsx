@@ -7,12 +7,12 @@ import NotFoundPage from './pages/Main/NotFoundPage';
 import { useSelector } from 'react-redux';
 import { selectAuthState } from './redux/slices/authSlice';
 import storage from './utils/localStorage';
-
 import { Container, useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import { selectBugsState } from './redux/slices/bugsSlice';
 import { UserState } from './redux/types';
 import { updateShorthandPropertyAssignment } from 'typescript';
+import InviteVerificationPage from './pages/Auth/InviteVerificationPage';
 
 const Routes = () => {
   const { user } = useSelector(selectAuthState);
@@ -29,14 +29,16 @@ const Routes = () => {
         <Route exact path="/bugs">
           {<BugsPage isMobile={false} />}
         </Route>
-        
-
         <Route exact path="/login">
           {user?.username === "user" ? <LoginPage /> : <Redirect to="/" />}
         </Route>
-        <Route exact path="/signup">
-          {user?.username === "user" ? <SignupPage /> : <Redirect to="/" />}
+        <Route exact path={'/invite/SUJ3NW12UVhIaVNiOTVuNzJrN2g='}>
+          <InviteVerificationPage />
         </Route>
+        <Route exact path="/signup">
+          {user?.username === "user" ? <SignupPage adminMode={false}/> : <Redirect to="/" />}
+        </Route>
+
         <Route>
           <NotFoundPage />
         </Route>

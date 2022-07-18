@@ -9,7 +9,7 @@ import { useMainPageStyles } from '../../styles/muiStyles';
 import QuestionAnswerTwoToneIcon from '@material-ui/icons/QuestionAnswerTwoTone';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
-const BugsListMobile: React.FC<{ bugs: BugState[], user: UserState | null}> = ({ bugs, user }) => {
+const BugsListMobile: React.FC<{ bugs: BugState[], user: UserState | null }> = ({ bugs, user }) => {
   const classes = useMainPageStyles();
 
   return (

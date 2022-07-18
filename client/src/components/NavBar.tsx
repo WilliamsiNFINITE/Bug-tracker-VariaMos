@@ -31,14 +31,7 @@ const NavBar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const handleLogout = () => {
-    dispatch(logout());/*
-    const autoUserCredentials: CredentialsPayload = {
-      username: "user",
-      password: "pass",
-    };
-
-    dispatch(login(autoUserCredentials))*/
-    //history.push('/');
+    dispatch(logout());
   };
 
   const handleGoBack = () => {
@@ -50,33 +43,11 @@ const NavBar = () => {
   };
 
   const mainButton = () => {
-    if (['/', '/login', '/signup'].includes(pathname) || !pathname.includes('/bugs')) {
       return (
-        <div className={classes.logoWrapper}>
-          <Button
-            className={classes.logoBtn}
-            component={RouterLink}
-            to="/"
-            color="secondary"
-          >
-            <img src={BugIcon} alt="logo" className={classes.svgImage} />
-            VariaMosBugTracker
-          </Button>
-          
-        </div>
+          <a href="https://variamos.com/home/">
+              <img src="https://variamos.azurewebsites.net/favicon.ico" alt="logo" className={classes.svgImage} />
+          </a>
       );
-    } else {
-      return (
-        <Button
-          startIcon={<ArrowBackIcon />}
-          color="secondary"
-          onClick={handleGoBack}
-          className={classes.backBtn}
-        >
-          {pathname.includes('/bugs') ? 'Back to bugs list' : 'Home'}
-        </Button>
-      );
-    }
   };
 
   return (

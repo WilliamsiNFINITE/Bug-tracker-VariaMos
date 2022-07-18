@@ -1,5 +1,6 @@
 import axios from 'axios';
 import backendUrl from '../backendUrl';
+import { InviteCodeData } from '../redux/types';
 
 interface Credentials {
   username: string;
@@ -40,11 +41,17 @@ const login = async (credentials: Credentials) => {
   return response.data;
 };
 
-const signup = async (credentials: Credentials) => {
-  const response = await axios.post(`${backendUrl}/signup`, credentials);
+const signup = async (credentials: Credentials, adminMode: boolean) => {
+  const response = await axios.post(`${backendUrl}/signup`, { credentials, adminMode });
   return response.data;
 };
 
-const authService = { login, signup, setToken, setisAdmin, setEmail, setNotifications };
+const verifyInvitation = async (inviteCode: InviteCodeData) => {
+  const response = await axios.post(`${backendUrl}/verifyCode`, inviteCode,
+  setConfig());
+  return response.data;
+}
+
+const authService = { login, signup, setToken, setisAdmin, setEmail, setNotifications, verifyInvitation };
 
 export default authService;

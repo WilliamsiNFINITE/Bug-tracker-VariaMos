@@ -138,7 +138,7 @@ const LoginPage = () => {
             clearErrorMsg={() => dispatch(clearAuthError())}
           />
         )}
-        <DemoCredsBox />
+        <DemoCredsBox adminSignup={false}/>
       </Paper>
     </div>
   );
