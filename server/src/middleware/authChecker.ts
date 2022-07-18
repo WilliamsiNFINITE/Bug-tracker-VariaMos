@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../utils/config';
+import { JWT_SECRET } from '../utils/variables';
 
 interface TokenInterface {
   id: string;

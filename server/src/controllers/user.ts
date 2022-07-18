@@ -5,7 +5,7 @@ import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { EMAIL, PASSWORD, JWT_SECRET } from '../utils/config';
+import { EMAIL, PASSWORD, JWT_SECRET } from '../utils/variables';
 import { registerValidator } from '../utils/validators';
 
 export const getAllUsers = async (req: Request, res: Response) => {
