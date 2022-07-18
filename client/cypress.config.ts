@@ -5,7 +5,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-    pageLoadTimeout : 120000,
+    pageLoadTimeout : 5000,
     viewportHeight: 1060,
     projectId: "87jdpk",
     baseUrl: 'http://localhost:3000'

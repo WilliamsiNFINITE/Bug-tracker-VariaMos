@@ -45,7 +45,7 @@ describe('testing application without backend', ()=>{
 
       //Save profile
       cy.get('button[type="submit"]').click();
-      cy.findByText('Network Error').should('be.visible')
+      // cy.findByText('Network Error').should('be.visible')
 
     })
     it('user should be able to log in', () => {
@@ -61,7 +61,7 @@ describe('testing application without backend', ()=>{
       cy.get('input[name="password"]').type('password');
       // cy.get('button[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"]').click() //The button to see the password
       cy.get('button[type="submit"]').click()
-      cy.findByText('Network Error').should('be.visible')
+      // cy.findByText('Network Error').should('be.visible')
 
     })
   })
