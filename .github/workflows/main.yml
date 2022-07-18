@@ -33,8 +33,10 @@ jobs:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      #      - name: Dependencies
-      #        run: npm install --force
+      - name: Dependencies
+        run: |
+          pwd
+          npm install
       # MegaLinter
       - name: MegaLinter
         id: ml
