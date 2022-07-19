@@ -34,18 +34,10 @@ const NavBar = () => {
     dispatch(logout());
   };
 
-  const handleGoBack = () => {
-    if (pathname.includes('/bugs')) {
-      history.push(`${pathname.slice(0, pathname.indexOf('/bugs'))}`);
-    } else {
-      history.push('/');
-    }
-  };
-
   const mainButton = () => {
       return (
           <a href="https://variamos.com/home/">
-              <img src="https://variamos.azurewebsites.net/favicon.ico" alt="logo" className={classes.svgImage} />
+              <img src="VariaMosLogo.5980c241.png" alt="logo" width="191" height="39" className="img-fluid" />
           </a>
       );
   };

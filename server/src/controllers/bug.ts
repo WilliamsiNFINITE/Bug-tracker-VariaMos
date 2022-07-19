@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import fs from 'fs';
 import { Bug } from '../entity/Bug';
 import { Note } from '../entity/Note';
 import { User } from '../entity/User';
@@ -168,6 +169,15 @@ export const deleteBug = async (req: Request, res: Response) => {
     return res.status(404).send({ message: 'Invalid bug ID.' });
   }
 
+  // remove image/video associated with bug from the Image folder
+  const path = "../client/public/Images/" + targetBug.filePath
+  fs.unlink(path, (err) => {
+    if (err) {
+      console.error(err)
+      return
+    }
+  });
+
   await Note.delete({ bugId });
   await targetBug.remove();
   res.status(204).end();
@@ -282,4 +292,3 @@ export const saveFilePath = async(uploadedfilePath: string) => {
 
 
 }
-
