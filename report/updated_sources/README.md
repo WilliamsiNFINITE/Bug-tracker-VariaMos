@@ -56,7 +56,9 @@ Create a .env file in server directory and add the following:
 
 ```
 PORT = 3005
+JWT_SECRET = "Your JWT secret"
 ```
+##### Note: `JWT_SECRET` is used to generate the JSON Web Token signature. If you are not familiar with it, check the [documentation](https://jwt.io/introduction)
 
 #### Client
 

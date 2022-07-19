@@ -1,0 +1,6 @@
+{
+    "recommendations": [
+        "mkaufman.HTMLHint",
+        "stylelint.vscode-stylelint"
+    ]
+}
