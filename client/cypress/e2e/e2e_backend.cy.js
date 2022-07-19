@@ -103,368 +103,467 @@ describe('testing application with backend', ()=>{
   })
 
   describe('user should be able to manage bugs', () => {
-    it('user should be able to report a bug without login', ()=>{
-      cy.wait(1500)
-      //Visit the application
-      cy.visit('http://localhost:3000');
+    describe('user should be able to report bugs', () => {
+      beforeEach(() =>{
+        cy.visit('http://localhost:3000');
+        //Logging in
+        cy.findByRole('button', {name: /log in/i }).click()
+        cy.get('input[name="username"]').type('username2');
+        cy.get('input[name="password"]').type('password');
+        cy.get('button[type="submit"]').click()
+        cy.wait(1500)
 
-      //Open form
-      cy.findByRole('button', {  name: /add bug/i}).click()
+      })
+      it('user should be able to report a bug without login', ()=>{
+        //Log out
+        cy.findByRole('button', {
+          name: /log out/i
+        }).click()
+        cy.wait(1000)
 
-      //Put a title without the minimum number of characters
-      cy.get('input[name="title"]').type('t');
-      cy.findByText('Must be at least 3 characters').should('be.visible')
-      cy.get('input[name="title"]').clear();
+        //Open form
+        cy.findByRole('button', {  name: /add bug/i}).click()
 
-      //Check if the textbox is empty
-      cy.findByText('Required').should('be.visible')
+        //Put a title without the minimum number of characters
+        cy.get('input[name="title"]').type('t');
+        cy.findByText('Must be at least 3 characters').should('be.visible')
+        cy.get('input[name="title"]').clear();
 
-      //Put a title with too many characters
-      let wrongText = 'x'
-      cy.get('input[name="title"]').type(wrongText.repeat(70));
-      cy.findByText('Must be at most 60 characters').should('be.visible')
-      cy.get('input[name="title"]').clear();
+        //Check if the textbox is empty
+        cy.findByText('Required').should('be.visible')
 
-      //Put a valid title
-      cy.get('input[name="title"]').type('title');
+        //Put a title with too many characters
+        let wrongText = 'x'
+        cy.get('input[name="title"]').type(wrongText.repeat(70));
+        cy.findByText('Must be at most 60 characters').should('be.visible')
+        cy.get('input[name="title"]').clear();
 
-      //Check if description is empty and add a description.
-      cy.get('textarea[name="description"]').type('d');
-      cy.get('textarea[name="description"]').clear();
-      cy.findByText('Required').should('be.visible')
-      cy.get('textarea[name="description"]').type('description');
+        //Put a valid title
+        cy.get('input[name="title"]').type('title');
 
-      //Changing the priority
-      cy.findByRole('radio', {
-        name: /high/i
-      }).click();
-      cy.findByRole('radio', {
-        name: /medium/i
-      }).click();
+        //Check if description is empty and add a description.
+        cy.get('textarea[name="description"]').type('d');
+        cy.get('textarea[name="description"]').clear();
+        cy.findByText('Required').should('be.visible')
+        cy.get('textarea[name="description"]').type('description');
 
-      //Create the bug and verify is has been created
-      cy.findByRole('button', {  name: /create new bug/i}).click()
-      cy.findByText('title').should('be.visible')
-    })
-    it('user should not be able to create twice the same bug', ()=>{
-      cy.wait(1500)
-      //Open and fill form
-      cy.findByRole('button', {  name: /add bug/i}).click()
-      cy.get('input[name="title"]').type('title');
-      cy.get('textarea[name="description"]').type('description');
-      cy.findByRole('button', {  name: /create new bug/i}).click()
+        //Changing the priority (medium with 4)
+        cy.findByRole('radio', {
+          name: /high/i
+        }).click();
+        cy.findByRole('radio', {
+          name: /medium/i
+        }).click();
 
-      //Assert that it cant be added
-      cy.findByText('A reported bug already has this title. Make sure this issue has not already been reported.').should('be.visible')
-    })
-    it('creating other bugs for testing purposes',()=>{
-      cy.wait(1500)
-      //Close the previous Form
-      cy.get('button[aria-label="close"]').click()
+        //Create the bug and verify is has been created
+        cy.findByRole('button', {  name: /create new bug/i}).click()
+        cy.findByText('title').should('be.visible')
 
-      //Bug#2
-      cy.findByRole('button', {  name: /add bug/i}).click()
-      cy.get('input[name="title"]').type('title2');
-      cy.get('textarea[name="description"]').type('description');
-      cy.findByRole('radio', {name: /high/i}).click();
-      cy.findByRole('button', {  name: /create new bug/i}).click()
+      })
+      it('user should not be able to create twice the same bug', ()=>{
+        cy.wait(1500)
+        //Open and fill form
+        cy.findByRole('button', {  name: /add bug/i}).click()
+        cy.get('input[name="title"]').type('title');
+        cy.get('textarea[name="description"]').type('description');
+        cy.findByRole('button', {  name: /create new bug/i}).click()
 
-      //Bug#3
-      cy.findByRole('button', {  name: /add bug/i}).click()
-      cy.get('input[name="title"]').type('title3');
-      cy.get('textarea[name="description"]').type('description');
-      cy.findByRole('button', {  name: /create new bug/i}).click()
+        //Assert that it cant be added
+        cy.findByText('A reported bug already has this title. Make sure this issue has not already been reported.').should('be.visible')
+      })
 
-    })
-    it('user should be able to leave a note while logged in', ()=>{
-      cy.wait(1500)
-      //Logging in
-      cy.findByRole('button', {name: /log in/i }).click()
-      cy.get('input[name="username"]').type('username');
-      cy.get('input[name="password"]').type('password');
-      cy.get('button[type="submit"]').click()
+      it('user should be able to see bug details', ()=>{
+        cy.get('button[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"]').click()
+        cy.findByRole('menuitem', {
+          name: /bug details/i
+        }).click()
 
-      //find a bug to leave a note
-      cy.findByRole('cell', {
-        name: 'title'
-      }).click()
+        cy.findByText('ERROR: Page Not Found!').should('be.visible')
+      })
+      it('admin should be able to assign a bug', ()=>{
+        //Assign the bug to username2
+        cy.get('button[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"]').click()
+        cy.findByRole('menuitem', {
+          name: /assign bug/i
+        }).click()
 
-      //Open form, type the note and submit
-      cy.findByRole('button', {
-        name: /leave a note/i
-      }).click();
-      cy.findByRole('textbox').type('This is my logged in note')
-      cy.findByRole('button', {
-        name: /submit note/i
-      }).click()
+        cy.findByRole('textbox', {
+          name: /select admin\(s\) to assign the bug to/i
+        }).type('username3')
 
-      //Check if it was added
-      cy.findByText('Reply').should('be.visible')
+        cy.findByText('username3').click()
 
-    })
-    it('user should be able to edit a note',()=>{
-      cy.wait(1500)
-      cy.findByText('Edit').click()
-      cy.findByRole('textbox').clear().type('This is my edited note')
-      cy.findByRole ('button', {
-        name: /update note/i
-      }).click()
+        cy.findByRole('button', {
+          name: /assign bug/i
+        }).click()
 
-    })
-    it('user should be able to delete a note',()=>{
-      cy.wait(1500)
-      cy.findByText('Delete').click()
-      cy.findByRole('button', {
-        name: /delete note/i
-      }).click()
+      })
+      it('admin user should be able to close a bug and cancel', ()=>{
+        //cancel
+        cy.get('button[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"]').click()
+        cy.findByRole('menuitem', {
+          name: /close bug/i
+        }).click()
+        cy.findByRole('button', {
+          name: /cancel/i
+        }).click()
 
-    })
-    it('user should be able to leave a note without login', ()=>{
-      cy.wait(1500)
-      //Logging out
-      cy.findByRole('button', {name: /log out/i }).click() //TODO : quand je déco y'a un 404
-      cy.visit('http://localhost:3000');
+      })
+      it('user should be able to close a bug',()=>{
+        //Delete
+        cy.get('button[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"]').click()
+        cy.findByRole('menuitem', {
+          name: /close bug/i
+        }).click()
+        cy.findByRole('button', {
+          name: /close bug/i
+        }).click()
 
-      //find a bug to leave a note
-      cy.findByRole('cell', {
-        name: 'title'
-      }).click()
-      cy.findByText('No notes added yet.').should('be.visible')
+      })
+      it('user should be able to re-open a bug',()=>{
+        cy.get('button[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"]').click()
+        cy.findByRole('menuitem', {
+          name: /re-open bug/i
+        }).click()
+        cy.findByRole('button', {
+          name: /re-open bug/i
+        }).click()
 
-      //Open form, type the note and submit
-      cy.findByRole('button', {
-        name: /leave a note/i
-      }).click();
-      cy.findByRole('textbox').type('This is my not logged in note')
-      cy.findByRole('button', {
-        name: /submit note/i
-      }).click()
+      })
+      it('admin user should be able to delete a bug and cancel', ()=>{
+        //cancel
+        cy.get('button[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"]').click()
+        cy.findByRole('menuitem', {
+          name: /delete bug/i
+        }).click()
+        cy.findByRole('button', {
+          name: /cancel/i
+        }).click()
 
-      //Check if it was added
-      cy.findByText('Reply').should('be.visible')
+      })
+      it('admin user should be able to delete a bug', ()=>{
+        //Delete
+        cy.get('button[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"]').click()
+        cy.findByRole('menuitem', {
+          name: /delete bug/i
+        }).click()
+        cy.findByRole('button', {
+          name: /delete bug/i
+        }).click()
 
-    })
-    it('user should be able to reply to notes', ()=>{
-      cy.wait(1500)
-      cy.findByText('Reply').click()
-      cy.findByRole('textbox').type('This is my reply')
-      cy.findByRole ('button', {
-        name: /submit response/i
-      }).click()
-
-    })
-    it('Creating other notes for testing purposes',()=>{
-      cy.wait(1500)
-
-      //Note#2
-      cy.findByRole('button', {
-        name: /leave a note/i
-      }).click();
-      cy.findByRole('textbox').type('This is my second note')
-      cy.findByRole('button', {
-        name: /submit note/i
-      }).click()
-
-      //Note#3
-      cy.findByRole('button', {
-        name: /leave a note/i
-      }).click();
-      cy.findByRole('textbox').type('This is my last note')
-      cy.findByRole('button', {
-        name: /submit note/i
-      }).click()
+      })
 
     })
-    it('user should be able to sort notes', ()=>{
-      cy.wait(1500)
-      //TODO
+    describe('creating data for testing purposes', () => {
+      beforeEach(() =>{
+        cy.visit('http://localhost:3000');
 
-      cy.findByRole('button', {
-        name: /sort notes by/i
-      }).click()
+      })
+      it('creating one bug to close',()=>{
+        //Logging in
+        cy.findByRole('button', {name: /log in/i }).click()
+        cy.get('input[name="username"]').type('username2');
+        cy.get('input[name="password"]').type('password');
+        cy.get('button[type="submit"]').click()
+        cy.wait(1500)
 
-      cy.findByRole('option', {
-        name: /oldest/i
-      }).click()
-      //TODO assert for changes
+        //Bug#2 high prio with 5
+        cy.findByRole('button', {  name: /add bug/i}).click()
+        cy.get('input[name="title"]').type('title2');
+        cy.get('textarea[name="description"]').type('description');
+        cy.findByRole('radio', {name: /high/i}).click();
+        cy.findByRole('button', {  name: /create new bug/i}).click()
 
-      cy.findByRole('button', {
-        name: /sort notes by/i
-      }).click()
+      })
+      it('closing the previous bug',()=>{
+        //Logging in
+        cy.findByRole('button', {name: /log in/i }).click()
+        cy.get('input[name="username"]').type('username2');
+        cy.get('input[name="password"]').type('password');
+        cy.get('button[type="submit"]').click()
 
-      cy.findByRole('option', {
-        name: /recently updated/i
-      }).click()
-      //TODO assert for changes
+        cy.wait(1500)
+        //Delete
+        cy.get('button[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"]').click()
+        cy.findByRole('menuitem', {
+          name: /close bug/i
+        }).click()
+        cy.findByRole('button', {
+          name: /close bug/i
+        }).click()
 
+      })
+      it('creating other bugs', ()=>{
 
-      cy.findByRole('button', {
-        name: /sort notes by/i
-      }).click()
+        //Bug#3 low prio alone
+        cy.findByRole('button', {  name: /add bug/i}).click()
+        cy.get('input[name="title"]').type('title3');
+        cy.get('textarea[name="description"]').type('description');
+        cy.findByRole('button', {  name: /create new bug/i}).click()
 
-      cy.findByRole('option', {
-        name: /newest/i
-      }).click()
-      //TODO assert for changes
+        //Bug#4 medium prio with 1
+        //Bug#5 high prio with 2
+      })
+      it('creating notes',()=>{
+        //find a bug to leave a note
+        cy.findByRole('cell', {
+          name: 'title2'
+        }).click()
 
-    })
-    it('user should be able to search bugs', ()=>{
-      cy.wait(1500)
-      //Get to the main page
-      cy.findByText(/back to bugs list/i).click()
+        //Check there is not any note
+        cy.findByRole('heading', {
+          name: /no notes added yet\./i
+        })
 
-      //TODO : type title2
-      cy.findByRole('textbox').type('title2')
-      // //TODO : erase button
-      // cy.get('button[name="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"]').click()
-      // cy.findByRole('textbox').type('title2')
+        //Note#2
+        cy.findByRole('button', {
+          name: /leave a note/i
+        }).click();
+        cy.findByRole('textbox').type('T').clear().type('This is my first note')
+        cy.findByRole('button', {
+          name: /submit note/i
+        }).click()
 
-      //TODO verify element not on screen (title)
-      //TODO : check results if positive
+        //Check if it was added
+        cy.findByText('Reply').should('be.visible')
 
+        //Note#3
+        cy.findByRole('button', {
+          name: /leave a note/i
+        }).click();
+        cy.findByRole('textbox').type('This is my other note')
+        cy.findByRole('button', {
+          name: /submit note/i
+        }).click()
 
-      //TODO : type negative
-      cy.findByRole('textbox').clear().type('negative_bug')
-      //TODO : check results if negative ('No matches found.')
-      cy.findByText('No matches found.').should('be.visible')
-
-    })
-    it('user should be able to close a bug',()=>{
-      cy.wait(1500)
-      //TODO : want to close title 2 to sort by recent closed after
-      cy.get('').should('be.visible')
-    })
-    it('user should be able to filter the bugs', ()=>{
-      cy.wait(1500)
-
-
-      cy.visit('http://localhost:3000');
-      cy.findByRole('radio', {
-        name: /closed/i
-      }).click()
-      cy.findByText('No matches found.').should('be.visible')
-      //TODO check if change was made
-
-      cy.visit('http://localhost:3000');
-      cy.findByRole('radio', {
-        name: /open/i
-      }).click()
-      //TODO check if change was made
-
-      cy.visit('http://localhost:3000');
-      cy.findByRole('radio', {
-        name: /all/i
-      }).click()
-      //TODO check if change was made
-
-    })
-    it('user should be able to re-open a bug',()=>{
-      cy.wait(1500)
-      cy.get('').should('be.visible')
-    })
-    it('user should be able to sort the bugs', ()=>{
-      cy.wait(1500)
-      cy.findByRole('button', {
-        name: /sort bugs by/i
-      }).click();
-
-      cy.findByRole('option', {
-        name: /oldest/i
-      }).click()
-
-      //TODO : title az, --> verify that title is first
-
-
-      //TODO : title az, --> verify that title is first
-      cy.findByRole('button', {
-        name: /sort bugs by/i
-      }).click();
-
-      cy.findByRole('option', {
-        name: /title \(a \- z\)/i
-      }).click()
-
-      //TODO : title za, --> verify that title2 is first
-      cy.findByRole('button', {
-        name: /sort bugs by/i
-      }).click();
-
-      cy.findByRole('option', {
-        name: /title \(z \- a\)/i
-      }).click()
-
-      //TODO : prio hl,--> verify that title2 is first
-      cy.findByRole('button', {
-        name: /sort bugs by/i
-      }).click();
-
-      cy.findByRole('option', {
-        name: /priority \(high \- low\)/i
-      }).click()
-
-      //TODO : prio lh,--> verify that title is first
-      cy.findByRole('button', {
-        name: /sort bugs by/i
-      }).click();
-
-      cy.findByRole('option', {
-        name: /priority \(low \- high\)/i
-      }).click()
-
-      //TODO : recent clsd,
-      cy.findByRole('button', {
-        name: /sort bugs by/i
-      }).click();
-
-      cy.findByRole('option', {
-        name: /recently closed/i
-      }).click()
-
-      //TODO : recent r-opnd,
-      cy.findByRole('button', {
-        name: /sort bugs by/i
-      }).click();
-
-      cy.findByRole('option', {
-        name: /recently re\-opened/i
-      }).click()
-
-      //TODO : recent updtd,
-      cy.findByRole('button', {
-        name: /sort bugs by/i
-      }).click();
-
-      cy.findByRole('option', {
-        name: /recently updated/i
-      }).click()
-
-      //TODO : most notes,
-      cy.findByRole('button', {
-        name: /sort bugs by/i
-      }).click();
-
-      cy.findByRole('option', {
-        name: /most notes/i
-      }).click()
-
-      //TODO : least notes,
-      cy.findByRole('button', {
-        name: /sort bugs by/i
-      }).click();
-
-      cy.findByRole('option', {
-        name: /least notes/i
-      }).click()
-
-      //TODO : Newest,
-      cy.findByRole('button', {
-        name: /sort bugs by/i
-      }).click();
-
-      cy.findByRole('option', {
-        name: /newest/i
-      }).click()
+      })
 
     })
+    describe('user should be able to use note features', () => {
+      beforeEach(() =>{
+        cy.visit('http://localhost:3000');
+        //Logging in
+        cy.findByRole('button', {name: /log in/i }).click()
+        cy.get('input[name="username"]').type('username2');
+        cy.get('input[name="password"]').type('password');
+        cy.get('button[type="submit"]').click()
+        cy.wait(1500)
+      })
+      it('user should be able to leave a note while logged in', ()=>{
+
+        //find a bug to leave a note
+        cy.findByRole('cell', {
+          name: 'title2'
+        }).click()
+
+        //Open form, type the note and submit
+        cy.findByRole('button', {
+          name: /leave a note/i
+        }).click();
+        cy.findByRole('textbox').type('This is my logged in note')
+        cy.findByRole('button', {
+          name: /submit note/i
+        }).click()
+
+      })
+      it('user should be able to edit a note',()=>{
+
+        //find a bug to leave a note
+        cy.findByRole('cell', {
+          name: 'title2'
+        }).click()
+
+        cy.findByText('Edit').click()
+        cy.findByRole('textbox').clear().type('This is my edited note')
+        cy.findByRole ('button', {
+          name: /update note/i
+        }).click()
+
+      })
+      it('user should be able to leave a note without login', ()=>{
+
+        //find a bug to leave a note
+        cy.findByRole('cell', {
+          name: 'title2'
+        }).click()
+
+        //Log out
+        cy.findByRole('button', {
+          name: /log out/i
+        }).click()
+        cy.wait(1000)
+
+        //find a bug to leave a note
+        cy.findByRole('cell', {
+          name: 'title3'
+        }).click()
+        // cy.findByText('No notes added yet.').should('be.visible')
+
+        //Open form, type the note and submit
+        cy.findByRole('button', {
+          name: /leave a note/i
+        }).click();
+        cy.findByRole('textbox').type('This is my not logged in note')
+        cy.findByRole('button', {
+          name: /submit note/i
+        }).click()
+
+      })
+      it('user should be able to reply to notes', ()=>{
+
+        //find a bug to leave a note
+        cy.findByRole('cell', {
+          name: 'title3'
+        }).click()
+
+        cy.findByText('Reply').click()
+        cy.findByRole('textbox').type('This is my reply')
+        cy.findByRole ('button', {
+          name: /submit response/i
+        }).click()
+
+      })
+      it('user should be able to delete a note',()=>{
+        //find a bug to leave a note
+        cy.findByRole('cell', {
+          name: 'title3'
+        }).click()
+
+
+        cy.findByText('Delete').click()
+        cy.findByRole('button', {
+          name: /delete note/i
+        }).click()
+
+      })
+
+
+    })
+    describe('user should be able to use sorting features', () => {
+      beforeEach(() =>{
+        cy.visit('http://localhost:3000');
+        //Logging in
+        cy.findByRole('button', {name: /log in/i }).click()
+        cy.get('input[name="username"]').type('username2');
+        cy.get('input[name="password"]').type('password');
+        cy.get('button[type="submit"]').click()
+        cy.wait(1500)
+
+      })
+      it('user should be able to search bugs', ()=>{
+        //Positive result
+        cy.findByRole('textbox').type('title2')
+        //TODO : check results if positive
+
+        //Negative result
+        cy.findByRole('textbox').clear().type('negative_bug')
+        cy.findByText('No matches found.').should('be.visible')
+
+      })
+      it('user should be able to filter the bugs', ()=>{
+        //Closed
+        cy.findByRole('radio', {
+          name: /closed/i
+        }).click()
+        cy.findByText('title2').should('be.visible')
+        cy.findByText('title3').should('not.be.visible')
+
+        //Open
+        cy.findByRole('radio', {
+          name: /open/i
+        }).click()
+        cy.findByText('title3').should('be.visible')
+        cy.findByText('title2').should('not.be.visible')
+
+        //All
+        cy.findByRole('radio', {
+          name: /all/i
+        }).click()
+        cy.findByText('title2').should('be.visible')
+        cy.findByText('title3').should('be.visible')
+
+        cy.findByRole('radio', {
+          name: /mybugs/i
+        }).click()
+        cy.findByText('title2').should('be.visible')
+        cy.findByText('title3').should('not.be.visible')
+
+      })
+      it('user should be able to sort the bugs', ()=>{
+        //Oldest
+        cy.findByRole('button', {name: /sort bugs by/i}).click();
+        cy.findByRole('option', {name: /oldest/i}).click()
+
+        //Title A to Z
+        cy.findByRole('button', {name: /sort bugs by/i}).click();
+        cy.findByRole('option', {name: /title \(a - z\)/i}).click()
+
+        //Title Z to A
+        cy.findByRole('button', {name: /sort bugs by/i}).click();
+        cy.findByRole('option', {name: /title \(z - a\)/i}).click()
+
+        //Priority high to low
+        cy.findByRole('button', {name: /sort bugs by/i}).click();
+        cy.findByRole('option', {name: /priority \(high - low\)/i}).click()
+
+        //Priority low to high
+        cy.findByRole('button', {name: /sort bugs by/i}).click();
+        cy.findByRole('option', {name: /priority \(low - high\)/i}).click()
+
+        //Recent closed
+        cy.findByRole('button', {name: /sort bugs by/i}).click();
+        cy.findByRole('option', {name: /recently closed/i}).click()
+
+        //Recent re-opened
+        cy.findByRole('button', {name: /sort bugs by/i}).click();
+        cy.findByRole('option', {name: /recently re-opened/i}).click()
+
+        //Recent updated
+        cy.findByRole('button', {name: /sort bugs by/i}).click();
+        cy.findByRole('option', {name: /recently updated/i}).click()
+
+        //Most notes
+        cy.findByRole('button', {name: /sort bugs by/i}).click();
+        cy.findByRole('option', {name: /most notes/i}).click()
+
+        //Least notes
+        cy.findByRole('button', {name: /sort bugs by/i}).click();
+        cy.findByRole('option', {name: /least notes/i}).click()
+
+        //Newest
+        cy.findByRole('button', {name: /sort bugs by/i}).click();
+        cy.findByRole('option', {name: /newest/i}).click()
+
+      })
+      it('user should be able to sort notes', ()=>{
+        //find a bug to leave a note
+        cy.findByRole('cell', {
+          name: 'title2'
+        }).click()
+
+        //Old
+        cy.findByRole('button', {name: /sort notes by/i}).click()
+        cy.findByRole('option', {name: /oldest/i}).click()
+
+        //Recent
+        cy.findByRole('button', {name: /sort notes by/i}).click()
+        cy.findByRole('option', {name: /recently updated/i}).click()
+
+        //New
+        cy.findByRole('button', {name: /sort notes by/i}).click()
+        cy.findByRole('option', {name: /newest/i}).click()
+
+      })
+
+    })
+
   })
+  //
+  // describe('user should be able to manage admins', () => {
+  //
+  // })
+  //
+  // describe('user should be able to change his settings', () => {
+  //
+  // })
 })
