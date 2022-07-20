@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   signup,
@@ -24,12 +24,16 @@ import {
 } from '@material-ui/core';
 import { useAuthPageStyles } from '../../styles/muiStyles';
 import PersonIcon from '@material-ui/icons/Person';
+import AddIcon from '@material-ui/icons/Add';
 import AlternateEmail from '@material-ui/icons/AlternateEmail';
 import LockIcon from '@material-ui/icons/Lock';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import FormDialog from '../../components/FormDialog';
+import DemoCredsBox from '../../components/DemoCredsBox';
 
 interface InputValues {
   username: string;
@@ -58,16 +62,21 @@ const validationSchema = yup.object({
     .min(6, 'Must be at least 6 characters'),
 });
 
-const SignupPage = () => {
+const SignupPage: React.FC<{
+  adminMode: boolean;
+  }> = ({ adminMode })  => {
   const classes = useAuthPageStyles();
   const dispatch = useDispatch();
+  const [isConnected, setIsConnected] = useState(false);
   const { loading, error } = useSelector(selectAuthState);
   const [showPass, setShowPass] = useState<boolean>(false);
   const [showConfPass, setShowConfPass] = useState<boolean>(false);
+
   const { register, handleSubmit, errors } = useForm({
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
   });
+
 
   const handleSignup = ({
     username,
@@ -78,11 +87,13 @@ const SignupPage = () => {
     if (password !== confirmPassword) {
       return dispatch(setAuthError('Both passwords need to match.'));
     }
-    dispatch(signup({ username, password, email }));
+    dispatch(signup({ username, password, email }, adminMode ));
+    setIsConnected(true);
   };
 
+
   return (
-    <div>
+    <div> 
       <Paper className={classes.root} elevation={2}>
         <img src={BugIcon} alt="bug-logo" className={classes.titleLogo} />
         <form onSubmit={handleSubmit(handleSignup)} className={classes.form}>
@@ -206,6 +217,7 @@ const SignupPage = () => {
             Sign Up
           </Button>
         </form>
+        {!adminMode ? (
         <Typography variant="body1" className={classes.footerText}>
           Already have an account?{' '}
           <Link
@@ -217,6 +229,7 @@ const SignupPage = () => {
             Log In
           </Link>
         </Typography>
+        ) : '' }
         {error && (
           <ErrorBox
             errorMsg={error}
@@ -224,7 +237,9 @@ const SignupPage = () => {
           />
         )}
       </Paper>
+
     </div>
+
   );
 };
 

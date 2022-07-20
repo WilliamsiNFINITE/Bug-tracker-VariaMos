@@ -30,8 +30,7 @@ interface BaseType {
 
   
 const validationSchema = yup.object({
-    email: yup.string(),
-    login: yup.string()
+    email: yup.string()
     });
 
 interface MakeAdmin extends BaseType {
@@ -46,7 +45,7 @@ const AdminForm: React.FC<MakeAdmin> = ({
     currentAdmins,
     bugId,
 }) => {
-
+  
     const [select, setSelect]= useState('');
     const classes = useFormStyles();
     const dispatch = useDispatch();
@@ -60,7 +59,6 @@ const AdminForm: React.FC<MakeAdmin> = ({
       resolver: yupResolver(validationSchema),
       defaultValues: {
         email: '',
-        login: '',
       },
     });
 
@@ -81,12 +79,13 @@ const AdminForm: React.FC<MakeAdmin> = ({
             dispatch(assignBugTo(bugId, admins, closeDialog))
           }
         }
+        window.location.reload();
     };
 
     const handleInviteAdmin = (data: InviteAdminPayload) => {
       dispatch(inviteAdmin(data, closeDialog));
     }
-
+    
     const SelectAddAdmin = () => {
       setSelect("add");
     }
@@ -281,7 +280,7 @@ const AdminForm: React.FC<MakeAdmin> = ({
         )}
 
         {editMode === "admin" && select === "invite" ? (
-          <><><TextField
+          <><TextField
             className={classes.fieldMargin}
             inputRef={register}
             name="email"
@@ -298,31 +297,14 @@ const AdminForm: React.FC<MakeAdmin> = ({
                   <TitleIcon color="primary" />
                 </InputAdornment>
               ),
-            }} /><TextField
-              className={classes.fieldMargin}
-              inputRef={register}
-              name="login"
-              required
+            }} /><Button
+              size="large"
+              color="primary"
+              variant="contained"
               fullWidth
-              type="text"
-              label="Login"
-              variant="outlined"
-              error={'login' in errors}
-              helperText={'login' in errors ? errors.login?.message : ''}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <TitleIcon color="primary" />
-                  </InputAdornment>
-                ),
-              }} /></><Button
-                size="large"
-                color="primary"
-                variant="contained"
-                fullWidth
-                className={classes.submitBtn}
-                type="submit"
-              >
+              className={classes.submitBtn}
+              type="submit"
+            >
               Invite Administrator
 
             </Button></>
@@ -332,6 +314,7 @@ const AdminForm: React.FC<MakeAdmin> = ({
         </form>
       );
 }
+
 
 export default AdminForm;
 

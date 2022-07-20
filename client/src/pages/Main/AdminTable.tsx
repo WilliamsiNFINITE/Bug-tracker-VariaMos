@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAuthState } from '../../redux/slices/authSlice';
 import ConfirmDialog from '../../components/ConfirmDialog';
@@ -31,6 +31,7 @@ const AdminsTable: React.FC<{
 
   const handleRemoveAdmin = (adminId: string) => {
     dispatch(removeAdmin(adminId));
+    window.location.reload();
   };
 
   return (

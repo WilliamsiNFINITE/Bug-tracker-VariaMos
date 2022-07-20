@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 import { User } from '../entity/User';
+import { InviteCode } from '../entity/InviteCode';
 import { Not } from 'typeorm';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { EMAIL, PASSWORD, JWT_SECRET } from '../utils/variables';
-import { registerValidator } from '../utils/validators';
+import { EMAIL, PASSWORD } from '../utils/variables';
 
 export const getAllUsers = async (req: Request, res: Response) => {
   
@@ -131,44 +130,17 @@ export const changeSettings = async (req: Request, res: Response) => {
 
 export const inviteAdmin = async (req: Request, res: Response) => {
   const email = req.body.data.email;
-  const username = req.body.data.login;
   
-  // generate random password
-  const password = crypto.randomBytes(10).toString('hex');
+  // generate random code
+  const inviteCode = crypto.randomBytes(15).toString('hex');
 
-  // payload validation
-  const { errors, valid } = registerValidator(username, password, email);
-
-  if (!valid) {
-    return res.status(400).send({ message: Object.values(errors)[0] });
-  }
-
-  const existingUser = await User.findOne({
-    where: `"username" ILIKE '${username}'`,
-  });
-
-  if (existingUser) {
-    return res
-      .status(401)
-      .send({ message: `Username '${username}' is already taken.` });
-  }
-  
+  // hash the code
   const saltRounds = 10;
-  const passwordHash = await bcrypt.hash(password, saltRounds);
-  
-  const isAdmin: boolean = true;
-  const notificationsOn: boolean = true;
+  const inviteCodeHash = await bcrypt.hash(inviteCode, saltRounds);
+  console.log(inviteCodeHash);
 
-  const user = User.create({ username, passwordHash, isAdmin, notificationsOn, email });
-  await user.save();
-
-  const token = jwt.sign(
-    {
-      id: user.id,
-      username: user.username,
-    },
-    JWT_SECRET
-  );
+  const code = InviteCode.create({ codeHash: inviteCodeHash })
+  await code.save();
 
   // send email to new admin
   let transporter = nodemailer.createTransport({
@@ -186,12 +158,12 @@ export const inviteAdmin = async (req: Request, res: Response) => {
     from: EMAIL,
     to: email,
     subject: "VariaMos | New invitation",
-    text: `Hello, you have been invited as an administrator on VariaMos BugTracker !
-    \nYou can sign in with the following credentials:
-    \n        Login: ${username}
-    \n        Password: ${password}
-    \n\nYou will be able to change your password after your first connection.
-    \nPlease do not reply to this email.
+    text: `Hello, you have been invited to join the administrator team on VariaMos BugTracker !
+    \nPlease create your account using the following link:
+    \n      http://localhost:3000/invite/SUJ3NW12UVhIaVNiOTVuNzJrN2g=
+    \nUse the following code to access the page:
+    \n      ${inviteCode}
+    \n\nPlease do not reply to this email.
     \n\nThe VariaMos Team.`
   };
 
@@ -208,18 +180,11 @@ export const inviteAdmin = async (req: Request, res: Response) => {
       console.log(error);
       return res.status(421).send({ message: "A problem occured, please try again later." });
     } else {
-      console.log(`Email sent for ${username}: ` + info);
+      console.log(`Email sent at ${email}: ` + info);
     }
   });
 
-  return res.status(201).json({
-    id: user.id,
-    username: user.username,
-    token,
-    isAdmin,
-    email,
-    notificationsOn,
-  });
+  res.status(201).end();
 };
 
 export const sendNotification = async (req: Request, res: Response) => {

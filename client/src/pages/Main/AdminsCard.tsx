@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FilterBar from '../../components/FilterBar';
 import InfoText from '../../components/InfoText';
 

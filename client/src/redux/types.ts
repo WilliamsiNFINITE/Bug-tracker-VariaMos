@@ -88,7 +88,10 @@ export interface SettingsPayload {
 
 export interface InviteAdminPayload {
   email: string;
-  login: string;
+}
+
+export interface InviteCodeData {
+  code: string;
 }
 
 export interface EditedBugData extends BugPayload {
