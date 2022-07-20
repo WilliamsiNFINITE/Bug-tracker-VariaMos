@@ -29,6 +29,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import DemoCredsBox from '../../components/DemoCredsBox';
 import { InviteCodeData } from '../../redux/types';
 import SignupPage from './SignupPage';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface InviteVerificationPageProps {
     closeDialog?: () => void;
@@ -47,6 +48,7 @@ const InviteVerificationPage: React.FC<InviteVerificationPageProps> = ({
   const classes = useAuthPageStyles();
   const dispatch = useDispatch();
   const [isVerified, setIsVerified] = useState(false);
+  const [isHuman, setIsHuman] = useState(false);
   const { loading, error } = useSelector(selectAuthState);
 
   const { register, handleSubmit, errors } = useForm({
@@ -54,13 +56,19 @@ const InviteVerificationPage: React.FC<InviteVerificationPageProps> = ({
     resolver: yupResolver(validationSchema),
   });
 
-
   const handleVerifyCode = (inviteCode: InviteCodeData) => {
     const verified = verifyCode(inviteCode, closeDialog);  
     verified.then(function(result) {
         setIsVerified(result);
     });
   };
+
+  const handleReCAPTCHA = (value: any) => {
+    console.log("ReCAPTCHA response: ", value);
+    // if captcha valid (need to see the format of value)
+    //setIsHuman(true);
+    // when isHuman is set to true, the button to verify the code is displayed on the screen
+  }
 
   return (
     <div> 
@@ -87,6 +95,11 @@ const InviteVerificationPage: React.FC<InviteVerificationPageProps> = ({
                     ),
                 }}
                 />
+                <ReCAPTCHA
+                  sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                  onChange={handleReCAPTCHA}
+              />,
+            {isHuman ? (
             <Button
                 color="primary"
                 variant="contained"
@@ -99,6 +112,7 @@ const InviteVerificationPage: React.FC<InviteVerificationPageProps> = ({
             >
                 Verify code
             </Button>
+            ) : '' }
             </div>
             <DemoCredsBox adminSignup={true}/>
             </form>

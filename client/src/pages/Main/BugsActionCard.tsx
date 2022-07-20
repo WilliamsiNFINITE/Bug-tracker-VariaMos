@@ -59,8 +59,8 @@ const BugsActionCard: React.FC<{
   const [viewAdmins, setViewAdmins] = useState(false);
 
   const handleSortChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-    const selectedValue = e.target.value as BugSortValues;
-    dispatch(sortBugsBy(selectedValue));
+    const selectedValue = e.target.value;
+    dispatch(sortBugsBy(selectedValue as BugSortValues));
   };
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
