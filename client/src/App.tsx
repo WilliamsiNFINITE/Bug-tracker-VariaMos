@@ -20,7 +20,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(autoLogin());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const App = () => {
     if (loadedDarkMode && !darkMode) {
       dispatch(toggleDarkMode());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   return (

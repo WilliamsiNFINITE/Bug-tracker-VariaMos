@@ -1,5 +1,5 @@
 import { Alert, AlertTitle } from '@material-ui/lab';
-import demoCreds from '../data/demoCreds';
+//import demoCreds from '../data/demoCreds';
 
 const DemoCredsBox: React.FC<{
   adminSignup: boolean;

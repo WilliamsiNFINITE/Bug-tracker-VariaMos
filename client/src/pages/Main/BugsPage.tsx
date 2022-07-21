@@ -41,7 +41,7 @@ const BugsPage: React.FC<{ isMobile: boolean }> = ({
     if (!bugs) {
       dispatch(fetchBugs());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   const filteredSortedBugs =

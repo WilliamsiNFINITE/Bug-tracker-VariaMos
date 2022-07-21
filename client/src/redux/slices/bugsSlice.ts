@@ -291,7 +291,6 @@ export const deleteBug = (
       history.push(`/`);
       dispatch(removeBug(bugId));
       dispatch(notify('Deleted the bug.', 'success'));
-      window.location.reload();
     } catch (e: any) {
       dispatch(notify(getErrorMsg(e), 'error'));
     }
@@ -360,7 +359,7 @@ export const assignBugTo = (
       dispatch(notify('Bug assigned!', 'success'));
       closeDialog && closeDialog();
     }
-    catch (e) {
+    catch (e: any) {
       dispatch(notify(getErrorMsg(e), 'error'));
     }
   };
