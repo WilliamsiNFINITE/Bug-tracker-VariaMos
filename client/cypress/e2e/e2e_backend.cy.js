@@ -23,6 +23,8 @@ describe('testing application with backend', ()=>{
       //Put a username with the minimum number of characters
       cy.get('input[name="username"]').type('u');
       cy.findByText('Must be at least 3 characters').should('be.visible')
+      cy.get('input[name="username"]').clear().type('username ');
+      cy.findByText('Only alphanum, dash & underscore characters are allowed').should('be.visible')
       cy.get('input[name="username"]').clear().type('username');
 
       //Put a password with the minimum number of characters
