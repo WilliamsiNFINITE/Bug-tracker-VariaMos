@@ -38,7 +38,6 @@ const changeSettings = async (data: SettingsPayload) => {
 }
 
 const sendNotification = async (adminsIds: string) => {
-  console.log(" id avant la route: ", adminsIds)
   const response = await axios.post(
     `${baseUrl}/sendNotification`, { adminsIds }, setConfig()
   );

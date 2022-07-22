@@ -21,7 +21,6 @@ export const postNote = async (req: Request, res: Response) => {
   await newNote.save();
 
   const targetBug = await Bug.findOne({ id: bugId });
-  console.log("target bug: ", targetBug)
   if (isReply) {
     const targetNote = await Note.findOne({ id: noteId });
     const authorId = targetNote?.authorId;
