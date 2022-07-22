@@ -15,7 +15,6 @@ const createNote = async (
     return response.data;
   }
   else {
-    console.log(noteId)
     const response = await axios.post(`${baseUrl}/${bugId}/notes`,{ body: noteBody, isReply },setConfig());
     return response.data;
   }

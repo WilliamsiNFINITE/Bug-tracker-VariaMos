@@ -18,7 +18,6 @@ export const getAllUsers = async (req: Request, res: Response) => {
 };
 
 export const addAdmins = async (req: Request, res: Response) => {
-  console.log("dans le controller user add admin")
   const currentUser = await User.findOne(req.user);
 
   if (currentUser?.isAdmin !== true) {
@@ -137,7 +136,6 @@ export const inviteAdmin = async (req: Request, res: Response) => {
   // hash the code
   const saltRounds = 10;
   const inviteCodeHash = await bcrypt.hash(inviteCode, saltRounds);
-  console.log(inviteCodeHash);
 
   const code = InviteCode.create({ codeHash: inviteCodeHash })
   await code.save();

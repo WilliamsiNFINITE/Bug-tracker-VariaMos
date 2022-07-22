@@ -41,6 +41,10 @@ const BugsTable: React.FC<{ bugs: BugState[], user: UserState | null }> = ({ bug
 
   return (
     <Paper className={classes.table}>
+            <BugCard
+        viewBug={ viewBug }
+        bugId={ bugId }
+       />   
       <Table>
         <TableHead>
           <TableRow>
@@ -117,10 +121,7 @@ const BugsTable: React.FC<{ bugs: BugState[], user: UserState | null }> = ({ bug
           ))}
         </TableBody>
       </Table>
-      <BugCard
-        viewBug={ viewBug }
-        bugId={ bugId }
-       />              
+           
     </Paper>
 
   );

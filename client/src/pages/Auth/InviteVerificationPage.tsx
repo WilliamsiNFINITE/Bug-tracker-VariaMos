@@ -64,10 +64,7 @@ const InviteVerificationPage: React.FC<InviteVerificationPageProps> = ({
   };
 
   const handleReCAPTCHA = (value: any) => {
-    console.log("ReCAPTCHA response: ", value);
-    // if captcha valid (need to see the format of value)
-    //setIsHuman(true);
-    // when isHuman is set to true, the button to verify the code is displayed on the screen
+    setIsHuman(true);
   }
 
   return (

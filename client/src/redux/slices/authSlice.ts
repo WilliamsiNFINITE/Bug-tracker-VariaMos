@@ -7,6 +7,7 @@ import { notify } from './notificationSlice';
 import { fetchUsers } from './usersSlice';
 import { getErrorMsg } from '../../utils/helperFuncs';
 import { fetchBugs } from './bugsSlice';
+import { autoUserId, autoUserName, autoUserToken } from '../../utils/variables';
 
 
 interface InitialAuthState {
@@ -60,18 +61,16 @@ export const login = (credentials: CredentialsPayload): AppThunk => {
     try {
       dispatch(setAuthLoading());
       const userData = await authService.login(credentials);
-      //console.log("userdata: ", userData);
       dispatch(setUser(userData));
       storage.saveUser(userData);
       authService.setToken(userData.token);
       authService.setisAdmin(userData.isAdmin);
       authService.setEmail(userData.email);
       authService.setNotifications(userData.notificationsOn);
-      //console.log("login token: ", userData.token);
       dispatch(fetchBugs());
       dispatch(fetchUsers());
       dispatch(notify(`Welcome back, ${userData.username}!`, 'success'));
-    } catch (e: any) {
+    } catch (e) {
       dispatch(setAuthError(getErrorMsg(e)));
     }
   };
@@ -83,17 +82,15 @@ export const signup = (credentials: CredentialsPayload, adminMode: boolean): App
       dispatch(setAuthLoading());
       const userData = await authService.signup(credentials, adminMode);
       dispatch(setUser(userData));
-      console.log("user data", userData)
       storage.saveUser(userData);
       authService.setToken(userData.token);
       authService.setisAdmin(userData.isAdmin);
-      //console.log("signup token: ", userData.token);
       dispatch(fetchBugs());
       dispatch(fetchUsers());
       dispatch(
         notify(`Hi, ${userData.username}! Welcome to Bug Tracker :D`, 'success')
       );
-    } catch (e: any) {
+    } catch (e) {
       dispatch(setAuthError(getErrorMsg(e)));
     }
   };
@@ -115,11 +112,8 @@ export const autoLogin = (): AppThunk => {
     const loggedUser = storage.loadUser();
     // real user
     if (loggedUser) {
-      //alert("User is still logged");
-      //console.log("loggedUser: ", loggedUser);
       dispatch(setUser(loggedUser));
       authService.setToken(loggedUser.token);
-      //console.log("auto login token: ", loggedUser.token);
       authService.setisAdmin(loggedUser.isAdmin);
       authService.setEmail(loggedUser.email);
       authService.setNotifications(loggedUser.notificationsOn);
@@ -128,11 +122,8 @@ export const autoLogin = (): AppThunk => {
     }
     // auto user ()
     else {
-      //alert("User is not logged in")
       // Automatically connect as auto user
-      const autoUserToken: string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsInVzZXJuYW1lIjoidXNlciJ9.7lC6scQ1vxLzFKSlZN2_1iGPBy56WYZ05nLPlx8G1eU"
-      const autoUserId: string = "00000000-0000-0000-0000-000000000000"
-      const autoUserName: string = "user"
+      // Automatically connect as auto user
       const autoUserStringData: string = `{
         "id":"${autoUserId}",
         "username":"${autoUserName}",
@@ -163,7 +154,7 @@ export const verifyCode = async (
       notify(`Your invitation has been sucessfully validated!`, 'success');
       closeDialog && closeDialog();
       return true;
-    } catch (e: any) {
+    } catch (e) {
       setAuthError(getErrorMsg(e));
       return false;
     }

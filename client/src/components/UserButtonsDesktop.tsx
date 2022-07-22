@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { SettingsPayload, UserState } from '../redux/types';
 import DarkModeSwitch from './DarkModeSwitch';
 
-import { Button, Avatar, Typography } from '@material-ui/core';
+import { Button, Avatar, Typography, MenuItem } from '@material-ui/core';
 import { useNavStyles } from '../styles/muiStyles';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
@@ -41,12 +41,19 @@ const UserButtonsDesktop: React.FC<UserMenu> = ({
       {user?.username !== "user" ? (
         <div className={classes.btnsWrapper}>
           <div className={classes.userInfo}>
+          <MenuItem
+              component={RouterLink}
+              to="/"
+            >
             <Avatar className={classes.avatar}>
               {user?.username.slice(0, 1)}
             </Avatar>
             <Typography color="secondary" variant="body1">
-              {user?.username}
+              
+
+              Main Menu
             </Typography>
+            </MenuItem>
           </div>
           <div>
             <Button

@@ -90,7 +90,6 @@ export const createBug = async (req: Request, res: Response) => {
     createdById: req.user,
   });
 
-  console.log("last bug title dans create", lastBugTitle);
   await newBug.save();
 
   const relationedBug = await Bug.createQueryBuilder('bug')
@@ -109,7 +108,6 @@ export const createBug = async (req: Request, res: Response) => {
 };
 
 export const updateBug = async (req: Request, res: Response) => {
-  console.log("update")
   const { title, description, priority } = req.body;
   const { bugId } = req.params;
 
@@ -270,7 +268,6 @@ export const reopenBug = async (req: Request, res: Response) => {
 };
 
 export const saveFilePath = async(uploadedfilePath: string) => {
-  console.log("save file path")
   const targetBug = await Bug.findOne({ title: lastBugTitle });
   let found: boolean = false;
 
