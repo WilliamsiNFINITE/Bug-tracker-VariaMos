@@ -29,6 +29,8 @@ This bug tracker is a modified version of the open source one made by [amand33p]
 - [Crypto](https://nodejs.org/api/crypto.html) - For generating random passwords
 - [Nodemailer](https://nodemailer.com/about/) - For email notifications
 - [Dotenv](https://www.npmjs.com/package/dotenv) - To load environment variables from a .env file
+- [Multer](https://www.npmjs.com/package/multer) - For file (image/gif/video) storage
+- [ReCAPTCHA](https://github.com/dozoisch/react-google-recaptcha) - Library to distinguish humans and automated access to websites
 
 ## Features
 
@@ -38,6 +40,7 @@ This bug tracker is a modified version of the open source one made by [amand33p]
 - Anyone can add a bug and leave notes
 - Users can create an account to receive email notifications
 - Admins can add/remove other admins, delete, close, update & assign bugs
+- ReCAPTCHA test to access the admin invite verification page
 - Sort bugs by various parameters like priority, recentely closed etc.
 - Filter bugs by name/title/assignments & other parameters
 - CRUD notes, for guiding other members with possibility to reply

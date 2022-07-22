@@ -71,10 +71,10 @@ const BugForm: React.FC<BugFormProps> = ({
   };
 
   const handleUpdateBug = (data: BugPayload) => {
-    console.log('avant')
     imageForm?.submit();
-    console.log('apres')
-    dispatch(editBug(bugId as string, data, closeDialog));
+    if (typeof(bugId) === "string") {
+      dispatch(editBug(bugId, data, closeDialog));
+    }
   };
 
   const imageForm = document.getElementById("image-form") as HTMLFormElement;

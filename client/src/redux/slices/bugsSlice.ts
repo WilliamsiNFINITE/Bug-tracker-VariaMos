@@ -218,7 +218,7 @@ export const fetchBugs = (): AppThunk => {
       const allBugs = await bugService.getBugs();
      
       dispatch(setBugs(allBugs));
-    } catch (e: any) {
+    } catch (e) {
       alert(e)
       dispatch(setFetchBugsError(getErrorMsg(e)));
     }
@@ -232,7 +232,6 @@ export const createNewBug = (
 ): AppThunk => {
   return async (dispatch) => {
     try {
-      console.log("file: ", file);
       dispatch(setSubmitBugLoading());
       if (file) {
         const newBug = await bugService.createBug(bugData, file);
@@ -244,7 +243,7 @@ export const createNewBug = (
       }
       dispatch(notify('New bug added!', 'success'));
       closeDialog && closeDialog();
-    } catch (e: any) {
+    } catch (e) {
       dispatch(setSubmitBugError(getErrorMsg(e)));
     }
   };
@@ -291,7 +290,6 @@ export const deleteBug = (
       history.push(`/`);
       dispatch(removeBug(bugId));
       dispatch(notify('Deleted the bug.', 'success'));
-      window.location.reload();
     } catch (e: any) {
       dispatch(notify(getErrorMsg(e), 'error'));
     }
@@ -353,14 +351,12 @@ export const assignBugTo = (
       const adminsToSendNotif = Admins.slice(Admins.length - nb_admins);
       const adminsIdsToSendNotif = adminsToSendNotif.map((a: any) => a.id);
       for (let id of adminsIdsToSendNotif) {
-        console.log("au tour de ", id);
-        console.log(typeof(id))
         await userService.sendNotification(id);
       }
       dispatch(notify('Bug assigned!', 'success'));
       closeDialog && closeDialog();
     }
-    catch (e) {
+    catch (e: any) {
       dispatch(notify(getErrorMsg(e), 'error'));
     }
   };

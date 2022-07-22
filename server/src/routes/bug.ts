@@ -17,7 +17,6 @@ const storage = multer.diskStorage({
     cb(null, '../client/public/Images')
   },
   filename: (_req, file, cb) => {
-    console.log("changing filename  ")
     const newFileName = Date.now() + path.extname(file.originalname)
     cb(null, newFileName);
     saveFilePath(newFileName);
