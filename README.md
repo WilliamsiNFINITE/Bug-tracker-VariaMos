@@ -29,6 +29,8 @@ This bug tracker is a modified version of the open source one made by [amand33p]
 - [Crypto](https://nodejs.org/api/crypto.html) - For generating random passwords
 - [Nodemailer](https://nodemailer.com/about/) - For email notifications
 - [Dotenv](https://www.npmjs.com/package/dotenv) - To load environment variables from a .env file
+- [Multer](https://www.npmjs.com/package/multer) - For file (image/gif/video) storage
+- [ReCAPTCHA](https://github.com/dozoisch/react-google-recaptcha) - Library to distinguish humans and automated access to websites
 
 ## Features
 
