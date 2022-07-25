@@ -17,6 +17,7 @@ This bug tracker is a modified version of the open source one made by [amand33p]
 - [Material-UI w/ lots of CSS customisations](https://material-ui.com/) - UI library
 - [Yup](https://github.com/jquense/yup) - Form validation tool
 - [date-fns](https://date-fns.org/) - Library for manipulating/formatting of timestamps
+- [Cypress](https://www.cypress.io/) - Frontend testing tool framework
 
 #### Back-end
 
