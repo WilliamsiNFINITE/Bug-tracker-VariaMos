@@ -79,7 +79,7 @@ const AdminForm: React.FC<MakeAdmin> = ({
             dispatch(assignBugTo(bugId, admins, closeDialog))
           }
         }
-        window.location.reload();
+        //window.location.reload();
     };
 
     const handleInviteAdmin = (data: InviteAdminPayload) => {

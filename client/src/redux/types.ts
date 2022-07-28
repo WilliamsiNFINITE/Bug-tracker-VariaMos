@@ -30,6 +30,7 @@ export interface AssignedAdmins {
   id: number;
   bugId: string;
   adminId: string;
+  adminUsername: string;
   joinedAt: Date;
 }
 
@@ -50,6 +51,7 @@ export interface BugState {
   createdAt: Date;
   assignments: AssignedAdmins[];
   filePath: string;
+  category: string;
 }
 
 export type BugSortValues =
@@ -77,6 +79,7 @@ export interface BugPayload {
   title: string;
   description: string;
   priority: BugPriority;
+  category?: string;
 }
 
 export interface SettingsPayload {

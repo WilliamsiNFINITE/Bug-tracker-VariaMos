@@ -227,11 +227,13 @@ export const fetchBugs = (): AppThunk => {
 
 export const createNewBug = (
   bugData: BugPayload,
+  bugCategory?: string,
   closeDialog?: () => void,
-  file?: File
+  file?: File,
 ): AppThunk => {
   return async (dispatch) => {
     try {
+      bugData.category = bugCategory;
       dispatch(setSubmitBugLoading());
       if (file) {
         const newBug = await bugService.createBug(bugData, file);
@@ -240,6 +242,7 @@ export const createNewBug = (
       else {
         const newBug = await bugService.createBug(bugData);
         dispatch(addBug(newBug));
+        console.log("bug created: ", bugCategory)
       }
       dispatch(notify('New bug added!', 'success'));
       closeDialog && closeDialog();
@@ -252,10 +255,12 @@ export const createNewBug = (
 export const editBug = (
   bugId: string,
   bugData: BugPayload,
+  bugCategory?: string,
   closeDialog?: () => void
 ): AppThunk => {
   return async (dispatch) => {
     try {
+      bugData.category = bugCategory;
       dispatch(setSubmitBugLoading());
       const updatedBug = await bugService.updateBug(bugId, bugData);
       const {

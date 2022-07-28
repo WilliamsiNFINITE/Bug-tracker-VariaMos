@@ -110,6 +110,7 @@ const BugsDetailsPage: React.FC<{
     notes,
     assignments,
     filePath,
+    category
   } = bug;
 
   const handleDeleteBug = () => {
@@ -287,11 +288,25 @@ const BugsDetailsPage: React.FC<{
               {priority}
             </div>
           </Typography>
-          <Typography color="secondary" variant="subtitle2">
-            Created by: <strong>{createdBy.username}</strong>
+          <Typography
+            color="secondary"
+            variant="subtitle2"
+            className={classes.marginText}
+          >
+            Class:{' '}
+            {/*<div
+              style={{
+                ...priorityStyles(priority),
+                display: 'inline',
+                padding: '0.20em 0.4em',
+                textTransform: 'capitalize',
+              }}
+            >*/}
+              {category}
+            {/*</div>*/}
           </Typography>
           <Typography color="secondary" variant="subtitle2">
-            Assigned to: <strong>{adminsAssigned}</strong>
+            Created by: <strong>{createdBy.username}</strong>
           </Typography>
           {updatedBy && updatedAt && (
             <Typography color="secondary" variant="subtitle2">

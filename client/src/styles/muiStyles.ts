@@ -4,8 +4,8 @@ export const useBodyStyles = (darkMode: boolean) =>
   makeStyles(
     (theme) => ({
       root: {
-        width: '100vW',
-        display: 'flex',
+        width: '100vw ',
+        display: 'inline-block',
         flexDirection: 'column',
         flex: 1,
         minHeight: '100vH',
@@ -19,6 +19,7 @@ export const useTableStyles = makeStyles(
   (theme) => ({
     table: {
       '& thead th': {
+        width: "100vw",
         fontWeight: '600',
         color: theme.palette.secondary.main,
         backgroundColor: theme.palette.primary.light,
@@ -32,6 +33,7 @@ export const useTableStyles = makeStyles(
     },
     scrollableTable: {
       '& thead th': {
+        width: "100vw",
         fontWeight: '600',
         color: theme.palette.secondary.main,
         backgroundColor: theme.palette.primary.light,

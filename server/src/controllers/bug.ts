@@ -20,6 +20,7 @@ const fieldsToSelect = [
   'bug.closedAt',
   'bug.reopenedAt',
   'bug.filePath',
+  'bug.category',
   'createdBy.id',
   'createdBy.username',
   'updatedBy.id',
@@ -57,7 +58,8 @@ export const getBugs = async (_req: Request, res: Response) => {
 };
 
 export const createBug = async (req: Request, res: Response) => {
-  const { title, description, priority } = req.body;
+  const { title, description, priority, category } = req.body;
+  console.log("cat", category)
   lastBugTitle = title;
   const { errors, valid } = createBugValidator(title, description, priority);
 
@@ -88,7 +90,9 @@ export const createBug = async (req: Request, res: Response) => {
     description,
     priority,
     createdById: req.user,
+    category: category,
   });
+ console.log(newBug.category)
 
   await newBug.save();
 
@@ -108,7 +112,7 @@ export const createBug = async (req: Request, res: Response) => {
 };
 
 export const updateBug = async (req: Request, res: Response) => {
-  const { title, description, priority } = req.body;
+  const { title, description, priority, category } = req.body;
   const { bugId } = req.params;
 
   const currentUser = await User.findOne(req.user);
@@ -132,6 +136,7 @@ export const updateBug = async (req: Request, res: Response) => {
   targetBug.title = title;
   targetBug.description = description;
   targetBug.priority = priority;
+  targetBug.category = category;
   targetBug.updatedById = req.user;
   targetBug.updatedAt = new Date();
 

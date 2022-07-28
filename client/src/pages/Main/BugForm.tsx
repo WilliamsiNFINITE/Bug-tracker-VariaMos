@@ -22,11 +22,19 @@ import {
   FormControl,
   Input,
   Container,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+  Chip,
 } from '@material-ui/core';
 import { useFormStyles } from '../../styles/muiStyles';
+import GroupIcon from '@material-ui/icons/Group';
 import TitleIcon from '@material-ui/icons/Title';
 import SubjectIcon from '@material-ui/icons/Subject';
-import React from 'react';
+import React, { useState } from 'react';
+import { Autocomplete } from '@material-ui/lab';
+import { SemanticClassificationFormat } from 'typescript';
 
 const validationSchema = yup.object({
   title: yup
@@ -36,6 +44,7 @@ const validationSchema = yup.object({
     .max(60, 'Must be at most 60 characters'),
 
   description: yup.string().required('Required'),
+  class: yup.string()
 });
 
 interface BugFormProps {
@@ -54,6 +63,23 @@ const BugForm: React.FC<BugFormProps> = ({
   const classes = useFormStyles();
   const dispatch = useDispatch();
   const { submitError, submitLoading } = useSelector(selectBugsState);
+  const [bugCategory, setBugCategory] = useState<string>('');
+
+  // If you want to add a BugClass, add it to the following list
+  const BugCategories = [
+  "App Architecture",
+  "Security Issue",
+  "Performance Issue", 
+  "Feature Models",
+  "TestRequirements Models",
+  "Components Models",
+  "DomainSecurityRequirements Models",
+  "SecurityRequirements Models",
+  "istar Models",
+  "UI Components Models",
+  "Adaptive AML Models",
+  "UI Variability Models"
+  ];
 
   const { register, control, handleSubmit, errors } = useForm({
     mode: 'onChange',
@@ -62,18 +88,24 @@ const BugForm: React.FC<BugFormProps> = ({
       title: currentData?.title || '',
       description: currentData?.description || '',
       priority: currentData?.priority || 'low',
+      class: bugCategory || '',
     },
   });
 
+  const handleClassChange = (e: any) => {
+    const selectedValue = e.target.innerText;
+    setBugCategory(selectedValue);
+  };
+
   const handleCreateBug = async (data: BugPayload) => {
     imageForm?.submit();
-    dispatch(createNewBug(data, closeDialog));  
+    dispatch(createNewBug(data, bugCategory, closeDialog));  
   };
 
   const handleUpdateBug = (data: BugPayload) => {
-    imageForm?.submit();
+    //imageForm?.submit();
     if (typeof(bugId) === "string") {
-      dispatch(editBug(bugId, data, closeDialog));
+      dispatch(editBug(bugId, data, bugCategory, closeDialog));
     }
   };
 
@@ -126,7 +158,64 @@ const BugForm: React.FC<BugFormProps> = ({
               </InputAdornment>
             ),
           }} />
-
+          
+          <Autocomplete
+              style={{ marginTop: 20 }}
+              filterSelectedOptions
+              onChange={handleClassChange}
+              options={
+                  BugCategories
+              }
+              getOptionLabel={(option) => option}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="Class (optional)"
+                  InputProps={{
+                    ...params.InputProps,
+                    startAdornment: (
+                      <>
+                        <InputAdornment
+                          position="start"
+                          style={{ paddingLeft: '0.4em' }}
+                        >
+                          <GroupIcon color="primary" />
+                        </InputAdornment>
+                        {params.InputProps.startAdornment}
+                      </>
+                    ),
+                  }}
+                />
+              )}
+              renderOption={(option) => (
+                <ListItem dense component="div">
+                  <ListItemAvatar>
+                    <Avatar className={classes.avatar}>
+                      {option.slice(0, 1)}
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={option}
+                    primaryTypographyProps={{
+                      color: 'secondary',
+                      variant: 'body1',
+                    }}
+                  />
+                </ListItem>
+              )}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    avatar={<Avatar>{option.slice(0, 1)}</Avatar>}
+                    color="secondary"
+                    variant="outlined"
+                    label={option}
+                    {...getTagProps({ index })}
+                  />
+                ))
+              }
+            />
         <Controller
           control={control}
           name="priority"
@@ -151,6 +240,8 @@ const BugForm: React.FC<BugFormProps> = ({
               </div>
             </RadioGroup>
           </FormControl>} />
+
+          
         <Button
           size="large"
           color="primary"

@@ -81,4 +81,7 @@ export class Bug extends BaseEntity {
 
   @Column()
   filePath: string;
+
+  @Column()
+  category: string
 }

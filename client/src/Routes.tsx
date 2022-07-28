@@ -2,23 +2,17 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import LoginPage from './pages/Auth/LoginPage';
 import SignupPage from './pages/Auth/SignupPage';
 import BugsPage from './pages/Main/BugsPage';
-import BugDetailsPage from './pages/Main/BugsDetailsPage';
 import NotFoundPage from './pages/Main/NotFoundPage';
 import { useSelector } from 'react-redux';
 import { selectAuthState } from './redux/slices/authSlice';
-import storage from './utils/localStorage';
 import { Container, useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
-import { selectBugsState } from './redux/slices/bugsSlice';
-import { UserState } from './redux/types';
-import { updateShorthandPropertyAssignment } from 'typescript';
 import InviteVerificationPage from './pages/Auth/InviteVerificationPage';
 
 const Routes = () => {
   const { user } = useSelector(selectAuthState);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
-  const isLoggedIn = storage.loadUser() || user;
 
   return (
     <Container disableGutters={isMobile}>

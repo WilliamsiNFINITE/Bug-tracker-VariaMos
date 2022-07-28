@@ -43,7 +43,7 @@ export const assignBug = async (req: Request, res: Response) => {
       }
     }
   }
-
+  
   const AssignmentsArray = adminsIds.map((adminId) => ({
     adminId,
     bugId,

@@ -7,30 +7,38 @@ import BugsDetailsPage from './BugsDetailsPage';
 
 const BugCard: React.FC<{
   viewBug: boolean;
+  id: string;
   bugId: string;
-}> = ({ viewBug, bugId }) => {
+}> = ({ viewBug, id, bugId }) => {
   const classes = useMainPageStyles();
 
   const BugDataToDisplay = () => {
-    return (
-        <div style={{ marginTop: '1em' }}>
-            <BugsDetailsPage
-                bugId={ bugId } 
-            />
-        </div>
-      );
+    if (id === bugId) {
+      return (
+          <div style={{ marginTop: '1em' }}>
+              <BugsDetailsPage
+                  bugId={ bugId } 
+              />
+          </div>
+        );
+      }
+      else {
+        console.log("les id ne sont pas les memes")
+      }
     }
 
-  return (
-    <Collapse
-      in={viewBug}
-      timeout="auto"
-      unmountOnExit
-      className={classes.membersWrapper}
-    >
-      {BugDataToDisplay()}
-    </Collapse>
-  );
+
+    return (
+        <Collapse
+            in={viewBug}
+            timeout="auto"
+            unmountOnExit
+            className={classes.membersWrapper}
+          >
+            {BugDataToDisplay()}
+        </Collapse>
+      );
+
 };
 
 export default BugCard;
