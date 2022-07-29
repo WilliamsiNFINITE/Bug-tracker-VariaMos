@@ -94,7 +94,9 @@ cd server
 npm install
 npm run dev
 ```
-#### Screenshots
+
+#### Docker <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" width="40px" heigth="40px">
+## Screenshots
 Because a picture is worth 1000 words:
 
 #### VariaMos online
