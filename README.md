@@ -95,5 +95,9 @@ npm install
 npm run dev
 ```
 
+#### Docker <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" width="40px" heigth="40px">
+## Screenshots
+Because a picture is worth 1000 words:
+
 #### VariaMos online
 You can check the VariaMos application here: [VariaMos](https://variamos.azurewebsites.net/)
