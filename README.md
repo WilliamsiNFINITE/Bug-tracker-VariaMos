@@ -94,6 +94,8 @@ cd server
 npm install
 npm run dev
 ```
+#### Screenshots
+Because a picture is worth 1000 words:
 
 #### VariaMos online
 You can check the VariaMos application here: [VariaMos](https://variamos.azurewebsites.net/)
