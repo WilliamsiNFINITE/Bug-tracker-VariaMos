@@ -59,7 +59,7 @@ export const getBugs = async (_req: Request, res: Response) => {
 
 export const createBug = async (req: Request, res: Response) => {
   const { title, description, priority, category } = req.body;
-  console.log("cat", category)
+
   lastBugTitle = title;
   const { errors, valid } = createBugValidator(title, description, priority);
 
@@ -92,7 +92,6 @@ export const createBug = async (req: Request, res: Response) => {
     createdById: req.user,
     category: category,
   });
- console.log(newBug.category)
 
   await newBug.save();
 

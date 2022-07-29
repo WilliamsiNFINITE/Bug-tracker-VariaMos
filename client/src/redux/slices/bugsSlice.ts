@@ -242,7 +242,6 @@ export const createNewBug = (
       else {
         const newBug = await bugService.createBug(bugData);
         dispatch(addBug(newBug));
-        console.log("bug created: ", bugCategory)
       }
       dispatch(notify('New bug added!', 'success'));
       closeDialog && closeDialog();

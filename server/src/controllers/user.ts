@@ -188,17 +188,7 @@ export const inviteAdmin = async (req: Request, res: Response) => {
 export const sendNotification = async (req: Request, res: Response) => {
   const adminsIds = req.body;
   
-  //console.log("id recu dans le controller: ", adminsIds);
   const admins: User[] = [];
-/*
-  for (let adminId of adminsIds) {
-    const admin = await User.findOne({
-      where: { id: adminId }
-    });
-    if (admin) {
-      admins.push(admin);
-    }
-  }*/
 
   const admin = await User.findOne({
     where: { id: adminsIds.adminsIds }

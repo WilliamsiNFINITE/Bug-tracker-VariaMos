@@ -22,9 +22,6 @@ const BugCard: React.FC<{
           </div>
         );
       }
-      else {
-        console.log("les id ne sont pas les memes")
-      }
     }
 
 
