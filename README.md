@@ -96,6 +96,15 @@ npm run dev
 ```
 
 #### Docker <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" width="40px" heigth="40px">
+If you need to use [Docker](https://www.docker.com/) do the following:
+
+To build the container, run this command in the root directory:
+`docker-compose build`
+
+To run it, run this command:
+
+`docker-compose up`
+ 
 ## Screenshots
 Because a picture is worth 1000 words:
 
