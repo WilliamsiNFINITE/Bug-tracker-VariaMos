@@ -68,7 +68,7 @@ export const createBug = async (req: Request, res: Response) => {
     return res.status(400).send({ message: Object.values(errors)[0] });
   }
 
-  // verify that no other bug has the same title
+  // Verify that no other bug has the same title
   const Allbugs = await Bug.createQueryBuilder('bug')
     .leftJoinAndSelect('bug.createdBy', 'createdBy')
     .leftJoinAndSelect('bug.updatedBy', 'updatedBy')
@@ -196,6 +196,9 @@ export const deleteBug = async (req: Request, res: Response) => {
 
   await Note.delete({ bugId });
   await targetBug.remove();
+
+  closeGitIssues(targetBug.gitIssueNumber);
+  
   res.status(204).end();
 };
 
