@@ -3,11 +3,11 @@ import fs from 'fs';
 import { Bug } from '../entity/Bug';
 import { Note } from '../entity/Note';
 import { User } from '../entity/User';
+import { closeGitIssues, createGitIssues, reopenGitIssues, updateGitIssues } from '../utils/githubIssuesAPI';
 import { createBugValidator } from '../utils/validators';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 let lastBugTitle: string = '';
-
 
 const fieldsToSelect = [
   'bug.id',
@@ -21,6 +21,7 @@ const fieldsToSelect = [
   'bug.reopenedAt',
   'bug.filePath',
   'bug.category',
+  'bug.gitIssueNumber',
   'createdBy.id',
   'createdBy.username',
   'updatedBy.id',
@@ -95,6 +96,16 @@ export const createBug = async (req: Request, res: Response) => {
 
   await newBug.save();
 
+  var promises: Promise<void>[] = [];
+  // Create a corresponding issue in Github Issues
+  promises.push(createGitIssues(title, description).then(function(result) {
+    newBug.gitIssueNumber = result;
+  }));
+
+  Promise.all(promises).then(async () => {
+    await newBug.save();
+  });
+
   const relationedBug = await Bug.createQueryBuilder('bug')
     .where('bug.id = :bugId', { bugId: newBug.id })
     .leftJoinAndSelect('bug.createdBy', 'createdBy')
@@ -140,6 +151,9 @@ export const updateBug = async (req: Request, res: Response) => {
   targetBug.updatedAt = new Date();
 
   await targetBug.save();
+
+  updateGitIssues(title, description, targetBug.gitIssueNumber);
+
   const relationedBug = await Bug.createQueryBuilder('bug')
     .where('bug.id = :bugId', { bugId })
     .leftJoinAndSelect('bug.createdBy', 'createdBy')
@@ -213,6 +227,9 @@ export const closeBug = async (req: Request, res: Response) => {
   targetBug.reopenedAt = null;
 
   await targetBug.save();
+
+  closeGitIssues(targetBug.gitIssueNumber);
+
   const relationedBug = await Bug.createQueryBuilder('bug')
     .where('bug.id = :bugId', { bugId })
     .leftJoinAndSelect('bug.createdBy', 'createdBy')
@@ -256,6 +273,9 @@ export const reopenBug = async (req: Request, res: Response) => {
   targetBug.closedAt = null;
 
   await targetBug.save();
+
+  reopenGitIssues(targetBug.gitIssueNumber);
+
   const relationedBug = await Bug.createQueryBuilder('bug')
     .where('bug.id = :bugId', { bugId })
     .leftJoinAndSelect('bug.createdBy', 'createdBy')

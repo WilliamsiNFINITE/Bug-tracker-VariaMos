@@ -52,6 +52,7 @@ export interface BugState {
   assignments: AssignedAdmins[];
   filePath: string;
   category: string;
+  gitIssueNumber: number;
 }
 
 export type BugSortValues =

@@ -1,0 +1,21 @@
+[
+    {
+        "title": "Test issue one",
+        "body": "body one",
+        "labels": [
+            "bug"
+        ]
+    },
+    {
+        "title": "Test issue two",
+        "labels": [
+            "bug"
+        ]
+    },
+    {
+        "title": "Test issue three",
+        "labels": [
+            "bug"
+        ]
+    }
+]
