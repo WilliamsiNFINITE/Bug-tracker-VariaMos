@@ -53,7 +53,7 @@ This bug tracker is a modified version of the open source one made by [amand33p]
 - Proper responsive UI for all screens
 
 ## Usage
-#### VariaMos staff
+#### VariaMos deployment
 If you are a VariaMos developer you'll want to read the [AdminREADME](https://github.com/SamNzo/Bug-tracker-VariaMos/blob/master/AdminsREADME.md) file.
 
 #### Env variable
