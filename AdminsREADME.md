@@ -1,5 +1,5 @@
 # Informations for VariaMos team
-This file is intended for VariaMos admins.
+This file is intended for VariaMos developers.
 
 ## Google reCAPTCHA
 Once the Bug Tracker is added to VariaMos, the `GoogleReCaptchaKey` variable in `client/src/utils/variables` needs to be changed.
