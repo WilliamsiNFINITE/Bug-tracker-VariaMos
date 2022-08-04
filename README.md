@@ -54,7 +54,7 @@ This bug tracker is a modified version of the open source one made by [amand33p]
 
 ## Usage
 #### VariaMos staff
-If you are a VariaMos dev you'll want to read the AdminREADME file.
+If you are a VariaMos dev you'll want to read the [AdminREADME](https://github.com/SamNzo/Bug-tracker-VariaMos/blob/master/AdminsREADME.md) file.
 
 #### Env variable
 
