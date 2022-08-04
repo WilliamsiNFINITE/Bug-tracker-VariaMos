@@ -88,16 +88,25 @@ export const changeSettings = async (req: Request, res: Response) => {
   const currentUser = await User.findOne(req.user);
   const { email, github, notifications, newPassword, oldPassword } = req.body;
 
+  // Check if the email adress format is valid 
   if (email) {
-    if (!/^[a-zA-Z0-9.!#$%&''*+/=?^_{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     .test(email)) {
-      return res.status(400).send({ message: 'Invalid e-mail adress.' });
+      return res.status(400).send({ message: 'Invalid email adress.' });
     }
   };
 
+  // Check if someone already has this email adress
+  const users = await User.find();
+  for (let user of users) {
+    if (user.email === email && user.username !== currentUser?.username) {
+      return res.status(400).send({ message: 'This email adress is already used by another user.' });
+    }
+  }
+
   if (currentUser) {
 
-    // if there is a new password verify that the current one is correct
+    // If there is a new password verify that the current one is correct
     if (oldPassword) {
       const credentialsValid = await bcrypt.compare(oldPassword, currentUser.passwordHash);
       if (!credentialsValid) {
@@ -204,7 +213,7 @@ export const sendNotification = async (req: Request, res: Response) => {
   
  
 
-  // send e-mail to each admin that has notifications on
+  // send email to each admin that has notifications on
   for (let admin of admins) {
     
     if (admin.notificationsOn === true) {

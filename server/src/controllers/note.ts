@@ -42,7 +42,7 @@ export const postNote = async (req: Request, res: Response) => {
       let mail = {
         from: EMAIL,
         to: author.email,
-        subject: "VariaMos | New invitation",
+        subject: "VariaMos | New reply",
         text: `Hello ${author.username}, someone replied to you on VariaMos BugTracker concerning the following bug: ${targetBug?.title}.
         \nYour message: ${targetNote?.body}
         \n\n${currentUser?.username} replied: ${body}

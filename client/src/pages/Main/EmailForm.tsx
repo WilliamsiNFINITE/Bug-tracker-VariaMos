@@ -125,7 +125,12 @@ const EmailForm: React.FC<EmailFormProps> = ({
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <GitHubIcon color="primary" />
+              <IconButton
+                onClick={() => window.open('https://github.com/')}
+                size="small"
+              >
+                <GitHubIcon color="primary" />
+              </IconButton>
             </InputAdornment>
           ),
           endAdornment: (
