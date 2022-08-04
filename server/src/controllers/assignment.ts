@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { User } from '../entity/User';
 import { AssignedAdmins } from '../entity/AssignedAdmins';
 import { Bug } from '../entity/Bug';
+import { assignGitIssues } from '../utils/githubIssuesAPI';
 
 export const assignBug = async (req: Request, res: Response) => {
   const { bugId } = req.params;
@@ -28,7 +29,7 @@ export const assignBug = async (req: Request, res: Response) => {
     return res.status(404).send({ message: 'Invalid bug ID.'});
   }
 
-  // verification if an admin selected is already in charge of the bug
+  // Verify if an admin selected is already in charge of the bug
   const currentAdminsInCharge = targetBug.assignments.map((a) => a.adminId);
 
   const l1 = currentAdminsInCharge.length;
@@ -36,6 +37,7 @@ export const assignBug = async (req: Request, res: Response) => {
   for (let i=0; i<l1; i++) {
     for (let j=0; j<l2; j++) {
       if (currentAdminsInCharge[i] === adminsIds[j]) {
+        // If the bug is already assigned to this admin send an error
         const adminAlreadyInCharge = await User.findOne({
           where: { id: adminsIds[j] }
         })
@@ -43,7 +45,21 @@ export const assignBug = async (req: Request, res: Response) => {
       }
     }
   }
-  
+
+  // Assign it on Github Issues to admins who entered their Github username
+  // Array with admins username to assign in Github Issues
+  const adminsNames: string[] = [];
+  for (let adminId of adminsIds) {
+    const admin = await User.findOne({
+      where: { id: adminId }
+    });
+    if (admin) {
+    adminsNames.push(admin?.github);
+    }
+  }
+
+  assignGitIssues(targetBug.gitIssueNumber, adminsNames)
+
   const AssignmentsArray = adminsIds.map((adminId) => ({
     adminId,
     bugId,

@@ -22,13 +22,15 @@ import {
 } from '@material-ui/core';
 import { useFormStyles } from '../../styles/muiStyles';
 import TitleIcon from '@material-ui/icons/Title';
-import SubjectIcon from '@material-ui/icons/Subject';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import GitHubIcon from '@material-ui/icons/GitHub';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import LockIcon from '@material-ui/icons/Lock';
 import { selectAuthState } from '../../redux/slices/authSlice';
 import { changeSettings } from '../../redux/slices/usersSlice';
 import { useState } from 'react';
+import DemoCredsBox from '../../components/DemoCredsBox';
 
 interface EmailFormProps {
   closeDialog?: () => void;
@@ -46,6 +48,8 @@ const EmailForm: React.FC<EmailFormProps> = ({
   currentData,
 }) => {
 
+  const [emailHelp, setEmailHelp] = useState(false);
+  const [githubHelp, setGithubHelp] = useState(false);
   const classes = useFormStyles();
   const dispatch = useDispatch();
   const { user } = useSelector(selectAuthState);
@@ -58,6 +62,7 @@ const EmailForm: React.FC<EmailFormProps> = ({
     resolver: yupResolver(validationSchema),
     defaultValues: {
       email: user?.email || '',
+      github: user?.github || '',
       notificationsOn: user?.notificationsOn || true,
       newPassword: '',
       oldPassword: '',
@@ -88,8 +93,58 @@ const EmailForm: React.FC<EmailFormProps> = ({
               <TitleIcon color="primary" />
             </InputAdornment>
           ),
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => setEmailHelp((prevState) => !prevState)}
+                size="small"
+              >
+                <HelpOutlineIcon color="primary" />
+              </IconButton>
+            
+            </InputAdornment>
+          )
         }}
       />
+
+    {emailHelp && (
+          <DemoCredsBox adminSignup={false} emailHelp={true}></DemoCredsBox>
+        )}
+
+  {user?.isAdmin? (
+    <TextField
+        inputRef={register}
+        className={classes.fieldMargin}
+        name="github"
+        fullWidth
+        type="text"
+        label="Github username"
+        variant="outlined"
+        error={'github' in errors}
+        helperText={'github' in errors ? errors.github?.message : ''}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <GitHubIcon color="primary" />
+            </InputAdornment>
+          ),
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => setGithubHelp((prevState) => !prevState)}
+                size="small"
+              >
+                <HelpOutlineIcon color="primary" />
+              </IconButton>
+            
+            </InputAdornment>
+          )
+        }}
+      />
+  ) : ''}
+    {githubHelp && (
+          <DemoCredsBox adminSignup={false} githubHelp={true}></DemoCredsBox>
+        )}
 
       <TextField
         className={classes.fieldMargin}

@@ -11,7 +11,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
   
   const users = await User.find({
     where: { id: Not(req.user) },
-    select: ['id', 'username', 'isAdmin', 'email', 'notificationsOn'],
+    select: ['id', 'username', 'isAdmin', 'email', 'notificationsOn', 'github'],
   });
 
   res.json(users);
@@ -56,6 +56,7 @@ export const addAdmins = async (req: Request, res: Response) => {
       'user.isAdmin',
       'user.email',
       'user.notificationsOn',
+      'user.github',
     ])
     .getMany();
 
@@ -85,7 +86,7 @@ export const removeAdmin = async (req: Request, res: Response) => {
 
 export const changeSettings = async (req: Request, res: Response) => {
   const currentUser = await User.findOne(req.user);
-  const { email, notifications, newPassword, oldPassword } = req.body;
+  const { email, github, notifications, newPassword, oldPassword } = req.body;
 
   if (email) {
     if (!/^[a-zA-Z0-9.!#$%&''*+/=?^_{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
@@ -113,6 +114,10 @@ export const changeSettings = async (req: Request, res: Response) => {
     
     if (email && email !== '') {
       currentUser.email = email;
+    }
+
+    if (github && github !== '') {
+      currentUser.github = github;
     }
     
     if (notifications === 'on') {

@@ -5,6 +5,7 @@ export interface UserState {
   isAdmin: boolean;
   email: string;
   notificationsOn: boolean;
+  github: string;
 }
 
 export type BugPriority = 'low' | 'medium' | 'high';
@@ -15,6 +16,7 @@ export interface User {
   isAdmin: boolean;
   email: string;
   notificationsOn: boolean;
+  github: string;
 }
 
 export interface Note {
@@ -85,6 +87,7 @@ export interface BugPayload {
 
 export interface SettingsPayload {
   email: string;
+  github: string;
   notificationsOn: boolean;
   newPassword: string;
   oldPassword: string;

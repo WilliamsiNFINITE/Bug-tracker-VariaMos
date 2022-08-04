@@ -17,5 +17,8 @@ export class User extends BaseModel {
 
   @Column()
   notificationsOn: boolean;
+
+  @Column()
+  github: string;
   
 }

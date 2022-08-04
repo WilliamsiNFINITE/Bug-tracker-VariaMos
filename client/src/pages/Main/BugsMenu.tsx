@@ -85,14 +85,6 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
           horizontal: 'center',
         }}
       >
-        <MenuItem
-          onClick={handleCloseMenu}
-          component={RouterLink}
-          to={`/bugs/${bugId}`}
-        >
-          <OpenInNewIcon style={{ marginRight: '10px' }} />
-          Bug Details
-        </MenuItem>
         <FormDialog
           triggerBtn={{
             type: 'menu',
