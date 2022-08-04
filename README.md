@@ -109,3 +109,8 @@ Because a picture is worth 1000 words:
 
 #### VariaMos online
 You can check the VariaMos application here: [VariaMos](https://variamos.azurewebsites.net/)
+
+#### Todo
+- Change the reCAPTCHA API Key when the app is deployed
+- Change the token/user/repo with the official VariaMos repo/owner
+- Fix email VariaMos
