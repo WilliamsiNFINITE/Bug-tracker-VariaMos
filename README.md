@@ -107,12 +107,14 @@ To run it, run this command:
 `docker-compose up`
  
 ## Screenshots
-Because a picture is worth 1000 words:
+Because a picture is worth 1000 words.
+
+<img src="https://github.com/SamNzo/Bug-tracker-VariaMos/blob/master/screenshots/signup%20page.png">
+<img src="https://github.com/SamNzo/Bug-tracker-VariaMos/blob/master/screenshots/bug%20pages.png">
+<img src="https://github.com/SamNzo/Bug-tracker-VariaMos/blob/master/screenshots/add%20bug.png">
+<img src="https://github.com/SamNzo/Bug-tracker-VariaMos/blob/master/screenshots/bug%20details.png">
+<img src="https://github.com/SamNzo/Bug-tracker-VariaMos/blob/master/screenshots/notes.png">
+<img src="https://github.com/SamNzo/Bug-tracker-VariaMos/blob/master/screenshots/settings.png">
 
 #### VariaMos online
 You can check the VariaMos application here: [VariaMos](https://variamos.azurewebsites.net/)
-
-#### Todo
-- Change the reCAPTCHA API Key when the app is deployed
-- Change the token/user/repo with the official VariaMos repo/owner
-- Fix email VariaMos
