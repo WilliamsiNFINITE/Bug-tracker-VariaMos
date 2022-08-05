@@ -1,10 +1,15 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { findLastIndex } from 'cypress/types/lodash';
 
 export const useBodyStyles = (darkMode: boolean) =>
   makeStyles(
     (theme) => ({
       root: {
-        width: '100vw ',
+        position: 'absolute',  
+        width: '100%',     
+        height: '100vh',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
         display: 'inline-block',
         flexDirection: 'column',
         flex: 1,
@@ -332,9 +337,12 @@ export const useActionCardStyles = makeStyles(
 export const useNavStyles = makeStyles(
   (theme) => ({
     container: {
+      width: '100vw',
       position: 'sticky',
       top: 0,
       zIndex: 100,
+      display: 'flex',
+      flexGrow: 1,
     },
     leftPortion: {
       flexGrow: 1,

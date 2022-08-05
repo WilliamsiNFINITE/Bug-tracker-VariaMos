@@ -30,10 +30,8 @@ const { auth } = middleware;
 
 router.get('/', auth, getBugs);
 router.post('/', auth, createBug);
-router.post('/upload', upload.single('image'), (_req, _res) => {
-  if (typeof(window) !== "undefined") {
-    window.location.reload();
-  }
+router.post('/upload', upload.single('image'), (_req, res) => {
+  res.end();
 });
 
 router.put('/:bugId', auth, updateBug);

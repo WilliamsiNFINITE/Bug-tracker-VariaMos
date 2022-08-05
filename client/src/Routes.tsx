@@ -15,7 +15,7 @@ const Routes = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   return (
-    <Container disableGutters={isMobile}>
+    <Container disableGutters={isMobile} maxWidth={false}>
       <Switch>
         <Route exact path="/">
           {<BugsPage isMobile={false} />}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -16,7 +16,7 @@ import { formatDateTime } from '../../utils/helperFuncs';
 import { priorityStyles, statusStyles } from '../../styles/customStyles';
 import CSS from 'csstype';
 
-import { Paper, Typography, Divider, useMediaQuery } from '@material-ui/core';
+import { Paper, Typography, Divider, useMediaQuery, Button } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import { useMainPageStyles, useTableStyles } from '../../styles/muiStyles';
 import RedoIcon from '@material-ui/icons/Redo';
@@ -26,10 +26,8 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { selectAuthState } from '../../redux/slices/authSlice';
 import AdminForm from './AdminForm';
 import { selectUsersState } from '../../redux/slices/usersSlice';
-/*
-interface ParamTypes {
-  bugId: string;
-}*/
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const BugsDetailsPage: React.FC<{
   bugId: string;
@@ -38,7 +36,7 @@ const BugsDetailsPage: React.FC<{
   const classes = useMainPageStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  //const { bugId } = useParams<ParamTypes>();
+
   const history = useHistory();
   const dispatch = useDispatch();
   const bug = useSelector((state: RootState) =>
@@ -74,6 +72,17 @@ const BugsDetailsPage: React.FC<{
   const admins = useSelector(selectAllAdmins);
   if (user?.isAdmin) {
     admins.push(user);
+  }
+
+  const [selectedClass, setSelectedClass] = useState(Tableclasses.scrollableTable);
+
+  const handleClass = () => {
+    if (selectedClass === Tableclasses.scrollableTable) {
+      setSelectedClass(Tableclasses.table);
+    } 
+    else {
+      setSelectedClass(Tableclasses.scrollableTable);
+    }
   }
 
   if (!bug) {
@@ -244,11 +253,23 @@ const BugsDetailsPage: React.FC<{
 
   return (
     <div className={classes.root}>
-      <Paper className={Tableclasses.scrollableTable}>
+      <Paper className={selectedClass}>
         <Paper className={classes.detailsHeader}>
           <Typography variant={isMobile ? 'h5' : 'h4'} color="secondary">
             <strong>{title}</strong>
           </Typography>
+          <div style={{ display: "flex" }}>
+            <Button
+            onClick={() => handleClass() }
+            color="primary"
+            variant="text"
+            startIcon={selectedClass === Tableclasses.scrollableTable ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+            size= 'large'
+            style={{ marginLeft: "auto" }}
+          >
+            {selectedClass === Tableclasses.scrollableTable ? 'Disable scroll mode' : 'Enable scroll mode'}
+            </Button>
+          </div>
           <Divider style={{ margin: '0.5em 0' }} />
           <Typography color="secondary" variant="h6">
             {description}
@@ -261,7 +282,7 @@ const BugsDetailsPage: React.FC<{
             Status: {statusInfo()}
           </Typography>
           {(bug.filePath && !isVideo) ? (
-            <img src={'/Images/' + bug.filePath}></img>
+            <img src={'/Images/' + bug.filePath} max-width="10"></img>
           ) : '' }
           {(bug.filePath && isVideo) ? (
             <video width="320" height="240" controls>
