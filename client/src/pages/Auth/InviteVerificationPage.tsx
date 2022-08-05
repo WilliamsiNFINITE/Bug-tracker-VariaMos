@@ -93,7 +93,7 @@ const InviteVerificationPage: React.FC<InviteVerificationPageProps> = ({
                 }}
                 />
                 <ReCAPTCHA
-                  sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                  sitekey="6LfA1EshAAAAAOqDmiPk5uPUiJxrIbPpnHPghTnc"
                   onChange={handleReCAPTCHA}
               />,
             {isHuman ? (
