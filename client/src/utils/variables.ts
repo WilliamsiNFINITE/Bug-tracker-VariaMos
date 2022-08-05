@@ -1,7 +1,7 @@
 // The key needs to be changed when the app is deployed
 // This one is provided by google for localhost use only
 // Get a key here: https://www.google.com/recaptcha/admin/create
-const GoogleReCaptchaKey = "6LfA1EshAAAAAKVtv6hT8C4QoJC5-sDyOCXOea3a";
+const GoogleReCaptchaKey = "put your secret key here";
 
 export { GoogleReCaptchaKey };
 
