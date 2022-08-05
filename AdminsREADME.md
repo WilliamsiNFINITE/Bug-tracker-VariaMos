@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-
-=======
 # Informations for VariaMos team
 This file is intended for VariaMos developers.
 
@@ -22,4 +18,4 @@ To create it go to **Settings > Developer settings > Personnal access token** an
 Then change the `GithubPersonnalToken`, `GithubRepo` and `GithubUser` variables in `server/src/utils/variables` to match the newly created token and the names of the VariaMos repository and its owner.
 
 *Note: The token is deleted if it is pushed to github (for security)*
->>>>>>> f75591ddabe38db34f5aea9ac7b2541b860df33b
+
