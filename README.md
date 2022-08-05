@@ -117,4 +117,4 @@ Because a picture is worth 1000 words.
 <img src="https://github.com/SamNzo/Bug-tracker-VariaMos/blob/master/screenshots/settings.png">
 
 #### VariaMos online
-Here you can check the VariaMos [application](https://variamos.azurewebsites.net/) and [website](https://variamos.com/home/)
+Here you can check the VariaMos [application](https://variamos.azurewebsites.net/) and [website](https://variamos.com/home/).
