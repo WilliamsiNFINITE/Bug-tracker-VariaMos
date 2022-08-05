@@ -3,10 +3,11 @@ This file is intended for VariaMos developers.
 
 ## Google reCAPTCHA
 Once the Bug Tracker is added to VariaMos, the `GoogleReCaptchaKey` variable in `client/src/utils/variables` needs to be changed.
+The `siteKey` variable in `client/src/pages/Auth/InviteVerificationPage.tsx` also needs to be changed
 
-The current one only works for localhost.
+The current ones only works for localhost.
 
-You need to create a new one [here](https://www.google.com/recaptcha/admin/create).
+You need to create new site and secret keys [here](https://www.google.com/recaptcha/admin/create).
 
 ## Github REST API
 In order to use the Github REST API to link the Bug Tracker to Github Issues a **personal access token** is required.
