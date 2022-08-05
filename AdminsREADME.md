@@ -1,6 +1,9 @@
 # Informations for VariaMos team
 This file is intended for VariaMos developers.
 
+## Database
+As explained in the README file you have to change the parameters in `ormconfig.js` to connect to the VariaMos database.
+
 ## Google reCAPTCHA
 If the reCAPTCHA does not work, a new key should be generated [here](https://www.google.com/recaptcha/admin/create).
 
