@@ -10,7 +10,6 @@ import storage from './utils/localStorage';
 import customTheme from './styles/customTheme';
 import { useBodyStyles } from './styles/muiStyles';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { selectUsersState } from './redux/slices/usersSlice';
 
 const App = () => {
   const dispatch = useDispatch();

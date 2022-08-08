@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectAuthState } from '../../redux/slices/authSlice';
 import { deleteNote } from '../../redux/slices/bugsSlice';
 import { Note } from '../../redux/types';
-import { RootState } from '../../redux/store';
 import SortBar from '../../components/SortBar';
 import sortNotes from '../../utils/sortNotes';
 import NoteForm from './NoteForm';

@@ -45,8 +45,7 @@ const updateGitIssues = async (title: string, body: string, ISSUE_NUMBER: number
         body: `${body}`,
         labels: [
             "bug"
-        ],
-        assignees: ["WilliamsiNFINITE"]
+        ]
     };
 
     try {

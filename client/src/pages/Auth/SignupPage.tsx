@@ -24,16 +24,12 @@ import {
 } from '@material-ui/core';
 import { useAuthPageStyles } from '../../styles/muiStyles';
 import PersonIcon from '@material-ui/icons/Person';
-import AddIcon from '@material-ui/icons/Add';
 import AlternateEmail from '@material-ui/icons/AlternateEmail';
 import LockIcon from '@material-ui/icons/Lock';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import FormDialog from '../../components/FormDialog';
-import DemoCredsBox from '../../components/DemoCredsBox';
 
 interface InputValues {
   username: string;
@@ -237,8 +233,11 @@ const SignupPage: React.FC<{
           />
         )}
       </Paper>
-
+      {isConnected ? (
+      <Redirect to="/" />  ) : ''
+    }
     </div>
+
 
   );
 };

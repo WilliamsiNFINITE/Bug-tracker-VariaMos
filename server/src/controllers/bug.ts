@@ -19,7 +19,8 @@ const fieldsToSelect = [
   'bug.updatedAt',
   'bug.closedAt',
   'bug.reopenedAt',
-  'bug.filePath',
+  'bug.ImageFilePath',
+  'bug.JSONFilePath',
   'bug.category',
   'bug.gitIssueNumber',
   'createdBy.id',
@@ -185,9 +186,17 @@ export const deleteBug = async (req: Request, res: Response) => {
     return res.status(404).send({ message: 'Invalid bug ID.' });
   }
 
-  // remove image/video associated with bug from the Image folder
-  const path = "../client/public/Images/" + targetBug.filePath
-  fs.unlink(path, (err) => {
+  // Remove image/video associated with bug from the Image folder
+  const Imgpath = "../client/public/Images/" + targetBug.ImageFilePath
+  fs.unlink(Imgpath, (err) => {
+    if (err) {
+      console.error(err)
+      return
+    }
+  });
+    // Remove JSON file associated with bug from the JSON_files folder
+  const JSONpath = "../client/public/JSON_files/" + targetBug.JSONFilePath
+  fs.unlink(JSONpath, (err) => {
     if (err) {
       console.error(err)
       return
@@ -294,13 +303,18 @@ export const reopenBug = async (req: Request, res: Response) => {
   return res.status(201).json(relationedBug);
 };
 
-export const saveFilePath = async(uploadedfilePath: string) => {
+export const saveFilePath = async(ImageFilePath: string, JSONFilePath: string) => {
   const targetBug = await Bug.findOne({ title: lastBugTitle });
   let found: boolean = false;
 
   if (targetBug) {
     found = true;
-    targetBug.filePath = uploadedfilePath;
+    if (ImageFilePath !== '') {
+      targetBug.ImageFilePath = ImageFilePath;
+    }
+    if (JSONFilePath !== '') {
+      targetBug.JSONFilePath = JSONFilePath;
+    }
     targetBug.save();
   }
   else {
@@ -308,7 +322,12 @@ export const saveFilePath = async(uploadedfilePath: string) => {
       const targetBug = await Bug.findOne({ title: lastBugTitle });
       if (targetBug) {
         found = true;
-        targetBug.filePath = uploadedfilePath;
+        if (ImageFilePath !== '') {
+          targetBug.ImageFilePath = ImageFilePath;
+        }
+        if (JSONFilePath !== '') {
+          targetBug.JSONFilePath = JSONFilePath;
+        }
         targetBug.save();
       }
     }

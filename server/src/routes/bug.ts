@@ -13,13 +13,29 @@ import multer from 'multer';
 import path from 'path';
 
 const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    cb(null, '../client/public/Images')
+  destination: (_req, file, cb) => {
+
+    if (file.fieldname === 'image') {
+      cb(null, '../client/public/Images');
+    }
+    else if (file.fieldname === 'json') {
+      cb(null, '../client/public/JSON_files');
+    }
+
   },
   filename: (_req, file, cb) => {
-    const newFileName = Date.now() + path.extname(file.originalname)
-    cb(null, newFileName);
-    saveFilePath(newFileName);
+    let imageFileName: string = '';
+    let JSONFileName: string = '';
+    if (file.fieldname === 'image') {
+      imageFileName = Date.now() + path.extname(file.originalname)
+      cb(null, imageFileName);
+    }
+    else if (file.fieldname === 'json') {
+      JSONFileName = Date.now() + path.extname(file.originalname);
+      cb(null, JSONFileName);
+    }
+
+    saveFilePath(imageFileName, JSONFileName);
   }
 });
 
@@ -30,8 +46,7 @@ const { auth } = middleware;
 
 router.get('/', auth, getBugs);
 router.post('/', auth, createBug);
-router.post('/upload', upload.single('image'), (_req, res) => {
-  res.end();
+router.post('/upload', upload.any(), (_req, _res) => {
 });
 
 router.put('/:bugId', auth, updateBug);

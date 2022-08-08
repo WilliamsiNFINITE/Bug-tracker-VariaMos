@@ -4,7 +4,7 @@ import {
   clearSubmitBugError,
   selectBugsState,
 } from '../../redux/slices/bugsSlice';
-import { BugPayload, SettingsPayload } from '../../redux/types';
+import { SettingsPayload } from '../../redux/types';
 import ErrorBox from '../../components/ErrorBox';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -53,7 +53,6 @@ const EmailForm: React.FC<EmailFormProps> = ({
   const classes = useFormStyles();
   const dispatch = useDispatch();
   const { user } = useSelector(selectAuthState);
-  const userId = user?.id;
   const { submitError, submitLoading } = useSelector(selectBugsState);
   const [showPass, setShowPass] = useState<boolean>(false);
   const [showConfPass, setShowConfPass] = useState<boolean>(false);

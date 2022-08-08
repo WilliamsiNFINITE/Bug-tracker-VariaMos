@@ -18,8 +18,6 @@ import { notify } from './notificationSlice';
 import { History } from 'history';
 import { getErrorMsg } from '../../utils/helperFuncs';
 import userService from '../../services/users';
-import usersSlice from './usersSlice';
-import { useSelector } from 'react-redux';
 
 interface InitialBugState {
   bugs: BugState[];

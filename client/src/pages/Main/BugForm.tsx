@@ -20,21 +20,22 @@ import {
   InputAdornment,
   FormLabel,
   FormControl,
-  Input,
-  Container,
   ListItem,
   ListItemAvatar,
   Avatar,
   ListItemText,
   Chip,
+  IconButton,
 } from '@material-ui/core';
 import { useFormStyles } from '../../styles/muiStyles';
 import GroupIcon from '@material-ui/icons/Group';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import TitleIcon from '@material-ui/icons/Title';
 import SubjectIcon from '@material-ui/icons/Subject';
 import React, { useState } from 'react';
 import { Autocomplete } from '@material-ui/lab';
-import { SemanticClassificationFormat } from 'typescript';
+import axios from 'axios';
+import DemoCredsBox from '../../components/DemoCredsBox';
 
 const validationSchema = yup.object({
   title: yup
@@ -64,12 +65,16 @@ const BugForm: React.FC<BugFormProps> = ({
   const dispatch = useDispatch();
   const { submitError, submitLoading } = useSelector(selectBugsState);
   const [bugCategory, setBugCategory] = useState<string>('');
-
+  const [descriptionHelp, setDescriptionbHelp] = useState(false);
+  const [classHelp, setClassHelp] = useState(false);
+  const [imageHelp, setImageHelp] = useState(false);
+  const [JSONHelp, setJSONHelp] = useState(false);
+ 
   // If you want to add a BugClass, add it to the following list
   const BugCategories = [
+  "Performance Issue",
   "App Architecture",
-  "Security Issue",
-  "Performance Issue", 
+  "Security Issue", 
   "Feature Models",
   "TestRequirements Models",
   "Components Models",
@@ -92,33 +97,36 @@ const BugForm: React.FC<BugFormProps> = ({
     },
   });
 
-  const handleClassChange = (e: any) => {
-    const selectedValue = e.target.innerText;
-    setBugCategory(selectedValue);
+  const handleClassChange = (e: any, selectedOption: string |null) => {
+    if (selectedOption) {
+      setBugCategory(selectedOption);
+    }
   };
 
   const handleCreateBug = async (data: BugPayload) => {
-    imageForm?.submit();
+    const formData = new FormData(form);
+    axios.post(backendUrl + '/bugs/upload', formData);
     dispatch(createNewBug(data, bugCategory, closeDialog));  
   };
 
   const handleUpdateBug = (data: BugPayload) => {
-    //imageForm?.submit();
     if (typeof(bugId) === "string") {
+      const formData = new FormData(document.getElementById("bug-form") as HTMLFormElement);
+      axios.post(backendUrl + '/bugs/upload', formData);
       dispatch(editBug(bugId, data, bugCategory, closeDialog));
     }
   };
 
-  const imageForm = document.getElementById("image-form") as HTMLFormElement;
-
+  const form = document.getElementById("bug-form") as HTMLFormElement;
+  
   return (
 
-    <><form id="image-form" method="POST" action={backendUrl + '/bugs/upload'} encType="multipart/form-data">
-      <input type="file" name='image' accept="image/*, video/*"></input>
-    </form>
-    <br></br>
-    <form
-      onSubmit={handleSubmit(isEditMode ? handleUpdateBug : handleCreateBug)}
+    <><form 
+    id="bug-form" 
+    method="POST" 
+    action={backendUrl + '/bugs/upload'} 
+    encType="multipart/form-data"
+    onSubmit={handleSubmit(isEditMode ? handleUpdateBug : handleCreateBug)}
     >
         <TextField
           inputRef={register}
@@ -157,8 +165,21 @@ const BugForm: React.FC<BugFormProps> = ({
                 <SubjectIcon color="primary" />
               </InputAdornment>
             ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setDescriptionbHelp((prevState) => !prevState)}
+                  size="small"
+                >
+                  <HelpOutlineIcon color="primary" />
+                </IconButton>
+              
+              </InputAdornment>
+            )
           }} />
-          
+            {descriptionHelp && (
+          <DemoCredsBox adminSignup={false} descriptionHelp={true}></DemoCredsBox>
+            )}
           <Autocomplete
               style={{ marginTop: 20 }}
               filterSelectedOptions
@@ -180,7 +201,12 @@ const BugForm: React.FC<BugFormProps> = ({
                           position="start"
                           style={{ paddingLeft: '0.4em' }}
                         >
-                          <GroupIcon color="primary" />
+                          <IconButton
+                            onClick={() => setClassHelp((prevState) => !prevState)}
+                            size="small"
+                          >
+                            <HelpOutlineIcon color="primary" />
+                          </IconButton>
                         </InputAdornment>
                         {params.InputProps.startAdornment}
                       </>
@@ -216,6 +242,9 @@ const BugForm: React.FC<BugFormProps> = ({
                 ))
               }
             />
+        {classHelp && (
+          <DemoCredsBox adminSignup={false} classHelp={true}></DemoCredsBox>
+        )}
         <Controller
           control={control}
           name="priority"
@@ -238,10 +267,33 @@ const BugForm: React.FC<BugFormProps> = ({
                   control={<Radio color="primary" />}
                   label="High" />
               </div>
+            
             </RadioGroup>
           </FormControl>} />
 
-          
+      <label htmlFor="imageInput">Image/Video:  </label>
+      <input id="imageInput" type="file" name='image' accept="image/*, video/*"></input>
+      <IconButton
+        onClick={() => setImageHelp((prevState) => !prevState)}
+        size="small"
+      >
+        <HelpOutlineIcon color="primary" />
+      </IconButton>
+      {imageHelp && (
+        <DemoCredsBox adminSignup={false} imageHelp={true}></DemoCredsBox>
+      )}
+      <br></br>
+      <label htmlFor="jsonInput">JSON file:  </label>
+      <input id="jsonInput" type="file" name='json' accept=".json"></input>
+      <IconButton
+        onClick={() => setJSONHelp((prevState) => !prevState)}
+        size="small"
+      >
+        <HelpOutlineIcon color="primary" />
+      </IconButton>
+      {JSONHelp && (
+        <DemoCredsBox adminSignup={false} JSONHelp={true}></DemoCredsBox>
+      )}
         <Button
           size="large"
           color="primary"

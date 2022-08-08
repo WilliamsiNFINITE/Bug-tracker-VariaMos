@@ -12,7 +12,7 @@ export { PASSWORD };
 // To interact with Github Issues
 const GithubUser = 'SamNzo';
 const GithubRepo = 'Bug-tracker-VariaMos';
-const GithubPersonnalToken = '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';
+const GithubPersonnalToken = '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';
 
 export { GithubUser };
 export { GithubRepo };

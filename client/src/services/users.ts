@@ -1,4 +1,3 @@
-import { RepeatOneSharp } from '@material-ui/icons';
 import axios from 'axios';
 import backendUrl from '../backendUrl';
 import { SettingsPayload, InviteAdminPayload } from '../redux/types';

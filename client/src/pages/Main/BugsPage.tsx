@@ -13,13 +13,10 @@ import sortBugs from '../../utils/sortBugs';
 import filterBugs from '../../utils/filterBugs';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import InfoText from '../../components/InfoText';
-import { Paper, Typography, useMediaQuery } from '@material-ui/core';
+import { Paper, Typography } from '@material-ui/core';
 import { useMainPageStyles } from '../../styles/muiStyles';
 import BugReportOutlinedIcon from '@material-ui/icons/BugReportOutlined';
 import { selectAuthState } from '../../redux/slices/authSlice';
-import { selectUsersState } from '../../redux/slices/usersSlice';
-import { BugState } from '../../redux/types';
-
 
 const BugsPage: React.FC<{ isMobile: boolean }> = ({
   isMobile,

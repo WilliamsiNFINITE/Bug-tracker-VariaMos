@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Collapse } from '@material-ui/core';
 import { useMainPageStyles } from '../../styles/muiStyles';
-import PeopleAltOutlinedIcon from '@material-ui/icons/PeopleAltOutlined';
 import BugsDetailsPage from './BugsDetailsPage';
 
 const BugCard: React.FC<{

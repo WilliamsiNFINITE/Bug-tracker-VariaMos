@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { findLastIndex } from 'cypress/types/lodash';
 
 export const useBodyStyles = (darkMode: boolean) =>
   makeStyles(

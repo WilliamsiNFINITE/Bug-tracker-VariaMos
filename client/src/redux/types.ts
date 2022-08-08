@@ -52,7 +52,8 @@ export interface BugState {
   updatedAt?: Date;
   createdAt: Date;
   assignments: AssignedAdmins[];
-  filePath: string;
+  ImageFilePath: string;
+  JSONFilePath: string;
   category: string;
   gitIssueNumber: number;
 }

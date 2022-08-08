@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectBugsById,
@@ -45,8 +45,8 @@ const BugsDetailsPage: React.FC<{
   const assign = bug?.assignments;
   const adminsAssignedIds = assign?.map((a) => a.adminId);
   let isVideo: boolean = false;
-  if (bug?.filePath) {
-    if (bug?.filePath.includes("mp4")) {
+  if (bug?.ImageFilePath) {
+    if (bug?.ImageFilePath.includes("mp4")) {
       isVideo = true;
     }
   }
@@ -118,7 +118,8 @@ const BugsDetailsPage: React.FC<{
     reopenedAt,
     notes,
     assignments,
-    filePath,
+    ImageFilePath,
+    JSONFilePath,
     category
   } = bug;
 
@@ -259,6 +260,19 @@ const BugsDetailsPage: React.FC<{
             <strong>{title}</strong>
           </Typography>
           <div style={{ display: "flex" }}>
+            {(bug.JSONFilePath !== null ) && (
+              <Link 
+              to={'/JSON_files/' + bug.JSONFilePath} 
+              target="_blank" 
+              download
+              style={{
+                fontWeight: "bold",
+                color: "blue"
+              }}
+              >
+                Download JSON file
+              </Link>
+            )}
             <Button
             onClick={() => handleClass() }
             color="primary"
@@ -281,12 +295,12 @@ const BugsDetailsPage: React.FC<{
           >
             Status: {statusInfo()}
           </Typography>
-          {(bug.filePath && !isVideo) ? (
-            <img src={'/Images/' + bug.filePath} max-width="10"></img>
+          {(bug.ImageFilePath && !isVideo) ? (
+            <img src={'/Images/' + bug.ImageFilePath} max-width="10"></img>
           ) : '' }
-          {(bug.filePath && isVideo) ? (
+          {(bug.ImageFilePath && isVideo) ? (
             <video width="320" height="240" controls>
-            <source src={'/Images/' + bug.filePath} type="video/mp4"></source>
+            <source src={'/Images/' + bug.ImageFilePath} type="video/mp4"></source>
             Your browser does not support the video tag.
           </video>
           ) : '' }

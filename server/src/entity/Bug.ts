@@ -80,7 +80,10 @@ export class Bug extends BaseEntity {
   assignments: AssignedAdmins[];
 
   @Column()
-  filePath: string;
+  ImageFilePath: string;
+
+  @Column()
+  JSONFilePath: string;
 
   @Column()
   category: string;

@@ -1,15 +1,10 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link as RouterLink } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
-  signup,
-  clearAuthError,
-  setAuthError,
   selectAuthState,
   verifyCode,
 } from '../../redux/slices/authSlice';
-import ErrorBox from '../../components/ErrorBox';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import BugIcon from '../../svg/bug-logo.svg';
@@ -17,10 +12,7 @@ import BugIcon from '../../svg/bug-logo.svg';
 import {
   TextField,
   Button,
-  Typography,
   InputAdornment,
-  IconButton,
-  Link,
   Paper,
 } from '@material-ui/core';
 import { useAuthPageStyles } from '../../styles/muiStyles';
@@ -46,7 +38,6 @@ const InviteVerificationPage: React.FC<InviteVerificationPageProps> = ({
     closeDialog
   }) => {
   const classes = useAuthPageStyles();
-  const dispatch = useDispatch();
   const [isVerified, setIsVerified] = useState(false);
   const [isHuman, setIsHuman] = useState(false);
   const { loading, error } = useSelector(selectAuthState);

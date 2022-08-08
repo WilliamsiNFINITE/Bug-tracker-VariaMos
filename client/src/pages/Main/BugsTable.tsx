@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { BugState, User, UserState } from '../../redux/types';
 import BugsMenu from './BugsMenu';
 import { formatDateTime } from '../../utils/helperFuncs';
@@ -11,14 +10,12 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Link,
   Paper,
 } from '@material-ui/core';
 import { useTableStyles } from '../../styles/muiStyles';
 import BugCard from './BugCard';
 import { selectAllAdmins } from '../../redux/slices/bugsSlice';
 import { useSelector } from 'react-redux';
-import { selectUsersState } from '../../redux/slices/usersSlice';
 
 const tableHeaders = [
   'Title',
@@ -44,7 +41,6 @@ const BugsTable: React.FC<{ bugs: BugState[], user: UserState | null }> = ({ bug
   }
 
   const classes = useTableStyles();
-  const history = useHistory();
   const [viewBug, setViewBug] = useState(false);
   const [bugId, setBugId] = useState('');
   const admins = useSelector(selectAllAdmins);

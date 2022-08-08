@@ -4,8 +4,6 @@ import userService from '../../services/users';
 import { SettingsPayload, InviteAdminPayload, User } from '../types';
 import { notify } from './notificationSlice';
 import { getErrorMsg } from '../../utils/helperFuncs';
-import { string } from 'yup';
-import { useState } from 'react';
 
 interface InitialBugState {
   users: User[];
