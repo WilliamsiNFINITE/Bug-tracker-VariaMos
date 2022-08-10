@@ -10,21 +10,16 @@ const getBugs = async () => {
   return response.data;
 };
 
-const createBug = async (bugData: BugPayload, file?: File) => {
-  const response = await axios.post(baseUrl, bugData ,setConfig());
+const createBug = async (bugData: BugPayload, form: FormData) => {
+  const response: any = await axios.post(baseUrl, bugData ,setConfig()).then(() => {});
+  axios.post(backendUrl + '/bugs/upload', form);
   return response.data;
 };
 
-const updateBug = async (
-  bugId: string,
-  bugData: BugPayload
-) => {
-  const response = await axios.put(
-    `${baseUrl}/${bugId}`,
-    bugData,
-    setConfig()
-  );
-  return response.data;
+const updateBug = async (bugId: string, bugData: BugPayload, form: FormData) => {
+  const response: any = await axios.put(`${baseUrl}/${bugId}`, bugData, setConfig());
+  await axios.post(backendUrl + '/bugs/upload', form);
+  return response.data; 
 };
 
 const deleteBug = async (bugId: string) => {

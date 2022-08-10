@@ -62,7 +62,6 @@ export const getBugs = async (_req: Request, res: Response) => {
 export const createBug = async (req: Request, res: Response) => {
   const { title, description, priority, category } = req.body;
 
-  lastBugTitle = title;
   const { errors, valid } = createBugValidator(title, description, priority);
 
   if (!valid) {
@@ -86,7 +85,7 @@ export const createBug = async (req: Request, res: Response) => {
       return res.status(400).send({ message: "A reported bug already has this title. \nMake sure this issue has not already been reported."})
     }
   }
-  
+  lastBugTitle = title;
   const newBug = Bug.create({
     title,
     description,
@@ -133,11 +132,11 @@ export const updateBug = async (req: Request, res: Response) => {
   }
 
   const { errors, valid } = createBugValidator(title, description, priority);
-  lastBugTitle = title;
+
   if (!valid) {
     return res.status(400).send({ message: Object.values(errors)[0] });
   }
-
+  lastBugTitle = title;
   const targetBug = await Bug.findOne({ id: bugId });
 
   if (!targetBug) {
@@ -304,34 +303,20 @@ export const reopenBug = async (req: Request, res: Response) => {
 };
 
 export const saveFilePath = async(ImageFilePath: string, JSONFilePath: string) => {
-  const targetBug = await Bug.findOne({ title: lastBugTitle });
-  let found: boolean = false;
-
-  if (targetBug) {
-    found = true;
-    if (ImageFilePath !== '') {
-      targetBug.ImageFilePath = ImageFilePath;
-    }
-    if (JSONFilePath !== '') {
-      targetBug.JSONFilePath = JSONFilePath;
-    }
-    targetBug.save();
-  }
-  else {
-    while(!found) {
-      const targetBug = await Bug.findOne({ title: lastBugTitle });
-      if (targetBug) {
-        found = true;
-        if (ImageFilePath !== '') {
-          targetBug.ImageFilePath = ImageFilePath;
-        }
-        if (JSONFilePath !== '') {
-          targetBug.JSONFilePath = JSONFilePath;
-        }
-        targetBug.save();
+  await Bug.findOne({
+    where: { title: lastBugTitle }
+  }).then(async (bug) => {
+    if (bug) {
+      if (ImageFilePath !== '') {
+        bug.ImageFilePath = ImageFilePath;
       }
+      if (JSONFilePath !== '') {
+        bug.JSONFilePath = JSONFilePath;
+      }
+      bug.save();
     }
-  }
+  });
 
+  
 
 }

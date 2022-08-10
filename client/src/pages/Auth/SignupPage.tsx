@@ -30,6 +30,7 @@ import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import { selectUsersState } from '../../redux/slices/usersSlice';
 
 interface InputValues {
   username: string;
@@ -64,7 +65,7 @@ const SignupPage: React.FC<{
   const classes = useAuthPageStyles();
   const dispatch = useDispatch();
   const [isConnected, setIsConnected] = useState(false);
-  const { loading, error } = useSelector(selectAuthState);
+  const { user, loading, error } = useSelector(selectAuthState);
   const [showPass, setShowPass] = useState<boolean>(false);
   const [showConfPass, setShowConfPass] = useState<boolean>(false);
 
@@ -84,7 +85,6 @@ const SignupPage: React.FC<{
       return dispatch(setAuthError('Both passwords need to match.'));
     }
     dispatch(signup({ username, password, email }, adminMode ));
-    setIsConnected(true);
   };
 
 
@@ -233,7 +233,7 @@ const SignupPage: React.FC<{
           />
         )}
       </Paper>
-      {isConnected ? (
+      {user?.username !== "user" ? (
       <Redirect to="/" />  ) : ''
     }
     </div>

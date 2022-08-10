@@ -32,7 +32,6 @@ const Routes = () => {
         <Route exact path="/signup">
           {user?.username === "user" ? <SignupPage adminMode={false}/> : <Redirect to="/" />}
         </Route>
-
         <Route>
           <NotFoundPage />
         </Route>

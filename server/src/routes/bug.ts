@@ -34,7 +34,6 @@ const storage = multer.diskStorage({
       JSONFileName = Date.now() + path.extname(file.originalname);
       cb(null, JSONFileName);
     }
-
     saveFilePath(imageFileName, JSONFileName);
   }
 });
@@ -46,7 +45,8 @@ const { auth } = middleware;
 
 router.get('/', auth, getBugs);
 router.post('/', auth, createBug);
-router.post('/upload', upload.any(), (_req, _res) => {
+router.post('/upload', upload.any(), (_req, res) => {
+  res.status(201).end();
 });
 
 router.put('/:bugId', auth, updateBug);

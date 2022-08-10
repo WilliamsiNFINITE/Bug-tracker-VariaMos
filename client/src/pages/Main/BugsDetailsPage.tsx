@@ -296,7 +296,7 @@ const BugsDetailsPage: React.FC<{
             Status: {statusInfo()}
           </Typography>
           {(bug.ImageFilePath && !isVideo) ? (
-            <img src={'/Images/' + bug.ImageFilePath} max-width="10"></img>
+            <img src={'/Images/' + bug.ImageFilePath} max-width="100px" max-height="150px"></img>
           ) : '' }
           {(bug.ImageFilePath && isVideo) ? (
             <video width="320" height="240" controls>
