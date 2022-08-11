@@ -24,6 +24,7 @@ import { useFormStyles } from '../../styles/muiStyles';
 import TitleIcon from '@material-ui/icons/Title';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import GitHubIcon from '@material-ui/icons/GitHub';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import LockIcon from '@material-ui/icons/Lock';
@@ -48,12 +49,14 @@ const EmailForm: React.FC<EmailFormProps> = ({
   currentData,
 }) => {
 
-  const [emailHelp, setEmailHelp] = useState(false);
-  const [githubHelp, setGithubHelp] = useState(false);
+  const [emailHelp, setEmailHelp] = useState<boolean>(false);
+  const [githubHelp, setGithubHelp] = useState<boolean>(false);
+  const [githubTokenHelp, setGithubTokenHelp] = useState<boolean>(false);
   const classes = useFormStyles();
   const dispatch = useDispatch();
   const { user } = useSelector(selectAuthState);
   const { submitError, submitLoading } = useSelector(selectBugsState);
+  const [showToken, setShowToken] = useState<boolean>(false);
   const [showPass, setShowPass] = useState<boolean>(false);
   const [showConfPass, setShowConfPass] = useState<boolean>(false);
   const { register, control, handleSubmit, errors } = useForm({
@@ -62,6 +65,7 @@ const EmailForm: React.FC<EmailFormProps> = ({
     defaultValues: {
       email: user?.email || '',
       github: user?.github || '',
+      githubToken: null,
       notificationsOn: user?.notificationsOn || true,
       newPassword: '',
       oldPassword: '',
@@ -111,44 +115,88 @@ const EmailForm: React.FC<EmailFormProps> = ({
         )}
 
   {user?.isAdmin? (
-    <TextField
-        inputRef={register}
-        className={classes.fieldMargin}
-        name="github"
-        fullWidth
-        type="text"
-        label="Github username"
-        variant="outlined"
-        error={'github' in errors}
-        helperText={'github' in errors ? errors.github?.message : ''}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <IconButton
-                onClick={() => window.open('https://github.com/')}
-                size="small"
-              >
-                <GitHubIcon color="primary" />
-              </IconButton>
-            </InputAdornment>
-          ),
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                onClick={() => setGithubHelp((prevState) => !prevState)}
-                size="small"
-              >
-                <HelpOutlineIcon color="primary" />
-              </IconButton>
-            
-            </InputAdornment>
-          )
-        }}
-      />
-  ) : ''}
-    {githubHelp && (
+    <><TextField
+          inputRef={register}
+          className={classes.fieldMargin}
+          name="github"
+          fullWidth
+          type="text"
+          label="Github username"
+          variant="outlined"
+          error={'github' in errors}
+          helperText={'github' in errors ? errors.github?.message : ''}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <IconButton
+                  onClick={() => window.open('https://github.com/')}
+                  size="small"
+                >
+                  <GitHubIcon color="primary" />
+                </IconButton>
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setGithubHelp((prevState) => !prevState)}
+                  size="small"
+                >
+                  <HelpOutlineIcon color="primary" />
+                </IconButton>
+
+              </InputAdornment>
+            )
+          }} />
+          {githubHelp && (
           <DemoCredsBox adminSignup={false} githubHelp={true}></DemoCredsBox>
         )}
+        <TextField
+            inputRef={register}
+            className={classes.fieldMargin}
+            name="githubToken"
+            fullWidth
+            type={showToken ? 'text' : 'password'}
+            label="Github Personal Access Token"
+            variant="outlined"
+            error={'githubToken' in errors}
+            helperText={'githubToken' in errors ? errors.githubToken?.message : ''}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <IconButton
+                    onClick={() => window.open('https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token')}
+                    size="small"
+                  >
+                    <VpnKeyIcon color="primary" />
+                  </IconButton>
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                      onClick={() => setShowToken((prevState) => !prevState)}
+                      size="small"
+                    >
+                      {showToken ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </IconButton>
+
+                  <IconButton
+                    onClick={() => setGithubTokenHelp((prevState) => !prevState)}
+                    size="small"
+                  >
+                    <HelpOutlineIcon color="primary" />
+                  </IconButton>
+
+                </InputAdornment>
+              )
+            }}
+             />
+             {githubTokenHelp && (
+          <DemoCredsBox adminSignup={false} githubTokenHelp={true}></DemoCredsBox>
+        )}</>
+  ) : ''}
+    
 
       <TextField
         className={classes.fieldMargin}

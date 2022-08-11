@@ -28,6 +28,7 @@ import AdminForm from './AdminForm';
 import { selectUsersState } from '../../redux/slices/usersSlice';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import '../../index.css';
 
 const BugsDetailsPage: React.FC<{
   bugId: string;
@@ -273,6 +274,7 @@ const BugsDetailsPage: React.FC<{
                 Download JSON file
               </Link>
             )}
+            
             <Button
             onClick={() => handleClass() }
             color="primary"
@@ -295,8 +297,9 @@ const BugsDetailsPage: React.FC<{
           >
             Status: {statusInfo()}
           </Typography>
+          <div className="center">
           {(bug.ImageFilePath && !isVideo) ? (
-            <img src={'/Images/' + bug.ImageFilePath} max-width="10"></img>
+              <img src={'/Images/' + bug.ImageFilePath} width="500vw" max-height="80vh"></img>
           ) : '' }
           {(bug.ImageFilePath && isVideo) ? (
             <video width="320" height="240" controls>
@@ -304,7 +307,7 @@ const BugsDetailsPage: React.FC<{
             Your browser does not support the video tag.
           </video>
           ) : '' }
-
+          </div>
 
           <Typography
             color="secondary"

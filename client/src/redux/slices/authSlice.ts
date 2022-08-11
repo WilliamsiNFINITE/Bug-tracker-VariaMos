@@ -87,9 +87,7 @@ export const signup = (credentials: CredentialsPayload, adminMode: boolean): App
       authService.setisAdmin(userData.isAdmin);
       dispatch(fetchBugs());
       dispatch(fetchUsers());
-      dispatch(
-        notify(`Hi, ${userData.username}! Welcome to Bug Tracker :D`, 'success')
-      );
+      dispatch(notify(`Hi, ${userData.username}! Welcome to Bug Tracker :D`, 'success'));
     } catch (e) {
       dispatch(setAuthError(getErrorMsg(e)));
     }

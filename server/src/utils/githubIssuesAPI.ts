@@ -141,8 +141,50 @@ const assignGitIssues = async (ISSUE_NUMBER: number, assignees: string[]) => {
     } catch (e) {console.log(e)};
 }
 
+/**
+ *  This function fetches all the issues from a repository
+ */
+const getGitIssues = async () => {
+    let response: Response | string = "";
+    try {
+        await fetch(`https://api.github.com/repos/${GithubUser}/${GithubRepo}/issues`, {
+            method: 'get',
+            headers: {'Content-Type': 'application/json', 'Authorization': `token ${GithubPersonnalToken}`}
+        })
+        .then(res => res.text())
+        .then(res =>
+            response = res
+        )
+            
+    } catch (e) {console.log(e)};
+
+    return response;
+
+}
+
+const verifyGitUser = async (personalToken: string) => {
+    let response: Response | string = "";
+    try {
+        await fetch(`https://api.github.com/user`, {
+            method: 'get',
+            headers: {'Accept': 'application/vnd.github+json', 'Authorization': `token ${personalToken}`}
+        })
+        .then(res =>res.text())
+        .then(res => response = res)
+            
+    } catch (e) {
+        console.log(e);
+    };
+    console.log("response before sending: ", response);
+    return response;
+
+
+}
+
 export { createGitIssues };
 export { updateGitIssues };
 export { closeGitIssues };
 export { reopenGitIssues };
 export { assignGitIssues };
+export { getGitIssues };
+export { verifyGitUser };

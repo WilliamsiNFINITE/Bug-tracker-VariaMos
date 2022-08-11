@@ -6,6 +6,7 @@ import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import { EMAIL, PASSWORD } from '../utils/variables';
+import { verifyGitUser } from '../utils/githubIssuesAPI';
 
 export const getAllUsers = async (req: Request, res: Response) => {
   
@@ -86,8 +87,7 @@ export const removeAdmin = async (req: Request, res: Response) => {
 
 export const changeSettings = async (req: Request, res: Response) => {
   const currentUser = await User.findOne(req.user);
-  const { email, github, notifications, newPassword, oldPassword } = req.body;
-
+  const { email, github, githubToken, notifications, newPassword, oldPassword } = req.body;
   // Check if the email adress format is valid 
   if (email) {
     if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
@@ -96,14 +96,38 @@ export const changeSettings = async (req: Request, res: Response) => {
     }
   };
 
-  // Check if someone already has this email adress
+  // Check if someone already has this email adress or github username
   const users = await User.find();
   for (let user of users) {
-    if (user.email === email && user.username !== currentUser?.username) {
-      return res.status(400).send({ message: 'This email adress is already used by another user.' });
+    if (user.email === email && user.username !== currentUser?.username && email !== "") {
+      return res.status(400).send({ message: `Email adress ${email} is already taken.` });
     }
-  }
+    if (user.github === github && user.username !== currentUser?.username) {
+      return res.status(400).send({ message: `Github username ${github} is already taken.` });
+    }
+  };
 
+  if (githubToken !== '') {
+        let unauthorized = false;
+        await verifyGitUser(githubToken).then(r => {
+        const response = JSON.parse(r);
+        console.log(response);
+        if (response.message === 'Bad credentials') {
+          unauthorized = true;
+        }
+        if (response.login !== github) {
+          unauthorized = true;
+        }
+    }).then(() => {
+      if (unauthorized) {
+        return res.status(403).send({ message: `Personal access token does not match Github username ${github}.` });
+      }
+    })
+    console.log(unauthorized)
+    
+  }
+      
+    
   if (currentUser) {
 
     // If there is a new password verify that the current one is correct

@@ -105,15 +105,13 @@ const BugForm: React.FC<BugFormProps> = ({
 
   const handleCreateBug = async (data: BugPayload) => {
     const formData = new FormData(form);
-    axios.post(backendUrl + '/bugs/upload', formData);
-    dispatch(createNewBug(data, bugCategory, closeDialog));  
+    dispatch(createNewBug(data, formData, bugCategory, closeDialog));
   };
 
   const handleUpdateBug = (data: BugPayload) => {
     if (typeof(bugId) === "string") {
-      const formData = new FormData(document.getElementById("bug-form") as HTMLFormElement);
-      axios.post(backendUrl + '/bugs/upload', formData);
-      dispatch(editBug(bugId, data, bugCategory, closeDialog));
+      const formData = new FormData(document.getElementById("bug-form") as HTMLFormElement);;
+      dispatch(editBug(bugId, data, formData, bugCategory, closeDialog));
     }
   };
 
