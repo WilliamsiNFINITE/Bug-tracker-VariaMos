@@ -11,13 +11,13 @@ const getBugs = async () => {
 };
 
 const createBug = async (bugData: BugPayload, form: FormData) => {
-  const response: any = await axios.post(baseUrl, bugData ,setConfig()).then(() => {});
+  const response = await axios.post(baseUrl, bugData ,setConfig())
   axios.post(backendUrl + '/bugs/upload', form);
   return response.data;
 };
 
 const updateBug = async (bugId: string, bugData: BugPayload, form: FormData) => {
-  const response: any = await axios.put(`${baseUrl}/${bugId}`, bugData, setConfig());
+  const response = await axios.put(`${baseUrl}/${bugId}`, bugData, setConfig());
   await axios.post(backendUrl + '/bugs/upload', form);
   return response.data; 
 };

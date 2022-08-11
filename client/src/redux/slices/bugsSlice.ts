@@ -233,7 +233,7 @@ export const createNewBug = (
     try {
       bugData.category = bugCategory;
       dispatch(setSubmitBugLoading());
-      const newBug = await bugService.createBug(bugData, form) as unknown as BugState;
+      const newBug = await bugService.createBug(bugData, form);
       dispatch(addBug(newBug));
       dispatch(notify('New bug added!', 'success'));
       closeDialog && closeDialog();
@@ -261,7 +261,7 @@ export const editBug = (
         priority,
         updatedAt,
         updatedBy,
-      } = updatedBug as unknown as EditedBugData;
+      } = updatedBug as EditedBugData;
 
       dispatch(
         updateBug({

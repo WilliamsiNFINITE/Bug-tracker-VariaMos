@@ -46,7 +46,7 @@ const { auth } = middleware;
 router.get('/', auth, getBugs);
 router.post('/', auth, createBug);
 router.post('/upload', upload.any(), (_req, res) => {
-  res.status(201).end();
+  res.status(201);
 });
 
 router.put('/:bugId', auth, updateBug);

@@ -89,6 +89,7 @@ export interface BugPayload {
 export interface SettingsPayload {
   email: string;
   github: string;
+  githubToken: string;
   notificationsOn: boolean;
   newPassword: string;
   oldPassword: string;

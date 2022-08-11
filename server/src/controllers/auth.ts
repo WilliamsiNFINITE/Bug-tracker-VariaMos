@@ -23,6 +23,13 @@ export const signupUser = async (req: Request, res: Response) => {
       .send({ message: `Username '${username}' is already taken.` });
   }
 
+  const users = await User.find();
+  for (let user of users) {
+    if (user.email === email) {
+      return res.status(400).send({ message: `Email adress ${email} is already taken.` });
+    }
+  }
+
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
 

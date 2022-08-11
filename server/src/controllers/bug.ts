@@ -3,7 +3,7 @@ import fs from 'fs';
 import { Bug } from '../entity/Bug';
 import { Note } from '../entity/Note';
 import { User } from '../entity/User';
-import { closeGitIssues, createGitIssues, reopenGitIssues, updateGitIssues } from '../utils/githubIssuesAPI';
+import { closeGitIssues, createGitIssues, getGitIssues, reopenGitIssues, updateGitIssues } from '../utils/githubIssuesAPI';
 import { createBugValidator } from '../utils/validators';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -55,6 +55,66 @@ export const getBugs = async (_req: Request, res: Response) => {
     .leftJoinAndSelect('bug.assignments', 'assignment')
     .select(fieldsToSelect)
     .getMany();
+
+  // Here we make sure that the issues on Github Issues are synchronized with
+  // the Bug Tracker. If one was created/updated on Github Issues we create/update
+  // the Bug Tracker one's to match
+
+  // Get issues from the Github repository
+  await getGitIssues().then(async (gitIssues) => {
+    // Issues are received as a string so we convert them to JSON
+    const JSON_issues = JSON.parse(gitIssues);
+    // For each issue
+    for (let gitIssue of JSON_issues) {
+      const gitIssueNumber = gitIssue.number;
+      // Check if it is already on the Bug Tracker
+      let cpt = 0;
+      let over = false;
+        for (let bug of bugs) {
+          if (over) {
+            break;
+          }
+          // If the bug is already on the Bug Tracker
+          if (bug.gitIssueNumber === gitIssueNumber) {
+            // Check if the bug data is the same as on Github Issues
+            await Bug.findOne({
+              where: { gitIssueNumber: gitIssueNumber }
+            }).then(async (b) => {
+                if (b) {
+                    // If not, update it 
+                    if (b.title !== gitIssue.title) {
+                      b.title = gitIssue.title;
+                    };
+                    if (b.description !== gitIssue.body) {
+                      b.description = gitIssue.body;
+                    };
+                    if (b.isResolved && gitIssue.state === "open") {
+                      // Case where the bug is closed on the Bug Tracker but opened on Github (someone re-opened it on Github)
+                      b.isResolved = false;
+                    }
+                    b.save();
+                    over = true;    
+                }   
+              });
+          }
+          else {
+            cpt += 1;
+          }
+        }
+        if (cpt === bugs.length) {
+          // If not, it was created on Github Issues
+          // So we create it on the Bug Tracker also
+          const newBug = Bug.create({
+            title: gitIssue.title,
+            description: gitIssue.body,
+            createdById: "00000000-0000-0000-0000-000000000000",
+            gitIssueNumber: gitIssue.number
+          });
+
+          await newBug.save();
+        }
+    }
+  });
 
   res.json(bugs);
 };

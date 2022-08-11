@@ -3,12 +3,13 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 const DemoCredsBox: React.FC<{
   adminSignup: boolean;
   githubHelp?: boolean;
+  githubTokenHelp?: boolean;
   emailHelp?: boolean;
   descriptionHelp?: boolean;
   classHelp?: boolean;
   imageHelp?: boolean;
   JSONHelp?: boolean;
-  }> = ({ adminSignup, githubHelp, emailHelp, descriptionHelp, classHelp, imageHelp, JSONHelp })  => {
+  }> = ({ adminSignup, githubHelp, githubTokenHelp, emailHelp, descriptionHelp, classHelp, imageHelp, JSONHelp })  => {
   if (adminSignup === true) {
     return (
       <div style={{ width: '100%', marginTop: '0.8em', marginBottom: '0.8em' }}>
@@ -25,6 +26,27 @@ const DemoCredsBox: React.FC<{
         <Alert severity="info">
           <AlertTitle>Why should I enter my Github username ?</AlertTitle>
           If you have permissions on the VariaMos Github repository, whenever a bug is assigned to you here it will also be asigned to you on Github Issues.
+        </Alert>
+      </div>
+    );
+  }
+  else if (githubTokenHelp === true) {
+    return (
+      <div style={{ width: '100%', marginTop: '0.8em', marginBottom: '0.8em' }}>
+        <Alert severity="info">
+          <AlertTitle>What is this ?</AlertTitle>
+          To link your Github account you need to generate a personal access token.<br></br>
+          It takes 30 seconds and you only need to do it once !<br></br>
+          <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token">
+             Check how to do it here
+          </a>
+        </Alert>
+        <Alert severity="warning">
+        <AlertTitle>Note</AlertTitle>
+        The expiration date does not matter.
+        <br></br>
+        <b>Your token will only be used to verify your account.
+        </b>
         </Alert>
       </div>
     );
