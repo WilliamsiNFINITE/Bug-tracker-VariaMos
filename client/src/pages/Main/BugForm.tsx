@@ -72,7 +72,8 @@ const BugForm: React.FC<BugFormProps> = ({
  
   // If you want to add a BugClass, add it to the following list
   const BugCategories = [
-  "Performance Issue",
+  "Question",
+  "Enhancement",
   "App Architecture",
   "Security Issue", 
   "Feature Models",
@@ -93,7 +94,7 @@ const BugForm: React.FC<BugFormProps> = ({
       title: currentData?.title || '',
       description: currentData?.description || '',
       priority: currentData?.priority || 'low',
-      class: bugCategory || '',
+      class: currentData?.category || '',
     },
   });
 
@@ -118,7 +119,6 @@ const BugForm: React.FC<BugFormProps> = ({
   const form = document.getElementById("bug-form") as HTMLFormElement;
   
   return (
-
     <><form 
     id="bug-form" 
     method="POST" 

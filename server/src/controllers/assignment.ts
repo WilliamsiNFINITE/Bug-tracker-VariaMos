@@ -78,6 +78,7 @@ export const assignBug = async (req: Request, res: Response) => {
     'admin.username',
     'admin.email',
     'admin.notificationsOn',
+    'admin.github',
     'bug.id',
   ])
   .getMany();

@@ -8,6 +8,7 @@ interface User {
   isAdmin: boolean;
   email: string;
   notificationsOn: boolean;
+  github: string;
 }
 
 const saveUser = (user: User) => {

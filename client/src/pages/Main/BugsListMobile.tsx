@@ -90,6 +90,7 @@ const BugsListMobile: React.FC<{ bugs: BugState[], user: UserState | null }> = (
                   title: b.title,
                   description: b.description,
                   priority: b.priority,
+                  category: b.category
                 }}
                 isResolved={b.isResolved}
                 isAdmin={user?.isAdmin}

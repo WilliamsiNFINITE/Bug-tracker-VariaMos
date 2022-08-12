@@ -426,6 +426,18 @@ export const deleteNote = (
   };
 };
 
+export const fetchNotes = (bugId: string): AppThunk => {
+  return async (dispatch) => {
+    try {
+    const Notes = await noteService.getNotes(bugId);
+    for (let note of Notes) {
+      dispatch(addNote({ note: note, bugId }));
+    }
+    } catch (e) {
+      dispatch(notify(getErrorMsg(e), 'error'));
+    }
+}}
+
 export const selectBugsState = (state: RootState) => state.bugs;
 
 export const selectBugsById = (state: RootState, bugId: string) => {

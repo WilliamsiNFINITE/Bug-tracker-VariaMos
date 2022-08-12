@@ -34,6 +34,7 @@ const fieldsToSelect = [
   'note.id',
   'note.bugId',
   'note.body',
+  'note.gitCommentId',
   'note.createdAt',
   'note.updatedAt',
   'noteAuthor.id',
@@ -82,15 +83,28 @@ export const getBugs = async (_req: Request, res: Response) => {
             }).then(async (b) => {
                 if (b) {
                     // If not, update it 
+                    // Title
                     if (b.title !== gitIssue.title) {
                       b.title = gitIssue.title;
                     };
+                    // Description
                     if (b.description !== gitIssue.body) {
                       b.description = gitIssue.body;
                     };
+                    // Status (open/closed)
                     if (b.isResolved && gitIssue.state === "open") {
                       // Case where the bug is closed on the Bug Tracker but opened on Github (someone re-opened it on Github)
                       b.isResolved = false;
+                    }
+                    // Category
+                    if (gitIssue.labels.length > 0 && gitIssue.labels[0].name === "question") {
+                      b.category = "Question";
+                    }
+                    else if (gitIssue.labels.length > 0 && gitIssue.labels[0].name === "enhancement") {
+                      b.category = "Enhancement";
+                    }
+                    else if (gitIssue.labels.length > 0 && gitIssue.labels[0].name === "bug") {
+                      b.category = "";
                     }
                     b.save();
                     over = true;    
@@ -104,10 +118,17 @@ export const getBugs = async (_req: Request, res: Response) => {
         if (cpt === bugs.length) {
           // If not, it was created on Github Issues
           // So we create it on the Bug Tracker also
+          // Get the creator id (works if he entered his Github username in his settings)
+          let creatorId: string = ''; 
+          await User.findOne({ where: { github: gitIssue.user.login }}).then((u) => {
+            if (u) {creatorId = u.id}
+            else {creatorId = "00000000-0000-0000-0000-000000000000"}
+          });
+          console.log(creatorId);
           const newBug = Bug.create({
             title: gitIssue.title,
             description: gitIssue.body,
-            createdById: "00000000-0000-0000-0000-000000000000",
+            createdById: creatorId,
             gitIssueNumber: gitIssue.number
           });
 
@@ -158,7 +179,7 @@ export const createBug = async (req: Request, res: Response) => {
 
   var promises: Promise<void>[] = [];
   // Create a corresponding issue in Github Issues
-  promises.push(createGitIssues(title, description).then(function(result) {
+  promises.push(createGitIssues(title, description, category).then(function(result) {
     newBug.gitIssueNumber = result;
   }));
 
@@ -206,13 +227,13 @@ export const updateBug = async (req: Request, res: Response) => {
   targetBug.title = title;
   targetBug.description = description;
   targetBug.priority = priority;
-  targetBug.category = category;
+  if (category !== '') {targetBug.category = category};
   targetBug.updatedById = req.user;
   targetBug.updatedAt = new Date();
 
   await targetBug.save();
 
-  updateGitIssues(title, description, targetBug.gitIssueNumber);
+  updateGitIssues(title, description, targetBug.gitIssueNumber, category);
 
   const relationedBug = await Bug.createQueryBuilder('bug')
     .where('bug.id = :bugId', { bugId })

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -6,6 +6,7 @@ import {
   deleteBug,
   closeReopenBug,
   selectAllAdmins,
+  fetchNotes,
 } from '../../redux/slices/bugsSlice';
 import { RootState } from '../../redux/store';
 import FormDialog from '../../components/FormDialog';
@@ -40,6 +41,14 @@ const BugsDetailsPage: React.FC<{
 
   const history = useHistory();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+      {
+      dispatch(fetchNotes(bugId));
+    }
+    // eslint-disable-next-line
+  }, []);
+
   const bug = useSelector((state: RootState) =>
     selectBugsById(state, bugId)
   );

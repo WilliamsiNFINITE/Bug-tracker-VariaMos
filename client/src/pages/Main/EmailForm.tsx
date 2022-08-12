@@ -41,12 +41,12 @@ interface EmailFormProps {
 
 const validationSchema = yup.object({
     email: yup.string(),
+    github: yup.string(),
+    githubToken: yup.string()
   });
 
 const EmailForm: React.FC<EmailFormProps> = ({
   closeDialog,
-  emailExist,
-  currentData,
 }) => {
 
   const [emailHelp, setEmailHelp] = useState<boolean>(false);

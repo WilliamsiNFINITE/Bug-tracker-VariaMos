@@ -25,7 +25,7 @@ export const signupUser = async (req: Request, res: Response) => {
 
   const users = await User.find();
   for (let user of users) {
-    if (user.email === email) {
+    if (user.email === email && email !== '') {
       return res.status(400).send({ message: `Email adress ${email} is already taken.` });
     }
   }
@@ -42,8 +42,6 @@ export const signupUser = async (req: Request, res: Response) => {
   }
 
   await user.save();
-
-
 
   const notificationsOn: boolean = true;
 
@@ -93,6 +91,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
   const email = user.email;
   const notificationsOn = user.notificationsOn;
+  const github = user.github;
 
   return res.status(201).json({
     id: user.id,
@@ -101,5 +100,6 @@ export const loginUser = async (req: Request, res: Response) => {
     isAdmin,
     email,
     notificationsOn,
+    github
   });
 };

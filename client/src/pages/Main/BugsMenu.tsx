@@ -39,7 +39,6 @@ const BugsMenu: React.FC<BugsMenuProps> = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const admins = useSelector(selectAllAdmins);
   const { user } = useSelector(selectAuthState);
-  
   if (user) {admins.push(user);}
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {

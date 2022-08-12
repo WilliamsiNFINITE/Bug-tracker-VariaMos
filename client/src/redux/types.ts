@@ -23,6 +23,7 @@ export interface Note {
   id: number;
   bugId: string;
   body: string;
+  gitCommentId: number;
   author: User;
   createdAt: Date;
   updatedAt: Date;

@@ -41,10 +41,16 @@ const deleteNote = async (bugId: string, noteId: number) => {
   return response.data;
 };
 
+const getNotes = async (bugId: string) => {
+  const response = await axios.get(`${baseUrl}/${bugId}`, setConfig());
+  return response.data;
+}
+
 const noteService = {
   createNote,
   editNote,
   deleteNote,
+  getNotes
 };
 
 export default noteService;

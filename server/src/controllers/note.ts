@@ -4,6 +4,118 @@ import nodemailer from 'nodemailer';
 import { EMAIL, PASSWORD } from '../utils/variables';
 import { User } from '../entity/User';
 import { Bug } from '../entity/Bug';
+import { createGitIssueComment, deleteGitIssueComment, getGitIssueComments, updateGitIssueComment } from '../utils/githubIssuesAPI';
+
+export const getNotes = async (req: Request, res: Response) => {
+  // Here we make sure that the bug comments are the same on Github and the Bug Tracker
+  const bugId = req.params.bugId;
+  
+  await Bug.findOne({ where: { id: bugId } }).then(async (bug) => {
+    if (bug) {
+      //Get notes from the Bug Tracker
+      const notes = await Note.find({ bugId: bug.id });
+      // Get notes from the Github issue
+      await getGitIssueComments(bug.gitIssueNumber).then(async (r) => {
+        // Response is a string so we convert it to JSON
+        const comments = JSON.parse(r);
+        // If the bug (on the BugTracker) has zero notes
+        // Add every comment from Github
+        if (notes.length === 0) {
+          let GithubNotes: Note[] = [];
+          for (let comment of comments) {
+            // Get the author id (works if he entered his Github username in his settings)
+            let writerId: string = ''; 
+            await User.findOne({ where: { github: comment.user.login }}).then((u) => {
+              if (u) {writerId = u.id}
+              else {writerId = "00000000-0000-0000-0000-000000000000"}
+            });
+            const newNote = Note.create({ 
+              body: comment.body, 
+              authorId: writerId,
+              bugId: bug.id,
+              gitCommentId: comment.id
+            });
+            await newNote.save()
+            GithubNotes.push(newNote);
+          }
+          const Notes = await Note.createQueryBuilder('note')
+          .leftJoinAndSelect('note.author', 'author')
+          .select([
+            'note.id',
+            'note.bugId',
+            'note.body',
+            'note.gitCommentId',
+            'note.createdAt',
+            'note.updatedAt',
+            'author.id',
+            'author.username',
+          ])
+          .getMany();
+
+        res.status(201).json(Notes.filter((n) => GithubNotes.includes(n)));      
+        }
+        // Else, add the Github comments missing on the Bug Tracker
+        else {
+          let GithubNotes: Note[] = [];
+          // For each Github comment
+          for (let comment of comments) {
+            let cpt = 0;
+            // Compare with the ones on the Bug Tracker
+            for (let note of notes) {
+              if (comment.id === note.gitCommentId) {
+                // Note already exists and is updated
+                note.body = comment.body;
+                await note.save();
+                break;
+              }
+              if (comment.body.replace(/\s/g, '') !== note.body.replace(/\s/g, '')) {
+                cpt += 1;
+              }
+              else {
+                break;
+              }
+              // Bug is added from Github
+              if (cpt === notes.length) {     
+                // Get the author id (works if he entered his Github username in his settings)
+                let writerId: string = ''; 
+                await User.findOne({ where: { github: comment.user.login }}).then((u) => {
+                  if (u) {writerId = u.id}
+                  else {writerId = "00000000-0000-0000-0000-000000000000"}
+                });
+
+                const newNote = Note.create({ 
+                  body: comment.body, 
+                  authorId: writerId,
+                  bugId: bug.id,
+                  gitCommentId: comment.id
+                });
+
+                await newNote.save();
+                GithubNotes.push(newNote);
+              }
+            }
+          }
+          const Notes = await Note.createQueryBuilder('note')
+          .leftJoinAndSelect('note.author', 'author')
+          .select([
+            'note.id',
+            'note.bugId',
+            'note.body',
+            'note.gitCommentId',
+            'note.createdAt',
+            'note.updatedAt',
+            'author.id',
+            'author.username',
+          ])
+          .getMany();
+
+          res.status(201).json(Notes.filter((n) => GithubNotes.includes(n))); 
+        }
+      })
+    }
+  })
+  
+}
 
 export const postNote = async (req: Request, res: Response) => {
   const { body, isReply, noteId } = req.body;
@@ -21,6 +133,16 @@ export const postNote = async (req: Request, res: Response) => {
   await newNote.save();
 
   const targetBug = await Bug.findOne({ id: bugId });
+
+  // Add the comment on Github Issues (and the comment id to the database)
+  if (targetBug) {
+    createGitIssueComment(targetBug?.gitIssueNumber, body).then(async (id) => {
+      newNote.gitCommentId = id;
+      await newNote.save();
+    })
+
+  };
+
   if (isReply) {
     const targetNote = await Note.findOne({ id: noteId });
     const authorId = targetNote?.authorId;
@@ -76,6 +198,7 @@ export const postNote = async (req: Request, res: Response) => {
       'note.id',
       'note.bugId',
       'note.body',
+      'note.gitCommentId',
       'note.createdAt',
       'note.updatedAt',
       'author.id',
@@ -96,6 +219,10 @@ export const deleteNote = async (req: Request, res: Response) => {
   }
 
   await targetNote.remove();
+
+  // Delete note from Github Issues
+  deleteGitIssueComment(targetNote.gitCommentId);
+  
   res.status(204).end();
 };
 
@@ -121,5 +248,9 @@ export const updateNote = async (req: Request, res: Response) => {
 
   targetNote.body = body;
   await targetNote.save();
+
+  // Update the comment on Github Issue
+  updateGitIssueComment(targetNote.gitCommentId, body);
+
   res.json(targetNote);
 };

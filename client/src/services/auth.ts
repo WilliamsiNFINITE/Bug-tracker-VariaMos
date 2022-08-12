@@ -30,6 +30,11 @@ const setEmail = (mail: string) => {
   email = mail;
 }
 
+let github: string = '';
+const setGithub = (githubUsername: string) => {
+  github = githubUsername;
+}
+
 export const setConfig = () => {
   return {
     headers: { 'x-auth-token': token , 'admin': isAdmin, 'email': email, 'notifications': notificationsOn },
@@ -52,6 +57,6 @@ const verifyInvitation = async (inviteCode: InviteCodeData) => {
   return response.data;
 }
 
-const authService = { login, signup, setToken, setisAdmin, setEmail, setNotifications, verifyInvitation };
+const authService = { login, signup, setToken, setisAdmin, setEmail, setNotifications, setGithub, verifyInvitation };
 
 export default authService;

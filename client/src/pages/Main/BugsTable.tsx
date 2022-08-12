@@ -69,7 +69,7 @@ const BugsTable: React.FC<{ bugs: BugState[], user: UserState | null }> = ({ bug
         </TableHead>
         <TableBody>
           {bugs.map((b) => (
-            <><TableRow key={b.id}>
+            <><TableRow>
               <TableCell
                 align="center"
                 onClick={() => actionsOnClick(b.id)}

@@ -107,7 +107,7 @@ export const changeSettings = async (req: Request, res: Response) => {
     }
   };
 
-  if (githubToken !== '') {
+  if (github !== currentUser?.github && github !== '') {
         let unauthorized = false;
         await verifyGitUser(githubToken).then(r => {
         const response = JSON.parse(r);
@@ -123,8 +123,10 @@ export const changeSettings = async (req: Request, res: Response) => {
         return res.status(403).send({ message: `Personal access token does not match Github username ${github}.` });
       }
     })
-    console.log(unauthorized)
-    
+  }
+
+  if (githubToken !=='' && github === '') {
+    return res.status(400).send({ message: `Personal access token needs to be matched with a Github username.` })
   }
       
     

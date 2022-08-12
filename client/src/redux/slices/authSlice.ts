@@ -66,6 +66,7 @@ export const login = (credentials: CredentialsPayload): AppThunk => {
       authService.setToken(userData.token);
       authService.setisAdmin(userData.isAdmin);
       authService.setEmail(userData.email);
+      authService.setGithub(userData.github);
       authService.setNotifications(userData.notificationsOn);
       dispatch(fetchBugs());
       dispatch(fetchUsers());
@@ -114,6 +115,7 @@ export const autoLogin = (): AppThunk => {
       authService.setToken(loggedUser.token);
       authService.setisAdmin(loggedUser.isAdmin);
       authService.setEmail(loggedUser.email);
+      authService.setGithub(loggedUser.github);
       authService.setNotifications(loggedUser.notificationsOn);
       dispatch(fetchBugs());
       dispatch(fetchUsers());

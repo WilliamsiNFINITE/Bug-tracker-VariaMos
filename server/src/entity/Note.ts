@@ -31,6 +31,9 @@ export class Note extends BaseEntity {
   @Column()
   bugId: string;
 
+  @Column()
+  gitCommentId: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
