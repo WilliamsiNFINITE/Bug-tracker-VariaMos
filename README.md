@@ -36,6 +36,7 @@ This bug tracker is a modified version of the open source one made by [amand33p]
 
 ## Features
 
+- Synchronization with Github Issues through REST API (issues, assignments, comments)
 - Authentication (login/register w/ username, password & optional email adress)
 - CRUD bugs, with title, description, priority & optional file (image, gif, video, JSON)
 - Email notifications (can be turned off)
