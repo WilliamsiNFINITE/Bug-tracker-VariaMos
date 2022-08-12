@@ -11,7 +11,7 @@ You will have to change the `GoogleReCaptchaKey` variable in `client/src/utils/v
 the `siteKey` variable in `client/src/pages/Auth/InviteVerificationPage.tsx` with the site key.
 
 ## Github REST API
-In order to use the Github REST API to link the Bug Tracker to Github Issues a **personal access token** is required.
+In order to use the Github REST API to synchronize the Bug Tracker with Github Issues a **personal access token** is required.
 
 It should be created by the owner of the VariaMos github repository.
 
