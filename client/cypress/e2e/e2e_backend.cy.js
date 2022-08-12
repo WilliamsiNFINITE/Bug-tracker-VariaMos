@@ -590,7 +590,7 @@ describe('testing application with backend', ()=>{
 
       //Short username
       cy.get('input[name="email"]').type('invalid_email')
-      cy.get('input[name="login"]').type('u')
+      cy.get('input[name="login"]').type('u') //Seems the login input does not exist anymore
       cy.findByRole('button', {name: /invite administrator/i}).click()
       cy.findByText('Username must be in range of 3-20 characters length.').should('be.visible')
 
@@ -647,11 +647,11 @@ describe('testing application with backend', ()=>{
 
     })
     it('user can change his email adress', ()=>{
-      cy.findByRole('textbox').clear().type('new@mail')
+      cy.get('input[name="email"]').clear().type('new@mail.com')
       cy.findByRole('button', {name: /change settings/i}).click()
       cy.findByText('New settings saved!').should('be.visible')
 
-      //Cerification
+      //Verification
       cy.findByRole('button', {name: /log out/i}).click()
       cy.findByRole('button', {name: /log in/i }).click()
       cy.get('input[name="username"]').type('username2');
@@ -659,7 +659,7 @@ describe('testing application with backend', ()=>{
       cy.get('button[type="submit"]').click()
       cy.wait(1500)
       cy.findByRole('button', {name: /settings/i}).click()
-      cy.findByRole('textbox').should('have.value','new@mail')
+      cy.get('input[name="email"]').should('have.value','new@mail.com')
 
     })
     it('user should be able to change his password', ()=>{
