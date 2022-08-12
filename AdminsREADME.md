@@ -15,7 +15,7 @@ In order to use the Github REST API to synchronize the Bug Tracker with Github I
 
 It should be created by the owner of the VariaMos github repository.
 
-To create it go to **Settings > Developer settings > Personnal access token** and select the scope **repo**.
+To create it go to **Settings > Developer settings > Personnal access token** and select the scope **repo** (more info [here](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token)).
 
 Then change the `GithubPersonnalToken`, `GithubRepo` and `GithubUser` variables in `server/src/utils/variables` to match the newly created token and the names of the VariaMos repository and its owner.
 
